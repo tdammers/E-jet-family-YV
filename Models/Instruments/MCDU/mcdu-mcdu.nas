@@ -70,6 +70,23 @@ var MCDU = {
         "XPDR": func (mcdu, parent) { return TransponderModule.new(mcdu, parent); },
 
         # Index modules
+        "ATCINDEX": func(mcdu, parent) { return IndexModule.new(mcdu, parent,
+                        "ATC INDEX",
+                        [ # PAGE 1
+                          [ nil, "EMERGENCY" ]
+                        , [ nil, "REQUEST" ]
+                        , [ nil, "WHEN CAN WE" ]
+                        , [ nil, "FREE TEXT" ]
+                        , nil
+                        , [ nil, "LOGON/STATUS" ]
+
+                        , [ nil, "POS REPORT" ]
+                        , [ nil, "REPORT" ]
+                        , [ nil, "VOICE" ]
+                        , [ nil, "CLEARANCE" ]
+                        , nil
+                        , [ nil, "LOG" ]
+                        ]); },
         "NAVINDEX": func(mcdu, parent) { return IndexModule.new(mcdu, parent,
                         "NAV INDEX",
                         [ # PAGE 1
@@ -80,8 +97,8 @@ var MCDU = {
                         , [ nil, "FIX INFO" ]
                         , [ "DEPARTURE", "DEPARTURE" ]
 
-                        , nil
-                        , nil
+                        , [ "ATCINDEX", "ATC" ]
+                        , [ nil, "DATALINK" ]
                         , [ nil, "FLT SUM" ]
                         , nil
                         , [ nil, "HOLD" ]
