@@ -18,8 +18,12 @@ var MCDU = {
             activeModule: nil,
             moduleStack: [],
             powered: 0,
+            acarsAvail: 0,
+            cpdlcAvail: 0,
             g: nil
         };
+        if (props.globals.getNode('/acars') != nil) { m.acarsAvail = 1; }
+        if (props.globals.getNode('/cpdlc') != nil) { m.cpdlcAvail = 1; }
         m.initCanvas();
         setlistener("/instrumentation/mcdu[" ~ n ~ "]/command", func () {
             m.handleCommand();
@@ -69,6 +73,9 @@ var MCDU = {
         "COM2": func (mcdu, parent) { return ComRadioDetailsModule.new(mcdu, parent, 2); },
         "XPDR": func (mcdu, parent) { return TransponderModule.new(mcdu, parent); },
 
+        # CPDLC
+        "CPDLC_LOGON": func (mcdu, parent) { return CPDLCLogonStatusModule.new(mcdu, parent); },
+
         # Index modules
         "ATCINDEX": func(mcdu, parent) { return IndexModule.new(mcdu, parent,
                         "ATC INDEX",
@@ -77,8 +84,8 @@ var MCDU = {
                         , [ nil, "REQUEST" ]
                         , [ nil, "WHEN CAN WE" ]
                         , [ nil, "FREE TEXT" ]
-                        , nil
-                        , [ nil, "LOGON/STATUS" ]
+                        , nil,
+                        , [ "CPDLC_LOGON", "LOGON/STATUS" ]
 
                         , [ nil, "POS REPORT" ]
                         , [ nil, "REPORT" ]
@@ -97,7 +104,7 @@ var MCDU = {
                         , [ nil, "FIX INFO" ]
                         , [ "DEPARTURE", "DEPARTURE" ]
 
-                        , [ "ATCINDEX", "ATC" ]
+                        , mcdu.cpdlcAvail ? [ "ATCINDEX", "ATC" ] : nil
                         , [ nil, "DATALINK" ]
                         , [ nil, "FLT SUM" ]
                         , nil

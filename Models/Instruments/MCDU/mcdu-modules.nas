@@ -2294,3 +2294,80 @@ var TestModule = {
         }
     },
 };
+
+var CPDLCLogonStatusModule = {
+    new: func (mcdu, parentModule) {
+        var m = BaseModule.new(mcdu, parentModule);
+        m.parents = prepended(CPDLCLogonStatusModule, m.parents);
+        return m;
+    },
+
+    getTitle: func () {
+        return "ATC LOGON/STATUS";
+    },
+
+    getNumPages: func () {
+        return 2;
+    },
+
+    loadPageItems: func (n) {
+        if (n == 0) {
+            me.views = [
+                StaticView.new( 1,  1, "LOGON TO", mcdu_white),
+                FormatView.new( 0,  2, mcdu_green | mcdu_large, "CPDLC-LOGON-STATION", 12, "%-12s", func (val) { return val or left_triangle ~ "--------"; }),
+
+                StaticView.new( 1,  3, "FLT ID", mcdu_white),
+                FormatView.new( 0,  4, mcdu_green | mcdu_large, "FLTID", 8, "%-8s"),
+
+                StaticView.new( 2,  5, "TAIL NO", mcdu_white),
+                FormatView.new( 1,  6, mcdu_blue | mcdu_large, "TAIL", 8, "%-8s"),
+
+                StaticView.new(17,  1, "LOGON", mcdu_white),
+                FormatView.new(19,  2,
+                    mcdu_white,
+                    "CPDLC-LOGON-STATION", 5,
+                    func(val) { return val ? "%5s" : ''; },
+                    func(val) { return val ? ("SEND" ~ right_triangle) : ''; }),
+                FormatView.new(12,  2,
+                    func(val) { return (val == "ACCEPTED") ? (mcdu_green | mcdu_large) : mcdu_green; },
+                    "CPDLC-LOGON-STATUS", 12,
+                    func(val) { return val ? "%12s" : ''; }),
+
+                StaticView.new(15,  3, "ACT CTR", mcdu_white),
+                FormatView.new(12,  4, mcdu_green | mcdu_large, "CPDLC-CURRENT-STATION", 12),
+
+                StaticView.new(14,  5, "NEXT CTR", mcdu_white),
+                FormatView.new(12,  6, mcdu_green | mcdu_large, "CPDLC-NEXT-STATION", 12),
+
+                StaticView.new(17,  7, "ORIGIN", mcdu_white),
+                FormatView.new(20,  8, mcdu_green | mcdu_large, "DEPARTURE-AIRPORT", 4),
+
+                StaticView.new(20,  9, "DEST", mcdu_white),
+                FormatView.new(20, 10, mcdu_green | mcdu_large, "ARRIVAL-AIRPORT", 4),
+
+                StaticView.new(14, 11, "DATALINK", mcdu_white),
+                FormatView.new(12, 12, mcdu_green | mcdu_large, "ACARS-STATUS", 12, "%12s",
+                    func(val) { if (val == 'running') { return 'ATN READY'; } else { return ''; } }),
+
+                StaticView.new( 0, 12, left_triangle ~ "ATC INDEX", mcdu_white),
+            ];
+
+            me.controllers = {
+                'L1': ModelController.new("CPDLC-LOGON-STATION"),
+                'R1': FuncController.new(func {
+                            if (globals.cpdlc == nil) return nil;
+                            if (!getprop('/cpdlc/logon-station')) return nil;
+                            globals.cpdlc.cpdlcRequestLogon();
+                            return nil;
+                        }),
+                'L6': SubmodeController.new("ret"),
+            };
+        }
+        elsif (n == 1) {
+            me.views = [];
+        }
+        else {
+            me.views = [];
+        }
+    },
+};
