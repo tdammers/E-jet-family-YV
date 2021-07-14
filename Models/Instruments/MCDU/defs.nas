@@ -285,6 +285,19 @@ var keyProps = {
     "WIND-HEAD": "/environment/headwind-kt",
     "WIND-CROSS": "/environment/crosswind-kt",
     "GS": "/velocities/groundspeed-kt",
+
+    # ACARS
+    "ACARS-STATUS": "/acars/status-text",
+
+    # CPDLC
+    "CPDLC-LOGON-STATION": "/cpdlc/logon-station",
+    "CPDLC-LOGON-STATUS": "/cpdlc/logon-status",
+    "CPDLC-CURRENT-STATION": "/cpdlc/current-station",
+    "CPDLC-NEXT-STATION": "/cpdlc/next-station",
+    "CPDLC-LAST-STATION": "/cpdlc/last-station",
+    "CPDLC-CURRENT-STATION-NAME": "/cpdlc/current-station-name",
+    "CPDLC-NEXT-STATION-NAME": "/cpdlc/next-station-name",
+    "CPDLC-LAST-STATION-NAME": "/cpdlc/last-station-name",
 };
 
 var keyDefs = {
