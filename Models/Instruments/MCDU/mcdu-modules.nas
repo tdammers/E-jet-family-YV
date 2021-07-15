@@ -805,7 +805,7 @@ var DirectToModule = {
 
     insertDirect: func () {
         var candidates = parseWaypoint(me.directToID);
-        debug.dump(me.directFromIndex, me.directToID, candidates);
+        # debug.dump(me.directFromIndex, me.directToID, candidates);
         if (size(candidates) > 0) {
             var newWP = candidates[0];
             var index = 1;
@@ -2323,15 +2323,14 @@ var CPDLCLogonStatusModule = {
                 FormatView.new( 1,  6, mcdu_blue | mcdu_large, "TAIL", 8, "%-8s"),
 
                 StaticView.new(17,  1, "LOGON", mcdu_white),
-                FormatView.new(19,  2,
-                    mcdu_white,
-                    "CPDLC-LOGON-STATION", 5,
-                    func(val) { return val ? "%5s" : ''; },
-                    func(val) { return val ? ("SEND" ~ right_triangle) : ''; }),
                 FormatView.new(12,  2,
                     func(val) { return (val == "ACCEPTED") ? (mcdu_green | mcdu_large) : mcdu_green; },
-                    "CPDLC-LOGON-STATUS", 12,
-                    func(val) { return val ? "%12s" : ''; }),
+                    "CPDLC-LOGON-STATUS", 12, "%12s"),
+                FormatView.new(12,  2,
+                    mcdu_white,
+                    "CPDLC-LOGON-STATION", 12,
+                    func(val) { return val ? "%12s" : ''; },
+                    func(val) { return val ? ("SEND" ~ right_triangle) : ''; }),
 
                 StaticView.new(15,  3, "ACT CTR", mcdu_white),
                 FormatView.new(12,  4, mcdu_green | mcdu_large, "CPDLC-CURRENT-STATION", 12),
@@ -2369,5 +2368,188 @@ var CPDLCLogonStatusModule = {
         else {
             me.views = [];
         }
+    },
+};
+
+var CPDLCLogModule = {
+    new: func (mcdu, parentModule) {
+        var m = BaseModule.new(mcdu, parentModule);
+        m.parents = prepended(CPDLCLogModule, m.parents);
+        m.listener = nil;
+        m.historyNode = props.globals.getNode('/cpdlc/history');
+        return m;
+    },
+
+    getTitle: func () {
+        return "ATC LOG";
+    },
+
+    activate: func () {
+        me.loadPage(me.page);
+        me.timer = maketimer(1, me, func () {
+            me.loadPage(me.page);
+            me.fullRedraw();
+        });
+        me.timer.start();
+    },
+
+    deactivate: func () {
+        if (me.timer != nil) {
+            me.timer.stop();
+            me.timer = nil;
+        }
+    },
+
+    getNumPages: func () {
+        var refs = props.globals.getNode('/cpdlc/history', 1).getChildren('item');
+        return math.max(1, math.floor((size(refs) + 4) / 5));
+    },
+
+    loadPageItems: func (n) {
+        var refs = props.globals.getNode('/cpdlc/history', 1).getChildren('item');
+        me.views = [];
+        me.controllers = {};
+        var r = size(refs) - 1 - n * 5;
+        var y = 1;
+        for (var i = 0; i < 5; i += 1) {
+            if (r < 0) break;
+            var msgID = refs[r].getValue();
+            var item = props.globals.getNode('/cpdlc/messages/' ~ msgID);
+            if (item == nil) {
+                continue;
+            }
+            var dir = item.getValue('dir');
+            var summary = item.getNode('cpdlc/message').getValue();
+            if (size(summary) > 22) {
+                summary = substr(summary, 0, 20) ~ '..';
+            }
+            append(me.views,
+                StaticView.new(1, y, sprintf("%04sZ", item.getValue('timestamp4')), mcdu_white));
+            append(me.views,
+                StaticView.new(12, y, sprintf("%11s", item.getValue('status') or ''), mcdu_white));
+            append(me.views,
+                StaticView.new(0, y+1, (dir == 'uplink') ? '↑' : '↓', mcdu_white | mcdu_large));
+            append(me.views,
+                StaticView.new(1, y+1, summary, ((dir == 'uplink') ? mcdu_green : mcdu_blue) | mcdu_large));
+            append(me.views,
+                StaticView.new(23, y+1, right_triangle, mcdu_white | mcdu_large));
+            var lsk = 'R' ~ (i + 1);
+            me.controllers[lsk] = (func(mid) {
+                return SubmodeController.new(func (owner, parent) {
+                    return CPDLCMessageModule.new(owner, parent, mid);
+                });
+            })(msgID);
+            r -= 1;
+            y += 2;
+        }
+        append(me.views, StaticView.new( 0, 12, left_triangle ~ "ATC INDEX", mcdu_white | mcdu_large));
+        append(me.views, StaticView.new(14, 12, "CLEAR LOG" ~ right_triangle, mcdu_white | mcdu_large));
+        me.controllers['L6'] = SubmodeController.new("ret");
+        me.controllers['R6'] = FuncController.new(func (owner, val) {
+            globals.cpdlc.clearHistory(); return nil;
+        });
+    },
+};
+
+var CPDLCMessageModule = {
+    new: func (mcdu, parentModule, msgID) {
+        var m = BaseModule.new(mcdu, parentModule);
+        m.parents = prepended(CPDLCMessageModule, m.parents);
+        m.msgID = msgID;
+        m.loadMessage();
+        return m;
+    },
+
+    loadMessage: func () {
+        print('loadMessage(' ~ me.msgID ~ ')');
+        me.messageNode = props.globals.getNode('/cpdlc/messages/' ~ me.msgID);
+        if (me.messageNode == nil) {
+            me.lines = [];
+            me.dir = 'uplink';
+            me.station = '????';
+            me.timestamp = '????';
+        }
+        else {
+            me.lines = me.parseCPDLCMessage(me.messageNode.getValue('cpdlc/message'));
+            me.dir = me.messageNode.getValue('dir');
+            me.station = (me.dir == 'uplink') ? me.messageNode.getValue('from') : me.messageNode.getValue('to');
+            me.timestamp = me.messageNode.getValue('timestamp4');
+        }
+    },
+
+    parseCPDLCMessage: func (rawMessage) {
+        var elems = split('/', rawMessage);
+        var lines = [];
+        foreach (var m; elems) {
+            append(lines, '/FREE TEXT');
+            if (size(m) <= 22) {
+                append(lines, m);
+            }
+            else {
+                append(lines, substr(m, 0, 22));
+                m = substr(m, 22);
+                while (size(m) > 0) {
+                    append(lines, '');
+                    append(lines, substr(m, 0, 22));
+                    m = substr(m, 22);
+                }
+            }
+        }
+        return lines;
+    },
+
+    getTitle: func () {
+        # spaces left to fit green timestamp
+        if (me.messageNode.getValue('dir') == 'uplink') {
+            return "        ATC UPLINK";
+        }
+        else {
+            return "        REQUEST   ";
+        }
+    },
+
+    getNumPages: func () {
+        return math.floor((size(me.lines) + 8 + 9) / 10);
+    },
+
+    loadPageItems: func (n) {
+        var y = 1;
+        var offset = 0;
+        var count = 10;
+
+        me.views = [];
+        me.controllers = {};
+
+        append(me.views, StaticView.new(3, 0, me.timestamp, mcdu_green | mcdu_large));
+        append(me.views, StaticView.new(7, 0, 'Z', mcdu_green));
+        if (n == 0) {
+            offset = 0;
+            count = 8;
+            append(me.views, StaticView.new(1, y, me.station, mcdu_green));
+            append(me.views, StaticView.new(12, y,
+                sprintf("%11s", me.messageNode.getValue('status')), mcdu_green | mcdu_large));
+            y += 2;
+        }
+        else {
+            offset = (n - 1) * 10 + 8;
+            count = 10;
+        }
+        for (var i = 0; i < count; i += 1) {
+            var j = offset + i;
+            if (j >= size(me.lines)) break;
+
+            var line = me.lines[j];
+            append(me.views,
+                StaticView.new(0, y, line, (math.mod(i, 2) == 0) ? mcdu_white : mcdu_green | mcdu_large));
+            y += 1;
+        }
+        if (offset + count < size(me.lines)) {
+            append(me.views,
+                StaticView.new(0, y, '-- CONTINUED --', mcdu_white));
+        }
+        append(me.views, StaticView.new( 0, 12, left_triangle ~ "ATC INDEX", mcdu_white | mcdu_large));
+        append(me.views, StaticView.new(20, 12, "LOG" ~ right_triangle, mcdu_white | mcdu_large));
+        me.controllers['L6'] = SubmodeController.new("ATCINDEX");
+        me.controllers['R6'] = SubmodeController.new("ret");
     },
 };
