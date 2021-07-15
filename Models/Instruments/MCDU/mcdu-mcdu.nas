@@ -20,6 +20,10 @@ var MCDU = {
             powered: 0,
             acarsAvail: 0,
             cpdlcAvail: 0,
+            alerts: {
+                descendNow: 0,
+                acarsUplink: 0,
+            },
             g: nil
         };
         if (props.globals.getNode('/acars') != nil) { m.acarsAvail = 1; }
@@ -75,6 +79,7 @@ var MCDU = {
 
         # CPDLC
         "CPDLC_LOGON": func (mcdu, parent) { return CPDLCLogonStatusModule.new(mcdu, parent); },
+        "CPDLC_LOG": func (mcdu, parent) { return CPDLCLogModule.new(mcdu, parent); },
 
         # Index modules
         "ATCINDEX": func(mcdu, parent) { return IndexModule.new(mcdu, parent,
@@ -84,7 +89,7 @@ var MCDU = {
                         , [ nil, "REQUEST" ]
                         , [ nil, "WHEN CAN WE" ]
                         , [ nil, "FREE TEXT" ]
-                        , nil,
+                        , nil
                         , [ "CPDLC_LOGON", "LOGON/STATUS" ]
 
                         , [ nil, "POS REPORT" ]
@@ -92,7 +97,7 @@ var MCDU = {
                         , [ nil, "VOICE" ]
                         , [ nil, "CLEARANCE" ]
                         , nil
-                        , [ nil, "LOG" ]
+                        , [ "CPDLC_LOG", "LOG" ]
                         ]); },
         "NAVINDEX": func(mcdu, parent) { return IndexModule.new(mcdu, parent,
                         "NAV INDEX",
@@ -561,6 +566,8 @@ var MCDU = {
         for (var p = 0; p < size(str); ) {
             var q = utf8NumBytes(str[p]);
             var c = substr(str, p, q);
+            # don't attempt to uppercase non-ascii
+            if (q == 1) { c = string.uc(c); }
             p += q;
             if (x >= 0) {
                 me.screenbuf[i] = [c, flags];
