@@ -711,11 +711,20 @@ var FlightPlanModule = {
         var label = "";
         var key = nil;
 
-        if (!getprop("/fms/performance-initialized")) {
-            label = "PERF INIT";
-            key = "PERFINIT";
+        if (me.mcdu.cpdlcAvail and getprop('/cpdlc/num-unread') > 0) {
+            var msgID = globals.cpdlc.getFirstUnread();
+
+            label = "ATC UPLINK";
+            key = (func (mid) {
+                return SubmodeController.new(func (owner, parent) {
+                    if (owner.peekScratchpad() == "ATC UPLINK") {
+                        owner.setScratchpad('');
+                    }
+                    return CPDLCMessageModule.new(owner, parent, mid);
+                });
+            })(msgID);
         }
-        else if (fms.vnav.desNowAvailable) {
+        elsif (fms.vnav.desNowAvailable) {
             label = "DES NOW";
             key = FuncController.new(func (owner, val) {
                 if (!vnav.desNow()) {
@@ -723,7 +732,11 @@ var FlightPlanModule = {
                 }
             });
         }
-        else if (me.fp.departure_runway == nil or me.fp.sid == nil) {
+        elsif (!getprop("/fms/performance-initialized")) {
+            label = "PERF INIT";
+            key = "PERFINIT";
+        }
+        elsif (me.fp.departure_runway == nil or me.fp.sid == nil) {
             label = "DEPARTURE";
             key = "DEPARTURE";
         }
@@ -2480,6 +2493,7 @@ var CPDLCMessageModule = {
 
     loadMessage: func () {
         var messageNode = props.globals.getNode('/cpdlc/messages/' ~ me.msgID);
+        globals.cpdlc.selectMessage(me.msgID);
         if (messageNode == nil) {
             me.elems = [];
             me.dir = 'uplink';
@@ -2702,7 +2716,5 @@ var CPDLCMessageModule = {
         append(me.views, StaticView.new(20, 12, "LOG" ~ right_triangle, mcdu_white | mcdu_large));
         me.controllers['L6'] = SubmodeController.new("ATCINDEX", 0);
         me.controllers['R6'] = SubmodeController.new("ret");
-
-        debug.dump(size(me.views));
     },
 };

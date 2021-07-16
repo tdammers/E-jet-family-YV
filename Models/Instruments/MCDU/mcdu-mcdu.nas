@@ -20,10 +20,6 @@ var MCDU = {
             powered: 0,
             acarsAvail: 0,
             cpdlcAvail: 0,
-            alerts: {
-                descendNow: 0,
-                acarsUplink: 0,
-            },
             g: nil
         };
         if (props.globals.getNode('/acars') != nil) { m.acarsAvail = 1; }
@@ -41,6 +37,20 @@ var MCDU = {
                 m.handleKeyboardRelease();
             }
         }, 1, 0);
+        if (m.cpdlcAvail) {
+            setlistener('/cpdlc/newest-uplink', func () {
+                m.setScratchpadMsg('ATC UPLINK', mcdu_white);
+            }, 0, 1);
+            setlistener('/cpdlc/logon-status', func (node) {
+                var status = node.getValue();
+                if (status == '') {
+                    m.setScratchpadMsg('ATC COMM LOST', mcdu_white);
+                }
+                elsif (status == 'ACCEPTED') {
+                    m.setScratchpadMsg('ATC COMM ESTABLISHED', mcdu_white);
+                }
+            }, 0, 1);
+        }
         return m;
     },
 
