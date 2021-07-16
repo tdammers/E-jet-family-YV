@@ -359,3 +359,4 @@ var findWaypointsByID = func (ident, ref=nil) {
         return findFixesByID(ref, ident);
     }
 };
+

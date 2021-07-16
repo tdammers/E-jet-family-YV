@@ -2432,7 +2432,11 @@ var CPDLCLogModule = {
                 continue;
             }
             var dir = item.getValue('dir');
-            var summary = item.getNode('cpdlc/message').getValue();
+            var summary = string.replace(
+                          string.replace(
+                            item.getNode('cpdlc/message').getValue(),
+                            '@_@', ' '),
+                            '@', '');
             if (size(summary) > 22) {
                 summary = substr(summary, 0, 20) ~ '..';
             }
@@ -2508,7 +2512,7 @@ var CPDLCMessageModule = {
             me.pages = [];
         }
         else {
-            me.elems = me.parseCPDLCMessage(messageNode.getValue('cpdlc/message'));
+            me.elems = parseCPDLCMessage(messageNode.getValue('cpdlc/message'));
             me.dir = messageNode.getValue('dir');
             me.status = messageNode.getValue('status');
             me.station = (me.dir == 'uplink') ? messageNode.getValue('from') : messageNode.getValue('to');
@@ -2602,40 +2606,37 @@ var CPDLCMessageModule = {
             append(views, StaticView.new(0, y, '/' ~ elem[0], mcdu_white));
             nextLine();
             var m = elem[1];
-            if (size(m) > 24) {
-                var words = split(' ', m);
-                var line = '';
-                foreach (var word; words) {
-                    if (size(line) == 0) {
-                        while (size(word) > 24) {
-                            evenLine();
-                            append(views, StaticView.new(0, y, substr(word, 0, 22) ~ '..', mcdu_green | mcdu_large));
-                            nextLine();
-                            word = substr(word, 22);
-                        }
+            var words = split(' ', m);
+            var line = '';
+            foreach (var word; words) {
+                if (substr(word, 0, 1) == '@')
+                    word = substr(word, 1);
+                if (substr(word, size(word) - 1) == '@')
+                    word = substr(word, 0, size(word) - 1);
+                if (size(line) == 0) {
+                    while (size(word) > 24) {
+                        evenLine();
+                        append(views, StaticView.new(0, y, substr(word, 0, 22) ~ '..', mcdu_green | mcdu_large));
+                        nextLine();
+                        word = substr(word, 22);
+                    }
+                    line = word;
+                }
+                else {
+                    if (size(line) + 1 + size(word) > 24) {
+                        evenLine();
+                        append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
+                        nextLine();
                         line = word;
                     }
                     else {
-                        if (size(line) + 1 + size(word) > 24) {
-                            evenLine();
-                            append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
-                            nextLine();
-                            line = word;
-                        }
-                        else {
-                            line = line ~ ' ' ~ word;
-                        }
+                        line = line ~ ' ' ~ word;
                     }
                 }
-                if (size(line) > 0) {
-                    evenLine();
-                    append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
-                    nextLine();
-                }
             }
-            else {
+            if (size(line) > 0) {
                 evenLine();
-                append(views, StaticView.new(0, y, m, mcdu_green | mcdu_large));
+                append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
                 nextLine();
             }
         }
@@ -2674,16 +2675,6 @@ var CPDLCMessageModule = {
         }
 
         nextPage();
-    },
-
-    parseCPDLCMessage: func (rawMessage) {
-        var rawElems = split('/', rawMessage);
-        var elems = [];
-        foreach (var m; rawElems) {
-            # For now, just treat everything as free text
-            append(elems, ['FREE TEXT', m])
-        }
-        return elems;
     },
 
     getTitle: func () {
