@@ -2330,7 +2330,7 @@ var CPDLCLogonStatusModule = {
                     mcdu_white,
                     "CPDLC-LOGON-STATION", 12,
                     func(val) { return val ? "%12s" : ''; },
-                    func(val) { return val ? ("SEND" ~ right_triangle) : ''; }),
+                    func(val) { return val ? ("       SEND" ~ right_triangle) : ''; }),
 
                 StaticView.new(15,  3, "ACT CTR", mcdu_white),
                 FormatView.new(12,  4, mcdu_green | mcdu_large, "CPDLC-CURRENT-STATION", 12),
@@ -2481,60 +2481,195 @@ var CPDLCMessageModule = {
     loadMessage: func () {
         var messageNode = props.globals.getNode('/cpdlc/messages/' ~ me.msgID);
         if (messageNode == nil) {
-            me.lines = [];
+            me.elems = [];
             me.dir = 'uplink';
             me.status = 'INVALID';
             me.station = '????';
             me.timestamp = '????';
+            me.ra = nil;
+            me.replyTimestamp = nil;
+            me.replyID = nil;
+            me.parentTimestamp = nil;
+            me.parentID = nil;
+            me.pages = [];
         }
         else {
-            me.lines = me.parseCPDLCMessage(messageNode.getValue('cpdlc/message'));
+            me.elems = me.parseCPDLCMessage(messageNode.getValue('cpdlc/message'));
             me.dir = messageNode.getValue('dir');
             me.status = messageNode.getValue('status');
             me.station = (me.dir == 'uplink') ? messageNode.getValue('from') : messageNode.getValue('to');
             me.timestamp = messageNode.getValue('timestamp4');
-        }
-        var replyID = messageNode.getValue('reply');
-        var replyNode = (replyID == nil) ? nil : props.globals.getNode('/cpdlc/messages/' ~ replyID);
-        if (replyNode == nil) {
-            me.replyID = nil;
-            me.replyTimestamp = nil;
-        }
-        else {
-            me.replyID = replyID;
-            me.replyTimestamp = replyNode.getValue('timestamp4');
-        }
-        var parentID = messageNode.getValue('parent');
-        var parentNode = (parentID == nil) ? nil : props.globals.getNode('/cpdlc/messages/' ~ parentID);
-        if (parentNode == nil) {
-            me.parentID = nil;
-            me.parentTimestamp = nil;
-        }
-        else {
-            me.parentID = parentID;
-            me.parentTimestamp = parentNode.getValue('timestamp4');
+
+            var replyID = messageNode.getValue('reply');
+            var replyNode = (replyID == nil) ? nil : props.globals.getNode('/cpdlc/messages/' ~ replyID);
+            if (replyNode == nil) {
+                me.replyID = nil;
+                me.replyTimestamp = nil;
+            }
+            else {
+                me.replyID = replyID;
+                me.replyTimestamp = replyNode.getValue('timestamp4');
+            }
+            var parentID = messageNode.getValue('parent');
+            var parentNode = (parentID == nil) ? nil : props.globals.getNode('/cpdlc/messages/' ~ parentID);
+            if (parentNode == nil) {
+                me.parentID = nil;
+                me.parentTimestamp = nil;
+            }
+            else {
+                me.parentID = parentID;
+                me.parentTimestamp = parentNode.getValue('timestamp4');
+            }
+
+            if (me.replyID == nil and me.dir == 'uplink') {
+                me.ra = messageNode.getValue('cpdlc/ra');
+            }
+            else {
+                me.ra = nil;
+            }
+            me.makePages();
         }
     },
 
-    parseCPDLCMessage: func (rawMessage) {
-        var elems = split('/', rawMessage);
-        var lines = [];
-        foreach (var m; elems) {
-            append(lines, '/FREE TEXT');
-            if (size(m) <= 22) {
-                append(lines, m);
+    makePages: func () {
+        var y = 1;
+        me.pages = [];
+        var views = [];
+        var controllers = {};
+        var nextPage = func () {
+            append(me.pages, { 'views': views, 'controllers': controllers });
+            y = 1;
+            views = [];
+            controllers = {};
+        };
+        var nextLine = func(limit=10) {
+            y += 1;
+            if (y > limit) {
+                nextPage();
             }
-            else {
-                append(lines, substr(m, 0, 22));
-                m = substr(m, 22);
-                while (size(m) > 0) {
-                    append(lines, '');
-                    append(lines, substr(m, 0, 22));
-                    m = substr(m, 22);
+        };
+        var evenLine = func(limit=10) {
+            if (y > limit or y & 1) nextLine(limit);
+        };
+        var unevenLine = func(limit=10) {
+            if (y > limit or !(y & 1)) nextLine(limit);
+        };
+        var lsk = func(which) {
+            var i = math.floor((y + 1) / 2);
+            return which ~ i;
+        };
+
+        unevenLine();
+        append(views, StaticView.new(1, y, me.station, mcdu_green));
+        append(views, StaticView.new(12, y, sprintf("%11s", me.status), mcdu_green | mcdu_large));
+        nextLine();
+
+        evenLine();
+        if (me.replyID != nil and me.dir == 'downlink') {
+            append(views, StaticView.new(0, y, left_triangle ~ "UPLINK", mcdu_white | mcdu_large));
+            controllers[lsk('L')] = (func(mid) {
+                    return SubmodeController.new(func (owner, parent) {
+                        return CPDLCMessageModule.new(owner, parent, mid);
+                    }, 0);
+            })(me.replyID);
+        }
+        elsif (me.parentID != nil and me.dir == 'uplink') {
+            append(views, StaticView.new(0, y, left_triangle ~ "REQUEST", mcdu_white | mcdu_large));
+            controllers[lsk('L')] = (func(mid) {
+                    return SubmodeController.new(func (owner, parent) {
+                        return CPDLCMessageModule.new(owner, parent, mid);
+                    }, 0);
+            })(me.parentID);
+        }
+        nextLine();
+
+        foreach (var elem; me.elems) {
+            unevenLine();
+            append(views, StaticView.new(0, y, '/' ~ elem[0], mcdu_white));
+            nextLine();
+            var m = elem[1];
+            if (size(m) > 24) {
+                var words = split(' ', m);
+                var line = '';
+                foreach (var word; words) {
+                    if (size(line) == 0) {
+                        while (size(word) > 24) {
+                            evenLine();
+                            append(views, StaticView.new(0, y, substr(word, 0, 22) ~ '..', mcdu_green | mcdu_large));
+                            nextLine();
+                            word = substr(word, 22);
+                        }
+                        line = word;
+                    }
+                    else {
+                        if (size(line) + 1 + size(word) > 24) {
+                            evenLine();
+                            append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
+                            nextLine();
+                            line = word;
+                        }
+                        else {
+                            line = line ~ ' ' ~ word;
+                        }
+                    }
+                }
+                if (size(line) > 0) {
+                    evenLine();
+                    append(views, StaticView.new(0, y, line, mcdu_green | mcdu_large));
+                    nextLine();
                 }
             }
+            else {
+                evenLine();
+                append(views, StaticView.new(0, y, m, mcdu_green | mcdu_large));
+                nextLine();
+            }
         }
-        return lines;
+
+        evenLine();
+        if (me.replyID != nil and me.dir == 'downlink') {
+            append(views, StaticView.new( 0, y, ">>>> RESPONSE ", mcdu_white | mcdu_large));
+            append(views, StaticView.new(14, y, me.replyTimestamp, mcdu_green | mcdu_large));
+            append(views, StaticView.new(18, y, "Z", mcdu_green));
+            append(views, StaticView.new(19, y, " <<<<", mcdu_white | mcdu_large));
+        }
+
+        if (me.ra != nil) {
+            evenLine(8);
+            # The RA page
+            if (me.ra == 'R') {
+                append(views, StaticView.new( 0, y, left_triangle ~ 'UNABLE     ', mcdu_white));
+                append(views, StaticView.new(12, y, '      ROGER' ~ right_triangle, mcdu_white));
+                nextLine(); evenLine();
+                append(views, StaticView.new( 0, y, left_triangle ~ 'STAND BY   ', mcdu_white));
+            }
+            elsif (me.ra == 'WU') {
+                append(views, StaticView.new( 0, y, left_triangle ~ 'UNABLE     ', mcdu_white));
+                append(views, StaticView.new(12, y, '      WILCO' ~ right_triangle, mcdu_white));
+                nextLine(); evenLine();
+                append(views, StaticView.new( 0, y, left_triangle ~ 'STAND BY   ', mcdu_white));
+            }
+            elsif (me.ra == 'AN') {
+                append(views, StaticView.new( 0, y, left_triangle ~ 'NEGATIVE   ', mcdu_white));
+                append(views, StaticView.new(12, y, 'AFFIRMATIVE' ~ right_triangle, mcdu_white));
+                nextLine(); evenLine();
+                append(views, StaticView.new( 0, y, left_triangle ~ 'STAND BY   ', mcdu_white));
+            }
+            append(views, StaticView.new(12, y, '      APPLY' ~ right_triangle, mcdu_white));
+            nextLine();
+        }
+
+        nextPage();
+    },
+
+    parseCPDLCMessage: func (rawMessage) {
+        var rawElems = split('/', rawMessage);
+        var elems = [];
+        foreach (var m; rawElems) {
+            # For now, just treat everything as free text
+            append(elems, ['FREE TEXT', m])
+        }
+        return elems;
     },
 
     getTitle: func () {
@@ -2548,75 +2683,26 @@ var CPDLCMessageModule = {
     },
 
     getNumPages: func () {
-        return math.floor((size(me.lines) + 8 + 9) / 10);
+        return size(me.pages);
     },
 
     loadPageItems: func (n) {
-        var y = 1;
-        var offset = 0;
-        var count = 10;
-
-        me.views = [];
-        me.controllers = {};
+        if (n < size(me.pages)) {
+            me.views = me.pages[n].views;
+            me.controllers = me.pages[n].controllers;
+        }
+        else {
+            me.views = [];
+            me.controllers = {};
+        }
 
         append(me.views, StaticView.new(3, 0, me.timestamp, mcdu_green | mcdu_large));
         append(me.views, StaticView.new(7, 0, 'Z', mcdu_green));
-        if (n == 0) {
-            offset = 0;
-            count = 8;
-            append(me.views, StaticView.new(1, y, me.station, mcdu_green));
-            append(me.views, StaticView.new(12, y,
-                sprintf("%11s", me.status), mcdu_green | mcdu_large));
-            y += 1;
-            if (me.replyID != nil and me.dir == 'downlink') {
-                append(me.views, StaticView.new(0, y, left_triangle ~ "UPLINK", mcdu_white | mcdu_large));
-                me.controllers['L1'] = (func(mid) {
-                        return SubmodeController.new(func (owner, parent) {
-                            return CPDLCMessageModule.new(owner, parent, mid);
-                        }, 0);
-                })(me.replyID);
-            }
-            elsif (me.parentID != nil and me.dir == 'uplink') {
-                append(me.views, StaticView.new(0, y, left_triangle ~ "REQUEST", mcdu_white | mcdu_large));
-                me.controllers['L1'] = (func(mid) {
-                        return SubmodeController.new(func (owner, parent) {
-                            return CPDLCMessageModule.new(owner, parent, mid);
-                        }, 0);
-                })(me.parentID);
-            }
-            y += 1;
-        }
-        else {
-            offset = (n - 1) * 10 + 8;
-            count = 10;
-        }
-        for (var i = 0; i < count; i += 1) {
-            var j = offset + i;
-            if (j >= size(me.lines)) break;
-
-            var line = me.lines[j];
-            append(me.views,
-                StaticView.new(0, y, line, (math.mod(i, 2) == 0) ? mcdu_white : mcdu_green | mcdu_large));
-            y += 1;
-        }
-        if (offset + count < size(me.lines)) {
-            append(me.views,
-                StaticView.new(0, y, '-- CONTINUED --', mcdu_white));
-            y += 1;
-        }
-        if (y <= 10) {
-            var yy = y + math.mod(y, 2);
-            if (me.replyID != nil and me.dir == 'downlink') {
-                append(me.views, StaticView.new( 0, yy, ">>>> RESPONSE ", mcdu_white | mcdu_large));
-                append(me.views, StaticView.new(14, yy, me.replyTimestamp, mcdu_green | mcdu_large));
-                append(me.views, StaticView.new(18, yy, "Z", mcdu_green));
-                append(me.views, StaticView.new(19, yy, " <<<<", mcdu_white | mcdu_large));
-                y = yy + 1;
-            }
-        }
         append(me.views, StaticView.new( 0, 12, left_triangle ~ "ATC INDEX", mcdu_white | mcdu_large));
         append(me.views, StaticView.new(20, 12, "LOG" ~ right_triangle, mcdu_white | mcdu_large));
         me.controllers['L6'] = SubmodeController.new("ATCINDEX", 0);
         me.controllers['R6'] = SubmodeController.new("ret");
+
+        debug.dump(size(me.views));
     },
 };
