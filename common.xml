@@ -70,6 +70,8 @@
             <path>/sim/simbrief/options/import-fob</path>
             <path>/sim/simbrief/options/import-perfinit</path>
             <path>/sim/simbrief/options/import-winds-aloft</path>
+            <path>/instrumentation/mfd/resolution</path>
+            <path>/instrumentation/mfd/scanrate</path>
             <path>/options/system/keyboard-mode</path>
             <path>/instrumentation/efb/available</path>
             <path>/instrumentation/efb/brightness</path>
@@ -2085,6 +2087,8 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
+            <scan-rate type="int" userarchive="y">1</scan-rate>
+            <resolution type="int" userarchive="y">6</resolution>
         </mfd>
 
         <mfd>
@@ -2099,6 +2103,8 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
+            <scan-rate type="int" userarchive="y">1</scan-rate>
+            <resolution type="int" userarchive="y">6</resolution>
         </mfd>
 
         <nav-compass>
@@ -2173,12 +2179,13 @@
             <mouse n="0">
                 <mode n="0">
                     <button n="3">
-                        <binding n="0">
-                            <script></script>
-                        </binding>
                         <binding n="1">
                             <condition>
-                                <property>/sim/current-view/can-change-z-offset</property>
+                                <and>
+                                    <property>/sim/current-view/can-change-z-offset</property>
+                                    <not><property>/devices/status/mice/mouse[0]/button[2]</property></not>
+                                    <not><property>/sim/mouse/right-button-mode-cycle-enabled</property></not>
+                                </and>
                             </condition>
                             <command>nasal</command>
                             <script>
@@ -2195,12 +2202,13 @@
                     </button>
 
                     <button n="4">
-                        <binding n="0">
-                            <script></script>
-                        </binding>
                         <binding n="1">
                             <condition>
-                                <property>/sim/current-view/can-change-z-offset</property>
+                                <and>
+                                    <property>/sim/current-view/can-change-z-offset</property>
+                                    <not><property>/devices/status/mice/mouse[0]/button[2]</property></not>
+                                    <not><property>/sim/mouse/right-button-mode-cycle-enabled</property></not>
+                                </and>
                             </condition>
                             <command>nasal</command>
                             <script>
