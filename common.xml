@@ -70,6 +70,8 @@
             <path>/sim/simbrief/options/import-fob</path>
             <path>/sim/simbrief/options/import-perfinit</path>
             <path>/sim/simbrief/options/import-winds-aloft</path>
+            <path>/instrumentation/mfd/resolution</path>
+            <path>/instrumentation/mfd/scanrate</path>
             <path>/options/system/keyboard-mode</path>
             <path>/instrumentation/efb/available</path>
             <path>/instrumentation/efb/brightness</path>
@@ -239,6 +241,16 @@
 
         <sound>
             <path>Aircraft/E-jet-family/sound.xml</path>
+
+            <button1 type="bool">false</button1>
+            <button2 type="bool">false</button2>
+            <knob1 type="bool">false</knob1>
+            <knob2 type="bool">false</knob2>
+            <switch1 type="bool">false</switch1>
+            <switch2 type="bool">false</switch2>
+            <apu-vol type="double">0.2</apu-vol>
+            <gear-vol type="double">0.2</gear-vol>
+            <flaps-vol type="double">0.02</flaps-vol>
         </sound>
 
         <instrumentation>
@@ -2085,6 +2097,8 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
+            <scan-rate type="int" userarchive="y">1</scan-rate>
+            <resolution type="int" userarchive="y">6</resolution>
         </mfd>
 
         <mfd>
@@ -2099,6 +2113,8 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
+            <scan-rate type="int" userarchive="y">1</scan-rate>
+            <resolution type="int" userarchive="y">6</resolution>
         </mfd>
 
         <nav-compass>
@@ -2173,12 +2189,13 @@
             <mouse n="0">
                 <mode n="0">
                     <button n="3">
-                        <binding n="0">
-                            <script></script>
-                        </binding>
                         <binding n="1">
                             <condition>
-                                <property>/sim/current-view/can-change-z-offset</property>
+                                <and>
+                                    <property>/sim/current-view/can-change-z-offset</property>
+                                    <not><property>/devices/status/mice/mouse[0]/button[2]</property></not>
+                                    <not><property>/sim/mouse/right-button-mode-cycle-enabled</property></not>
+                                </and>
                             </condition>
                             <command>nasal</command>
                             <script>
@@ -2195,12 +2212,13 @@
                     </button>
 
                     <button n="4">
-                        <binding n="0">
-                            <script></script>
-                        </binding>
                         <binding n="1">
                             <condition>
-                                <property>/sim/current-view/can-change-z-offset</property>
+                                <and>
+                                    <property>/sim/current-view/can-change-z-offset</property>
+                                    <not><property>/devices/status/mice/mouse[0]/button[2]</property></not>
+                                    <not><property>/sim/mouse/right-button-mode-cycle-enabled</property></not>
+                                </and>
                             </condition>
                             <command>nasal</command>
                             <script>
@@ -2396,6 +2414,9 @@
         <messages>
             <file>Aircraft/E-jet-family/Nasal/messages.nas</file>
         </messages>
+		<sound>
+			<file>Aircraft/E-jet-family/Nasal/effects-volume.nas</file>
+		</sound>
         <systems>
             <file>Aircraft/E-jet-family/Nasal/systems.nas</file>
             <file>Aircraft/E-jet-family/Nasal/limits.nas</file>
