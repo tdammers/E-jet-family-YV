@@ -748,7 +748,7 @@
     <animation>
         <type>knob</type>
         <object-name>e1.case</object-name>
-        <property>sim/model/door-positions/eng1-control/position-norm</property>
+        <property>controls/switches/eng-case-pos[0]</property>
         <factor>-95</factor>
         <axis>
             <object-name>e1.case.axis</object-name>
@@ -756,10 +756,8 @@
         <action>
             <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("eng1-control");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/eng-case[0]</property>
             </binding>
         </action>
     </animation>
@@ -767,7 +765,7 @@
     <animation>
         <type>knob</type>
         <object-name>e2.case</object-name>
-        <property>sim/model/door-positions/eng2-control/position-norm</property>
+        <property>controls/switches/eng-case-pos[1]</property>
         <factor>-95</factor>
         <axis>
             <object-name>e2.case.axis</object-name>
@@ -775,10 +773,8 @@
         <action>
             <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("eng2-control");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/eng-case[1]</property>
             </binding>
         </action>
     </animation>
@@ -2516,7 +2512,7 @@
     <animation>
         <type>knob</type>
         <object-name>FCM.elevator.case</object-name>
-        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
+        <property>controls/switches/fcm-case-pos[0]</property>
         <factor>110</factor>
         <axis>
             <object-name>FCM.elevator.case.axis</object-name>
@@ -2524,10 +2520,8 @@
         <action>
             <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-elevator");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[0]</property>
             </binding>
         </action>
     </animation>
@@ -2541,7 +2535,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -2551,7 +2545,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -2577,7 +2571,7 @@
     <animation>
         <type>knob</type>
         <object-name>FCM.rudder.case</object-name>
-        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
+        <property>controls/switches/fcm-case-pos[1]</property>
         <factor>110</factor>
         <axis>
             <object-name>FCM.rudder.case.axis</object-name>
@@ -2585,10 +2579,8 @@
         <action>
             <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-rudder");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[1]</property>
             </binding>
         </action>
     </animation>
@@ -2602,7 +2594,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -2612,7 +2604,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -2638,7 +2630,7 @@
     <animation>
         <type>knob</type>
         <object-name>FCM.spoilers.case</object-name>
-        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
+        <property>controls/switches/fcm-case-pos[2]</property>
         <factor>110</factor>
         <axis>
             <object-name>FCM.spoilers.case.axis</object-name>
@@ -2646,10 +2638,8 @@
         <action>
             <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-spoilers");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[2]</property>
             </binding>
         </action>
     </animation>
@@ -2663,7 +2653,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[2]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -2673,7 +2663,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[2]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3078,7 +3068,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/eng1-control/position-norm</property>
+                        <property>controls/switches/eng-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3125,7 +3115,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/eng2-control/position-norm</property>
+                        <property>controls/switches/eng-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>

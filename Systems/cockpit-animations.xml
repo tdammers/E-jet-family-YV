@@ -11,4 +11,36 @@
         <output>/controls/switches/hud-flip-pos[1]</output>
         <max-rate-of-change>2</max-rate-of-change>
     </filter>
+	<!-- Engine start case : 0 - engine left/1; 1 - engine right/2 -->
+    <filter>
+        <type>noise-spike</type>
+        <input>/controls/switches/eng-case[0]</input>
+        <output>/controls/switches/eng-case-pos[0]</output>
+        <max-rate-of-change>0.5</max-rate-of-change>
+    </filter>
+    <filter>
+        <type>noise-spike</type>
+        <input>/controls/switches/eng-case[1]</input>
+        <output>/controls/switches/eng-case-pos[1]</output>
+        <max-rate-of-change>0.5</max-rate-of-change>
+    </filter>
+	<!-- FCM button covers: 0 - elevator; 1 - rudder; 2 - spoilers -->
+    <filter>
+        <type>noise-spike</type>
+        <input>/controls/switches/fcm-case[0]</input>
+        <output>/controls/switches/fcm-case-pos[0]</output>
+        <max-rate-of-change>1</max-rate-of-change>
+    </filter>
+    <filter>
+        <type>noise-spike</type>
+        <input>/controls/switches/fcm-case[1]</input>
+        <output>/controls/switches/fcm-case-pos[1]</output>
+        <max-rate-of-change>1</max-rate-of-change>
+    </filter>
+    <filter>
+        <type>noise-spike</type>
+        <input>/controls/switches/fcm-case[2]</input>
+        <output>/controls/switches/fcm-case-pos[2]</output>
+        <max-rate-of-change>1</max-rate-of-change>
+    </filter>
 </PropertyList>
