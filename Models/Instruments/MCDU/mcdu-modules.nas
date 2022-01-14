@@ -238,63 +238,49 @@ var PlaceholderModule = {
     },
 };
 
-var FlightPlanModule = {
-    new: func (mcdu, parentModule, specialMode = nil) {
+var RouteModule = {
+    new: func (mcdu, parentModule) {
         var m = BaseModule.new(mcdu, parentModule);
-        m.parents = prepended(FlightPlanModule, m.parents);
-        m.specialMode = specialMode;
-        if (fms.modifiedFlightplan != nil) {
-            m.fp = fms.modifiedFlightplan;
-            m.fpStatus = 'MOD';
+        m.parents = prepended(RouteModule, m.parents);
+        if (fms.modifiedRoute != nil) {
+            m.route = fms.modifiedRoute;
+            m.routeStatus = 'MOD';
         }
         else {
-            m.fp = flightplan();
-            if (m.fp == nil) {
-                m.fpStatus = '';
-                m.fp = fms.getModifyableFlightplan();
-            }
-            else {
-                m.fpStatus = 'ACT';
-            }
+            m.route = fms.getActiveRoute();
+            m.routeStatus = 'ACT';
         }
         m.timer = nil;
         return m;
     },
 
     startEditing: func () {
-        if (me.fpStatus == 'ACT') {
-            me.fp = fms.getModifyableFlightplan();
-            me.fpStatus = 'MOD';
+        if (me.routeStatus == 'ACT') {
+            me.route = fms.getModifyableRoute();
+            me.routeStatus = 'MOD';
         }
     },
 
     finishEditing: func () {
-        if (me.fpStatus != 'ACT') {
-            me.fp = fms.commitFlightplan();
-            me.fpStatus = 'ACT';
+        if (me.routeStatus != 'ACT') {
+            me.route = fms.commitRoute();
+            me.routeStatus = 'ACT';
         }
     },
 
     cancelEditing: func () {
-        if (me.fpStatus != 'ACT') {
-            me.fp = fms.discardFlightplan();
-            me.fpStatus = 'ACT';
+        if (me.routeStatus != 'ACT') {
+            me.route = fms.discardRoute();
+            me.routeStatus = 'ACT';
         }
     },
 
     getNumPages: func () {
-        if (me.specialMode == 'ROUTE') {
-            var legs = fms.getRouteLegs(me.fp);
-            var numEntries = size(legs);
-            # one extra page at the beginning, one extra entry for the
-            # destination.
-            return math.max(1, math.ceil((numEntries + 1) / 5)) + 1;
-        }
-        else {
-            var numEntries = me.fp.getPlanSize();
-            var firstEntry = me.fp.current - 1;
-            return math.max(1, math.ceil((numEntries - firstEntry) / 5));
-        }
+        var legs = me.route.legs;
+        var numEntries = size(legs);
+        # one extra page at the beginning, one extra entry for the
+        # destination.
+        return math.max(1, math.ceil((numEntries + 1) / 5)) + 1;
     },
 
     activate: func () {
@@ -314,113 +300,83 @@ var FlightPlanModule = {
     },
 
     getTitle: func () {
-        return me.fpStatus ~ ((me.specialMode == 'ROUTE') ? " RTE" : " FLT PLAN");
+        return me.routeStatus ~ " RTE";
     },
 
-    findWaypointByID: func (wpid) {
-        var fst = math.max(0, me.fp.current);
-
-        for (var i = fst; i < me.fp.getPlanSize(); i += 1) {
-            var wp = me.fp.getWP(i);
-            if (wp.id == wpid) {
-                return wp;
-            }
-        }
-        return nil;
+    deleteLeg: func (deleteIndex) {
+        me.startEditing();
+        me.route.deleteLeg(deleteIndex);
+        fms.updateModifiedFlightplanFromRoute();
     },
 
-    findLastEnrouteWP: func () {
-        if (me.fp == nil) return 0;
-        var result = 0;
-        for (var i = 1; i < me.fp.getPlanSize(); i += 1) {
-            var wp = me.fp.getWP(i);
-            if (wp.wp_role == 'star' or wp.wp_role == 'approach' or wp.wp_role == 'missed' or wp.wp_type == 'runway') {
-                break;
-            }
-            else if (wp.wp_role == nil) {
-                result = i;
-            }
-        }
-        return result;
-    },
-
-    appendViaTo: func (viaTo, appendAfter = nil) {
+    appendViaTo: func (viaTo, appendIndex = nil) {
         # printf("Append VIA-TO: %s", viaTo);
         var s = split('.', viaTo);
         # debug.dump(s);
         var newWaypoints = [];
-        var appendIndex = (appendAfter == nil) ? me.findLastEnrouteWP() : appendAfter;
         var targetFix = nil;
-        var refWP = me.fp.getWP(appendIndex);
-        var ref = geo.aircraft_position();
         # printf("Append after: %i (%s)", appendIndex, (refWP == nil) ? "<nil>" : refWP.id);
-        if (refWP != nil) {
-            ref = refWP;
+
+        if (size(s) == 0) {
+            return 'INVALID';
         }
-        if (size(s) == 1) {
-            var candidates = [];
-            if (size(s[0]) == 5) {
-                # 5 chars: it's a fix
-                candidates = findFixesByID(ref, s[0]);
+
+        # No route entered yet? Let's first check if the first element is a
+        # SID.
+        if (size(me.route.legs) == 0 and me.route.departureAirport != nil) {
+            var sid = me.route.departureAirport.getSid(s[0]);
+            if (typeof(sid) == 'ghost') {
+                me.route.sid = sid;
+                s = subvec(s, 1);
             }
-            else if (size(s[0]) == 4) {
-                # 4 chars: it's an airport
-                candidates = findAirportsByICAO(s[0]);
-            }
-            else if (size(s[0]) < 4 and size(s[0]) > 1) {
-                # 2-3 chars: it's probably a navaid (VOR or NDB)
-                candidates = findNavaidsByID(ref, s[0]);
-                # ...but could also be a fix
-                if (size(candidates) == 0) {
-                    candidates = findFixesByID(ref, s[0]);
+        }
+
+        var result = 'INVALID';
+        while (size(s) > 0) {
+            # If this is the last bit, and ends at the destination airport,
+            # then try for a STAR
+
+            if (size(s) == 2 and
+                me.route.destinationAirport != nil and
+                s[1] == me.route.destinationAirport.id) {
+                var star = me.route.destinationAirport.getStar(s[0]);
+                if (typeof(star) == 'ghost') {
+                    me.route.star = star;
+                    me.route.closed = 1;
+                    result = 'OK';
+                    break;
                 }
             }
-            if (size(candidates) > 0) {
-                targetFix = candidates[0];
-            }
-            if (targetFix != nil) {
-                me.startEditing();
-                var wp = createWP(candidates[0], candidates[0].id);
-                me.fp.insertWP(wp, appendIndex + 1);
-                fms.kickRouteManager();
-                # printf("Insert %s at %i", candidates[0].id, appendIndex);
-                me.mcdu.setScratchpad('');
-            }
-            else {
-                me.mcdu.setScratchpadMsg("NO WAYPOINT", mcdu_yellow);
-            }
-        }
-        else if (size(s) == 2) {
-            var wp = createViaTo(s[0], s[1]);
-            if (wp != nil) {
-                me.startEditing();
-                me.fp.insertWP(wp, appendIndex + 1);
-                fms.kickRouteManager();
-                me.mcdu.setScratchpad('');
-            }
-            else {
-                me.mcdu.setScratchpadMsg("NO WAYPOINT", mcdu_yellow);
-            }
-        }
-    },
 
-    deleteWP: func (wpi) {
-        if (wpi > 0) {
-            me.fp.deleteWP(wpi);
-            fms.kickRouteManager();
+            # Attempt to interpret as airway.fix....
+            if (size(s) > 1) {
+                result = me.route.appendLeg(s[0], s[1]);
+                if (result == 'OK') {
+                    s = subvec(s, 2);
+                    continue;
+                }
+            }
+
+            # If that doesn't work, interpret as fix....
+            result = me.route.appendLeg(nil, s[0]);
+            if (result == 'OK') {
+                s = subvec(s, 1);
+                continue;
+            }
+
+            break;
+        }
+
+        if (result == 'OK') {
+            me.startEditing();
+            fms.updateModifiedFlightplanFromRoute();
+        }
+        else {
+            me.mcdu.setScratchpadMsg(result, mcdu_yellow);
         }
     },
 
     loadPageItems: func (p) {
-        if (me.specialMode == 'ROUTE') {
-            me.loadPageItemsRTE(p);
-        }
-        else {
-            me.loadPageItemsFPL(p);
-        }
-    },
-
-    loadPageItemsRTE: func (p) {
         var departureModel = makeAirportModel(me, "DEPARTURE-AIRPORT");
         var destinationModel = makeAirportModel(me, "DESTINATION-AIRPORT");
 
@@ -449,54 +405,47 @@ var FlightPlanModule = {
             };
         }
         else {
-            var waypoints = fms.getRouteLegs(me.fp);
-            var numWaypoints = size(waypoints);
-            var firstWP = (p - 1) * 5;
             me.views = [];
             me.controllers = {};
             append(me.views, StaticView.new(1, 1, "VIA", mcdu_white));
             append(me.views, StaticView.new(21, 1, "TO", mcdu_white));
             var y = 2;
+            var firstEntry = (p - 1) * 5;
             for (var i = 0; i < 5; i += 1) {
+                var j = firstEntry + i;
                 var lsk = sprintf("R%i", i + 1);
-                var wp = nil;
-                var j = firstWP + i;
-                if (j < size(waypoints)) {
-                    wp = waypoints[j];
-                }
-                if (wp == nil) {
-                    append(me.views, StaticView.new(0, y, "-----", mcdu_green | mcdu_large));
-                    me.controllers[lsk] =
-                        FuncController.new(func (owner, val) { owner.appendViaTo(val); });
+                var leg = (j < size(me.route.legs)) ? me.route.legs[j] : nil;
+                if (leg == nil) {
+                    if (!me.route.isClosed()) {
+                        append(me.views, StaticView.new(0, y, "-----", mcdu_green | mcdu_large));
+                        me.controllers[lsk] =
+                            FuncController.new(func (owner, val) { owner.appendViaTo(val); });
+                    }
                     break;
                 }
                 else {
-                    append(me.views, StaticView.new(0, y, (wp[0] == "DCT") ? "DIRECT" : wp[0], mcdu_green | mcdu_large));
-                    append(me.views, StaticView.new(16, y, sprintf("%8s", wp[1].id), mcdu_green | mcdu_large));
-                    if (wp[1].wp_role == nil) {
-                        # Only enroute waypoints can be deleted
+                    append(me.views, StaticView.new(0, y, leg.airwayID, mcdu_green | mcdu_large));
+                    append(me.views, StaticView.new(16, y, leg.toID, mcdu_green | mcdu_large));
+                    if (j == size(me.route.legs) - 1) {
                         me.controllers[lsk] =
-                            (func (wpi) {
+                            (func (i) {
                                 return FuncController.new(
                                     func (owner, val) {
                                         # printf("Append before WP %i", j);
-                                        owner.appendViaTo(val, wpi);
+                                        owner.setScratchpadMsg("NOT ALLOWED", mcdu_yellow);
                                     },
                                     func (owner) {
                                         # printf("Delete WP %i", j);
                                         owner.startEditing();
-                                        owner.deleteWP(wpi);
+                                        owner.deleteLeg(i);
                                     });
-                            })(wp[1].index);
+                            })(j);
                     }
                 }
                 y += 2;
             }
         }
-        if (me.fpStatus == 'ACT') {
-            me.appendR6Item();
-        }
-        else {
+        if (me.routeStatus != 'ACT') {
             append(me.views,
                 StaticView.new(0, 12, left_triangle ~ "CANCEL", mcdu_white | mcdu_large));
             me.controllers["L6"] = FuncController.new(func (owner, val) {
@@ -510,7 +459,86 @@ var FlightPlanModule = {
         }
     },
 
-    loadPageItemsFPL: func (p) {
+};
+
+var FlightPlanModule = {
+    new: func (mcdu, parentModule, specialMode=nil) {
+        var m = BaseModule.new(mcdu, parentModule);
+        m.parents = prepended(FlightPlanModule, m.parents);
+        m.specialMode = specialMode;
+        if (fms.modifiedFlightplan != nil) {
+            m.fp = fms.modifiedFlightplan;
+            m.fpStatus = 'MOD';
+        }
+        else {
+            m.fp = flightplan();
+            if (m.fp == nil) {
+                m.fpStatus = '';
+                m.fp = fms.getModifyableFlightplan();
+            }
+            else {
+                m.fpStatus = 'ACT';
+            }
+        }
+        m.timer = nil;
+        return m;
+    },
+
+    startEditing: func () {
+        if (me.fpStatus == 'ACT') {
+            me.fp = fms.getModifyableFlightplan();
+            me.fpStatus = 'MOD';
+        }
+    },
+
+    finishEditing: func (fromRoute=0) {
+        if (me.fpStatus != 'ACT') {
+            me.fp = fms.commitFlightplan();
+            me.fpStatus = 'ACT';
+        }
+    },
+
+    cancelEditing: func () {
+        if (me.fpStatus != 'ACT') {
+            me.fp = fms.discardFlightplan();
+            me.fpStatus = 'ACT';
+        }
+    },
+
+    getNumPages: func () {
+        var numEntries = me.fp.getPlanSize();
+        var firstEntry = me.fp.current - 1;
+        return math.max(1, math.ceil((numEntries - firstEntry) / 5));
+    },
+
+    activate: func () {
+        me.loadPage(me.page);
+        me.timer = maketimer(1, me, func () {
+            me.loadPage(me.page);
+            me.fullRedraw();
+        });
+        me.timer.start();
+    },
+
+    deactivate: func () {
+        if (me.timer != nil) {
+            me.timer.stop();
+            me.timer = nil;
+        }
+    },
+
+    getTitle: func () {
+        return me.fpStatus ~ " FLT PLAN";
+    },
+
+    deleteWP: func (wpi) {
+        if (wpi > 0) {
+            me.fp.deleteWP(wpi);
+            fms.kickRouteManager();
+        }
+    },
+
+    loadPageItems: func (p) {
         var numWaypoints = me.fp.getPlanSize();
         var firstEntry = math.max(0, me.fp.current - 1);
         var firstWP = p * 5 + firstEntry;
@@ -803,7 +831,7 @@ var DirectToModule = {
 
     insertDirect: func () {
         var candidates = parseWaypoint(me.directToID);
-        debug.dump(me.directFromIndex, me.directToID, candidates);
+        # debug.dump(me.directFromIndex, me.directToID, candidates);
         if (size(candidates) > 0) {
             var newWP = candidates[0];
             var index = 1;
@@ -1980,10 +2008,20 @@ var NavIdentModule = {
             me.views = [
                 StaticView.new( 2,  1, "DATE", mcdu_white),
                 FormatView.new( 1, 2, mcdu_large | mcdu_cyan, "ZDAY", 2, "%02d"),
-                FormatView.new( 3, 2, mcdu_large | mcdu_cyan, "ZMON", 3, "%3s",
-                    [ "XXX", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" ]),
+                FormatView.new( 3, 2, mcdu_large | mcdu_cyan, "ZMON", 3, "%3s", datetime.monthName3),
                 FormatView.new( 6, 2, mcdu_large | mcdu_cyan, "ZYEAR", 2, "%02d",
                     func (y) { return math.mod(y, 100); }),
+
+                StaticView.new(12, 1, "ACTIVE NDB", mcdu_white),
+
+                FormatView.new(10, 2, mcdu_large | mcdu_green, "NDBFROM_DAY", 2, "%02d"),
+                FormatView.new(12, 2, mcdu_large | mcdu_green, "NDBFROM_MON", 3, "%3s", datetime.monthName3),
+                FormatView.new(16, 2, mcdu_large | mcdu_green, "NDBUNTIL_DAY", 2, "%02d"),
+                FormatView.new(18, 2, mcdu_large | mcdu_green, "NDBUNTIL_MON", 3, "%3s", datetime.monthName3),
+                StaticView.new(21, 2, "/", mcdu_large | mcdu_green),
+                FormatView.new(22, 2, mcdu_large | mcdu_green, "NDBUNTIL_YEAR", 2, "%02d",
+                    func (y) { return math.mod(y or 0, 100); }),
+
                 StaticView.new( 2,  3, "UTC", mcdu_white),
                 FormatView.new( 1, 4, mcdu_large | mcdu_cyan, "ZHOUR", 2, "%02d"),
                 FormatView.new( 3, 4, mcdu_large | mcdu_cyan, "ZMIN", 2, "%02d"),
@@ -1991,8 +2029,8 @@ var NavIdentModule = {
                 StaticView.new( 2,  5, "SW", mcdu_white),
                 FormatView.new( 1,  6, mcdu_large | mcdu_green, "FGVER", 10, "%-10s"),
                 StaticView.new(11,  5, "NDS", mcdu_white),
-                StaticView.new(15,  5, "V3.01 16M", mcdu_green),
-                StaticView.new(12,  6, "WORLD3-301", mcdu_large | mcdu_green),
+                FormatView.new(15,  5, mcdu_green, "NDBVERSION", 9),
+                FormatView.new(12,  6, mcdu_large | mcdu_green, "NDBSOURCE", 12),
                 StaticView.new( 0, 12, left_triangle ~ "MAINTENANCE", mcdu_large | mcdu_white),
                 StaticView.new(12, 12, "   POS INIT" ~ right_triangle, mcdu_large | mcdu_white),
             ];

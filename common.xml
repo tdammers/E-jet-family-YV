@@ -3,9 +3,11 @@
 <PropertyList>
 
     <sim>
-        <author>Gabriel Hernandez (YV3399), D-ECHO, Tobias Dammers (nl256)</author>
+        <author>Gabriel Hernandez (YV3399), D-ECHO, Tobias Dammers (nl256), e.a.</author>
         <status>Version 0.6</status>
         <flight-model>jsb</flight-model>
+        <expected-aircraft-dir-name>E-jet-family</expected-aircraft-dir-name>
+        <minimum-fg-version>2020.3</minimum-fg-version>
 
         <model>
             <livery>
@@ -64,33 +66,26 @@
         <aircraft-data>
             <path>/sim/model/autopush/route/show</path>
             <path>/sim/model/autopush/route/show-wingtip</path>
-            <path>/sim/simbrief/username</path>
-            <path>/sim/simbrief/options/autocommit</path>
-            <path>/sim/simbrief/options/import-payload</path>
-            <path>/sim/simbrief/options/import-fob</path>
-            <path>/sim/simbrief/options/import-perfinit</path>
-            <path>/sim/simbrief/options/import-winds-aloft</path>
             <path>/instrumentation/mfd/resolution</path>
             <path>/instrumentation/mfd/scanrate</path>
+            <path>/instrumentation/pfd[0]/enabled</path>
+            <path>/instrumentation/pfd[1]/enabled</path>
+            <path>/instrumentation/mfd[0]/enabled</path>
+            <path>/instrumentation/mfd[1]/enabled</path>
+            <path>/instrumentation/eicas/enabled</path>
             <path>/options/system/keyboard-mode</path>
             <path>/instrumentation/efb/available</path>
             <path>/instrumentation/efb/brightness</path>
             <path>/instrumentation/efb/flightbag-companion-uri</path>
+            <path>/controls/gear/enable-tiller</path>
+            <path>/controls/switches/hud-flip[0]</path>
+            <path>/controls/switches/hud-flip[1]</path>
+            <path>/sim/http/local-ip</path>
         </aircraft-data>
 
-        <simbrief>
-            <username type="string" userarchive="y" />
-            <options>
-                <autocommit type="bool" userarchive="y">0</autocommit>
-                <import-fp type="bool" userarchive="y">1</import-fp>
-                <import-payload type="bool" userarchive="y">0</import-payload>
-                <import-fob type="bool" userarchive="y">0</import-fob>
-                <import-perfinit type="bool" userarchive="y">0</import-perfinit>
-                <import-winds-aloft type="bool" userarchive="y">0</import-winds-aloft>
-            </options>
-            <downloading type="bool">0</downloading>
-            <text-status type="string"></text-status>
-        </simbrief>
+        <http>
+            <local-ip>localhost:8080</local-ip>
+        </http>
 
         <flaps>
             <!--
@@ -496,6 +491,14 @@
                             <dialog-name>mcdu2</dialog-name>
                         </binding>
                     </item>
+                    <item>
+                        <name>mcduweb</name>
+                        <label>Remote MCDU 1</label>
+                        <binding>
+                            <command>dialog-show</command>
+                            <dialog-name>mcduweb</dialog-name>
+                        </binding>
+                    </item>
                 </menu>
                 <menu n="100">
                     <label>E-jet-family</label>
@@ -572,6 +575,8 @@
                             <dialog-name>performance</dialog-name>
                         </binding>
                     </item>
+
+                    <!--
                     <item>
                         <name>simbrief</name>
                         <label>SimBrief</label>
@@ -580,6 +585,7 @@
                             <dialog-name>simbrief</dialog-name>
                         </binding>
                     </item>
+                    -->
                 </menu>
             </default>
         </menubar>
@@ -684,7 +690,7 @@
 
     <options>
         <system>
-            <keyboard-mode type="bool" userarchive="y">0</keyboard-mode>
+            <keyboard-mode type="bool">0</keyboard-mode>
         </system>
     </options>
 
@@ -972,6 +978,10 @@
                 <name type="string">°C</name>
             </temp>
         </units>
+
+        <airways>
+            <loaded type="bool">false</loaded>
+        </airways>
 
         <flightplan-modifications type="bool">false</flightplan-modifications>
         <!-- flight phase -->
@@ -1302,7 +1312,7 @@
                 <tru n="0">
                     <name>TRU ESS</name>
                     <volts type="double">0</volts>
-                    <amps type="double">0</amps>
+                    <amfs type="double">0</amfs>
                     <load type="double">0</load>
                     <status type="int">0</status>
                 </tru>
@@ -1310,7 +1320,7 @@
                 <tru n="1">
                     <name>TRU 1</name>
                     <volts type="double">0</volts>
-                    <amps type="double">0</amps>
+                    <amfs type="double">0</amfs>
                     <load type="double">0</load>
                     <status type="int">0</status>
                 </tru>
@@ -1318,7 +1328,7 @@
                 <tru n="2">
                     <name>TRU 2</name>
                     <volts type="double">0</volts>
-                    <amps type="double">0</amps>
+                    <amfs type="double">0</amfs>
                     <load type="double">0</load>
                     <status type="int">0</status>
                 </tru>
@@ -1625,6 +1635,7 @@
         <flight>
             <ground-spoilers-armed type="bool">false</ground-spoilers-armed>
             <speedbrake-lever type="double">0</speedbrake-lever>
+            <steep-approach type="bool">false</steep-approach>
 
             <!--
                 These are the pilot-selected v-speeds; any non-zero setting
@@ -1820,18 +1831,18 @@
             <law type="int">1</law>
         </rudder>
         <spoilers>
-            <!-- not currently functional yet, we only need this for MDF and
-                 cockpit animations. -->
+            <!-- 1 = normal, 0 = direct -->
             <law type="int">1</law>
         </spoilers>
     </fbw>
 
     <instrumentation>
         <IESS>
-            <brightness type="float" userarchive="y">0.75</brightness>
+            <brightness type="float">0.75</brightness>
         </IESS>
 
         <eicas>
+            <enabled type="bool">true</enabled>
             <signals>
                 <messages-changed type="bool">false</messages-changed>
             </signals>
@@ -1865,18 +1876,20 @@
         </eicas>
 
         <mcdu>
+            <enabled type="bool">true</enabled>
             <display>IDENT</display>
             <input type="string"/>
             <serviceable type="bool">true</serviceable>
             <command type="string"></command>
-            <brightness type="double" userarchive="y">0.8</brightness>
+            <brightness type="double">0.8</brightness>
         </mcdu>
         <mcdu>
+            <enabled type="bool">true</enabled>
             <display>IDENT</display>
             <input type="string"/>
             <serviceable type="bool">true</serviceable>
             <command type="string"></command>
-            <brightness type="double" userarchive="y">0.8</brightness>
+            <brightness type="double">0.8</brightness>
         </mcdu>
 
         <wxr>
@@ -1944,6 +1957,9 @@
         </annun>
 
         <pfd>
+            <enabled type="bool">true</enabled>
+            <!-- 0 = slow, 1 = default, 2 = fast -->
+            <update-rate type="int">1</update-rate>
             <!-- 0 = FMS, 1,2 = VOR1/LOC1, VOR2,LOC2 -->
             <nav-src type="int">1</nav-src>
             <preview type="int">0</preview>
@@ -2020,6 +2036,8 @@
         </pfd>
 
         <pfd>
+            <enabled type="bool">true</enabled>
+            <update-rate type="int">0</update-rate>
             <!-- 0 = FMS, 1,2 = VOR1/LOC1, VOR2,LOC2 -->
             <nav-src type="int">2</nav-src>
             <preview type="int">0</preview>
@@ -2096,6 +2114,7 @@
         </pfd>
 
         <mfd>
+            <enabled type="bool">true</enabled>
             <lateral-range type="double">20</lateral-range>
             <!-- 0 = Map, 1 = Plan, 2 = Systems -->
             <page>0</page>
@@ -2107,11 +2126,12 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
-            <scan-rate type="int" userarchive="y">1</scan-rate>
-            <resolution type="int" userarchive="y">6</resolution>
+            <scan-rate type="int">1</scan-rate>
+            <resolution type="int">6</resolution>
         </mfd>
 
         <mfd>
+            <enabled type="bool">true</enabled>
             <lateral-range type="double">20</lateral-range>
             <!-- 0 = Map, 1 = Plan, 2 = Systems -->
             <page>0</page>
@@ -2123,8 +2143,8 @@
             </cursor>
             <wx-mode type="int">0</wx-mode>
             <wx-mode-indicated type="int">0</wx-mode-indicated>
-            <scan-rate type="int" userarchive="y">1</scan-rate>
-            <resolution type="int" userarchive="y">6</resolution>
+            <scan-rate type="int">1</scan-rate>
+            <resolution type="int">6</resolution>
         </mfd>
 
         <nav-compass>
@@ -2185,12 +2205,12 @@
         </mk-viii>
 
         <efb>
-            <available type="bool" userarchive="y">false</available>
+            <available type="bool">false</available>
             <power type="bool">true</power>
-            <brightness type="double" userarchive="y">0.75</brightness>
+            <brightness type="double">0.75</brightness>
             <orientation-norm type="double">0</orientation-norm>
             <selected-orientation-norm type="double">0</selected-orientation-norm>
-            <flightbag-companion-uri type="string" userarchive="y">http://localhost:7675/</flightbag-companion-uri>
+            <flightbag-companion-uri type="string">http://localhost:7675/</flightbag-companion-uri>
         </efb>
     </instrumentation>
 
@@ -2276,6 +2296,11 @@
                     <command>property-assign</command>
                     <property>/it-autoflight/input/toga</property>
                     <value type="bool">true</value>
+                </binding>
+                <binding>
+                    <command>property-assign</command>
+                    <property>/controls/flight/steep-approach</property>
+                    <value type="bool">false</value>
                 </binding>
             </key>
             <key n="2">
@@ -2388,6 +2413,9 @@
         <polyfill>
             <file>Aircraft/E-jet-family/Nasal/polyfill.nas</file>
         </polyfill>
+        <datetime>
+            <file>Aircraft/E-jet-family/Nasal/datetime.nas</file>
+        </datetime>
         <fastercanvas>
             <file>Aircraft/E-jet-family/Nasal/fastercanvas.nas</file>
         </fastercanvas>
@@ -2456,9 +2484,10 @@
             <file>Aircraft/E-jet-family/Nasal/fms/speed.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/vnav.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/radios.nas</file>
-            <file>Aircraft/E-jet-family/Nasal/fms/main.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/route.nas</file>
+            <file>Aircraft/E-jet-family/Nasal/fms/main.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/performance.nas</file>
+            <file>Aircraft/E-jet-family/Nasal/fms/airways.nas</file>
         </fms>
 
         <autopush>
@@ -2497,9 +2526,9 @@
             <file>Aircraft/E-jet-family/Nasal/efb.nas</file>
         </efb>
 
-        <simbrief>
+        <simbriefHooks>
             <file>Aircraft/E-jet-family/Nasal/simbrief.nas</file>
-        </simbrief>
+        </simbriefHooks>
 
         <keyboardFixes>
             <file>Aircraft/E-jet-family/Nasal/keyboard.nas</file>
@@ -2523,15 +2552,30 @@
                     <drag-elevator type="double">0.01</drag-elevator>
                     <drag-flap type="double">0.04</drag-flap>
                     <drag-gear type="double">0.04</drag-gear>
-                    <drag-induced type="double">0.06</drag-induced>
-                    <drag-mach type="double">0.008</drag-mach>
+                    <drag-induced type="double">0.035</drag-induced>
+                    <drag-mach type="double">0.021</drag-mach>
                     <drag-parasitic type="double">0.0125</drag-parasitic>
                     <drag-slat type="double">0.003</drag-slat>
-                    <drag-speedbrake type="double">0.05</drag-speedbrake>
+                    <drag-mfs type="double">0.01</drag-mfs>
+                    <yaw-mfs type="double">0.01</yaw-mfs>
+                    <bank-mfs type="double">0.01</bank-mfs>
                     <yaw-damper-beta type="double">-5</yaw-damper-beta>
                     <yaw-damper-rate type="double">2</yaw-damper-rate>
                 </coefficients>
             </aero-config>
         </jsbsim>
     </fdm>
+
+    <surface-positions>
+        <mfs1-pos-norm  type="double">0</mfs1-pos-norm>
+        <mfs2-pos-norm  type="double">0</mfs2-pos-norm>
+        <mfs3-pos-norm  type="double">0</mfs3-pos-norm>
+        <mfs4-pos-norm  type="double">0</mfs4-pos-norm>
+        <mfs5-pos-norm  type="double">0</mfs5-pos-norm>
+        <mfs6-pos-norm  type="double">0</mfs6-pos-norm>
+        <mfs7-pos-norm  type="double">0</mfs7-pos-norm>
+        <mfs8-pos-norm  type="double">0</mfs8-pos-norm>
+        <mfs9-pos-norm  type="double">0</mfs9-pos-norm>
+        <mfs10-pos-norm type="double">0</mfs10-pos-norm>
+    </surface-positions>
 </PropertyList>
