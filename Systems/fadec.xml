@@ -145,9 +145,100 @@
     </filter>
 
     <filter>
+        <name>Left throttle command</name>
+        <type>gain</type>
+		<input>
+            <condition>
+				<equals>
+					<property>/it-autoflight/output/athr</property>
+					<value>1</value>
+				</equals>
+            </condition>
+            <property>/it-autoflight/internal/throttle[0]</property>
+		</input>
+        <input>
+            <property>controls/engines/engine[0]/throttle</property>
+        </input>
+        <output>controls/engines/engine[0]/target</output>
+    </filter>
+
+    <filter>
+        <name>Lever Left</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <!-- TOGA RES mode: interpolate between TOGA and MAX N1 -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[0]/throttle</property>
+                    <property>fadec/configuration/throttle-toga-reserve</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <sum>
+                    <property>trs/thrust/to</property>
+                    <product>
+                        <div>
+                            <difference>
+                                <property>controls/engines/engine[0]/throttle</property>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                            <difference>
+                                <value>1</value>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                        </div>
+                        <difference>
+                            <property>fadec/configuration/max-n1</property>
+                            <property>trs/thrust/to</property>
+                        </difference>
+                    </product>
+                </sum>
+            </expression>
+        </input>
+        <!-- TOGA mode: select exact TOGA thrust, as per TRS -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[0]/throttle</property>
+                    <property>fadec/configuration/throttle-toga-norm</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <min>
+                    <property>trs/thrust/to</property>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <!-- Normal mode: interpolate thrust between idle and TOGA. -->
+        <input>
+            <expression>
+                <min>
+                    <sum>
+                        <property>fadec/configuration/idle-n1</property>
+                        <product>
+                            <div>
+                                <property>controls/engines/engine[0]/throttle</property>
+                                <property>fadec/configuration/throttle-toga-norm</property>
+                            </div>
+                            <difference>
+                                <property>fadec/configuration/max-n1</property>
+                                <property>fadec/configuration/idle-n1</property>
+                            </difference>
+                        </product>
+                    </sum>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <output>/fadec/lever[0]</output>
+    </filter>
+    <filter>
         <name>Target Left</name>
         <type>gain</type>
         <gain>1</gain>
+        <!-- Starter active: select 0.1% above idle to keep the juices flowing -->
         <input>
             <condition>
                 <property>controls/engines/engine[0]/starter-switch</property>
@@ -159,33 +250,62 @@
                 </sum>
             </expression>
         </input>
+        <!-- TOGA RES mode: interpolate between TOGA and MAX N1 -->
         <input>
             <condition>
                 <greater-than>
-                    <property>controls/engines/engine[0]/throttle</property>
-                    <property>fadec/configuration/throttle-toga-norm</property>
+                    <property>controls/engines/engine[0]/target</property>
+                    <property>fadec/configuration/throttle-toga-reserve</property>
                 </greater-than>
             </condition>
             <expression>
                 <sum>
-                    <property>fadec/configuration/idle-n1</property>
+                    <property>trs/thrust/to</property>
                     <product>
-                        <property>/controls/engines/engine[0]/throttle</property>
+                        <div>
+                            <difference>
+                                <property>controls/engines/engine[0]/target</property>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                            <difference>
+                                <value>1</value>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                        </div>
                         <difference>
                             <property>fadec/configuration/max-n1</property>
-                            <property>fadec/configuration/idle-n1</property>
+                            <property>trs/thrust/to</property>
                         </difference>
                     </product>
                 </sum>
             </expression>
         </input>
+        <!-- TOGA mode: select exact TOGA thrust, as per TRS -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[0]/target</property>
+                    <property>fadec/configuration/throttle-toga-norm</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <min>
+                    <property>trs/thrust/to</property>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <!-- Normal mode: interpolate thrust between idle and TOGA. -->
         <input>
             <expression>
                 <min>
                     <sum>
                         <property>fadec/configuration/idle-n1</property>
                         <product>
-                            <property>/controls/engines/engine[0]/throttle</property>
+                            <div>
+                                <property>controls/engines/engine[0]/target</property>
+                                <property>fadec/configuration/throttle-toga-norm</property>
+                            </div>
                             <difference>
                                 <property>fadec/configuration/max-n1</property>
                                 <property>fadec/configuration/idle-n1</property>
@@ -218,6 +338,72 @@
             </expression>
         </input>
         <output>fadec/throttle-cmd[0]</output>
+    </filter>
+
+    <filter>
+        <name>Left Engine heat production</name>
+        <type>gain</type>
+        <gain>0.05</gain>
+        <input>
+            <property>engines/engine[0]/fuel-flow_pph</property>
+        </input>
+        <output>engines/engine[0]/heat-in</output>
+    </filter>
+    <filter>
+        <name>Left Engine temp diff</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <difference>
+                    <property>engines/engine[0]/itt-degc</property>
+                    <property>environment/temperature-degc</property>
+                </difference>
+            </expression>
+        </input>
+        <output>engines/engine[0]/temp-diff-c</output>
+    </filter>
+    <filter>
+        <name>Left Engine heat out</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <product>
+                    <property>engines/engine[0]/temp-diff-c</property>
+                    <max>
+                        <sum>
+                            <property>engines/engine[0]/n1</property>
+                            <value>-5</value>
+                        </sum>
+                        <value>5</value>
+                    </max>
+                    <value>0.0065</value>
+                </product>
+            </expression>
+        </input>
+        <output>engines/engine[0]/heat-out</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <update-interval-secs>0.1</update-interval-secs>
+        <debug type="bool">false</debug>
+        <input>
+            <expression>
+                <sum>
+                    <product>
+                        <difference>
+                            <property>engines/engine[0]/heat-in</property>
+                            <property>engines/engine[0]/heat-out</property>
+                        </difference>
+                        <value>0.1</value>
+                    </product>
+                    <property>engines/engine[0]/itt-degc</property>
+                </sum>
+            </expression>
+        </input>
+        <output>engines/engine[0]/itt-degc</output>
     </filter>
 
     <!-- RIGHT ENGINE -->
@@ -367,9 +553,100 @@
 
 
     <filter>
+        <name>Right throttle command</name>
+        <type>gain</type>
+		<input>
+            <condition>
+				<equals>
+					<property>/it-autoflight/output/athr</property>
+					<value>1</value>
+				</equals>
+            </condition>
+            <property>/it-autoflight/internal/throttle[1]</property>
+		</input>
+        <input>
+            <property>controls/engines/engine[1]/throttle</property>
+        </input>
+        <output>controls/engines/engine[1]/target</output>
+    </filter>
+
+    <filter>
+        <name>Lever Right</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <!-- TOGA RES mode: interpolate between TOGA and MAX N1 -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[1]/throttle</property>
+                    <property>fadec/configuration/throttle-toga-reserve</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <sum>
+                    <property>trs/thrust/to</property>
+                    <product>
+                        <div>
+                            <difference>
+                                <property>controls/engines/engine[1]/throttle</property>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                            <difference>
+                                <value>1</value>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                        </div>
+                        <difference>
+                            <property>fadec/configuration/max-n1</property>
+                            <property>trs/thrust/to</property>
+                        </difference>
+                    </product>
+                </sum>
+            </expression>
+        </input>
+        <!-- TOGA mode: select exact TOGA thrust, as per TRS -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[1]/throttle</property>
+                    <property>fadec/configuration/throttle-toga-norm</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <min>
+                    <property>trs/thrust/to</property>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <!-- Normal mode: interpolate thrust between idle and TOGA. -->
+        <input>
+            <expression>
+                <min>
+                    <sum>
+                        <property>fadec/configuration/idle-n1</property>
+                        <product>
+                            <div>
+                                <property>controls/engines/engine[1]/throttle</property>
+                                <property>fadec/configuration/throttle-toga-norm</property>
+                            </div>
+                            <difference>
+                                <property>fadec/configuration/max-n1</property>
+                                <property>fadec/configuration/idle-n1</property>
+                            </difference>
+                        </product>
+                    </sum>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <output>/fadec/lever[1]</output>
+    </filter>
+    <filter>
         <name>Target Right</name>
         <type>gain</type>
         <gain>1</gain>
+        <!-- Starter active: select 0.1% above idle to keep the juices flowing -->
         <input>
             <condition>
                 <property>controls/engines/engine[1]/starter-switch</property>
@@ -381,33 +658,62 @@
                 </sum>
             </expression>
         </input>
+        <!-- TOGA RES mode: interpolate between TOGA and MAX N1 -->
         <input>
             <condition>
                 <greater-than>
-                    <property>controls/engines/engine[1]/throttle</property>
-                    <property>fadec/configuration/throttle-toga-norm</property>
+                    <property>controls/engines/engine[1]/target</property>
+                    <property>fadec/configuration/throttle-toga-reserve</property>
                 </greater-than>
             </condition>
             <expression>
                 <sum>
-                    <property>fadec/configuration/idle-n1</property>
+                    <property>trs/thrust/to</property>
                     <product>
-                        <property>/controls/engines/engine[1]/throttle</property>
+                        <div>
+                            <difference>
+                                <property>controls/engines/engine[1]/target</property>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                            <difference>
+                                <value>1</value>
+                                <property>fadec/configuration/throttle-toga-reserve</property>
+                            </difference>
+                        </div>
                         <difference>
                             <property>fadec/configuration/max-n1</property>
-                            <property>fadec/configuration/idle-n1</property>
+                            <property>trs/thrust/to</property>
                         </difference>
                     </product>
                 </sum>
             </expression>
         </input>
+        <!-- TOGA mode: select exact TOGA thrust, as per TRS -->
+        <input>
+            <condition>
+                <greater-than>
+                    <property>controls/engines/engine[1]/target</property>
+                    <property>fadec/configuration/throttle-toga-norm</property>
+                </greater-than>
+            </condition>
+            <expression>
+                <min>
+                    <property>trs/thrust/to</property>
+                    <property>fadec/trs-limit</property>
+                </min>
+            </expression>
+        </input>
+        <!-- Normal mode: interpolate thrust between idle and TOGA. -->
         <input>
             <expression>
                 <min>
                     <sum>
                         <property>fadec/configuration/idle-n1</property>
                         <product>
-                            <property>/controls/engines/engine[1]/throttle</property>
+                            <div>
+                                <property>controls/engines/engine[1]/target</property>
+                                <property>fadec/configuration/throttle-toga-norm</property>
+                            </div>
                             <difference>
                                 <property>fadec/configuration/max-n1</property>
                                 <property>fadec/configuration/idle-n1</property>
@@ -440,6 +746,128 @@
             </expression>
         </input>
         <output>fadec/throttle-cmd[1]</output>
+    </filter>
+
+    <filter>
+        <name>Right Engine heat production</name>
+        <type>gain</type>
+        <gain>0.05</gain>
+        <input>
+            <property>engines/engine[1]/fuel-flow_pph</property>
+        </input>
+        <output>engines/engine[1]/heat-in</output>
+    </filter>
+    <filter>
+        <name>Right Engine temp diff</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <difference>
+                    <property>engines/engine[1]/itt-degc</property>
+                    <property>environment/temperature-degc</property>
+                </difference>
+            </expression>
+        </input>
+        <output>engines/engine[1]/temp-diff-c</output>
+    </filter>
+    <filter>
+        <name>Right Engine heat out</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <product>
+                    <property>engines/engine[1]/temp-diff-c</property>
+                    <max>
+                        <sum>
+                            <property>engines/engine[1]/n1</property>
+                            <value>-5</value>
+                        </sum>
+                        <value>5</value>
+                    </max>
+                    <value>0.0065</value>
+                </product>
+            </expression>
+        </input>
+        <output>engines/engine[1]/heat-out</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <update-interval-secs>0.1</update-interval-secs>
+        <debug type="bool">false</debug>
+        <input>
+            <expression>
+                <sum>
+                    <product>
+                        <difference>
+                            <property>engines/engine[1]/heat-in</property>
+                            <property>engines/engine[1]/heat-out</property>
+                        </difference>
+                        <value>0.1</value>
+                    </product>
+                    <property>engines/engine[1]/itt-degc</property>
+                </sum>
+            </expression>
+        </input>
+        <output>engines/engine[1]/itt-degc</output>
+    </filter>
+
+    <!-- REVERSERS -->
+    <filter>
+        <name>Reverser Left</name>
+        <type>noise-spike</type>
+        <max-rate-of-change>0.715</max-rate-of-change>
+        <input>
+            <condition>
+                <not>
+                    <or>
+                        <property>/gear/gear[1]/wow</property>
+                        <property>/gear/gear[2]/wow</property>
+                    </or>
+                </not>
+            </condition>
+            <value>0</value>
+        </input>
+        <input>
+            <property>/controls/engines/engine[0]/reverser</property>
+        </input>
+        <output>/engines/engine[0]/reverser-pos-norm</output>
+    </filter>
+    <filter>
+        <name>Reverser Left To JSB</name>
+        <type>gain</type>
+        <gain>1.7</gain>
+        <input>/controls/engines/engine[0]/reverser</input>
+        <output>/fdm/jsbsim/propulsion/engine[0]/reverser-angle-rad</output>
+    </filter>
+    <filter>
+        <name>Reverser Right</name>
+        <type>noise-spike</type>
+        <max-rate-of-change>0.715</max-rate-of-change>
+        <input>
+            <condition>
+                <not>
+                    <or>
+                        <property>/gear/gear[1]/wow</property>
+                        <property>/gear/gear[2]/wow</property>
+                    </or>
+                </not>
+            </condition>
+            <value>0</value>
+        </input>
+        <input>
+            <property>/controls/engines/engine[1]/reverser</property>
+        </input>
+        <output>/engines/engine[1]/reverser-pos-norm</output>
+    </filter>
+    <filter>
+        <name>Reverser Right To JSB</name>
+        <type>gain</type>
+        <gain>1.7</gain>
+        <input>/controls/engines/engine[1]/reverser</input>
+        <output>/fdm/jsbsim/propulsion/engine[1]/reverser-angle-rad</output>
     </filter>
 
 </PropertyList>

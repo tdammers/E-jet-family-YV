@@ -194,7 +194,7 @@
         <input>
             <expression>
                 <sum>
-                    <property>/controls/flight/elevator</property>
+                    <property>/fdm/jsbsim/fcs/elevator-sum</property>
                     <property>/fbw/elevator/etc</property>
                     <property>/fbw/elevator/tsa/elevator-command</property>
                 </sum>
@@ -218,7 +218,7 @@
             <property>/fbw/elevator/elevator-command-normal-law</property>
         </input>
         <input>
-            <property>/controls/flight/elevator</property>
+            <property>/fdm/jsbsim/fcs/elevator-sum</property>
         </input>
         <output>/fdm/jsbsim/fcs/elevator-cmd-fbw</output>
     </filter>

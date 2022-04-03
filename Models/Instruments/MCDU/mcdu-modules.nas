@@ -2151,12 +2151,14 @@ var ComRadioDetailsModule = {
                 StaticView.new( 16,  1, "SQUELCH",                mcdu_white ),
                 StaticView.new( 19,  3, "MODE",                   mcdu_white ),
                 StaticView.new( 19,  5, "FREQ",                   mcdu_white ),
+                FormatView.new( 17,  6, mcdu_large | mcdu_green, "COM" ~ me.radioNum ~ "FS", 7),
                 StaticView.new(  0, 12, left_triangle, mcdu_large | mcdu_white ),
                 StaticView.new(  1, 12, "MEMORY", mcdu_large | mcdu_white ),
             ];
             me.controllers = {
                 "L1": PropSwapController.new("COM" ~ me.radioNum ~ "S", "COM" ~ me.radioNum ~ "A"),
                 "L2": FreqController.new("COM" ~ me.radioNum ~ "S"),
+                "R3": ComModeController.new("COM" ~ me.radioNum ~ "FS"),
             };
             if (me.ptitle != nil) {
                 me.controllers["R6"] = SubmodeController.new("ret");

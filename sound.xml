@@ -1932,30 +1932,92 @@
 
         <ap-disconnect>
             <name>AP Disconnect</name>
-            <mode>once</mode>
+            <mode>looped</mode>
             <type>avionics</type>
             <path>Aircraft/E-jet-family/Sounds/APdisco.wav</path>
             <condition>
-                <property>/it-autoflight/sound/apoffsound</property>
+                <property>/instrumentation/annun/ap-disconnect-warning</property>
             </condition>
             <volume>
                 <factor>1</factor>
             </volume>
         </ap-disconnect>
-
-        <ap-disconnect>
-            <name>AP Disconnect 2</name>
-            <mode>once</mode>
+        <at-disconnect>
+            <name>AT Disconnect</name>
+            <mode>looped</mode>
             <type>avionics</type>
-            <path>Aircraft/E-jet-family/Sounds/APdisco.wav</path>
+            <path>Aircraft/E-jet-family/Sounds/ATdisco.wav</path>
             <condition>
-                <property>/it-autoflight/sound/apoffsound2</property>
+                <property>/instrumentation/annun/at-disconnect-warning</property>
             </condition>
             <volume>
                 <factor>1</factor>
             </volume>
-        </ap-disconnect>
+        </at-disconnect>
 
+        <callout-eighty>
+            <name>80 knots</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/E-jet-family/Sounds/Cockpit/80kt.wav</path>
+            <condition>
+                <and>
+                    <property>/instrumentation/callouts/eighty</property>
+                    <property>systems/electrical/outputs/master-warn-caution[0]</property>
+                </and>
+            </condition>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </callout-eighty>
+        <callout-v1>
+            <name>V1</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/E-jet-family/Sounds/Cockpit/v1.wav</path>
+            <condition>
+                <property>/instrumentation/callouts/v1</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </callout-v1>
+        <callout-v2>
+            <name>V2</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/E-jet-family/Sounds/Cockpit/v2.wav</path>
+            <condition>
+                <property>/instrumentation/callouts/v2</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </callout-v2>
+        <callout-vr>
+            <name>Vr</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/E-jet-family/Sounds/Cockpit/vr.wav</path>
+            <condition>
+                <property>/instrumentation/callouts/vr</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </callout-vr>
+        <callout-gearup>
+            <name>Gear up</name>
+            <mode>once</mode>
+            <type>avionics</type>
+            <path>Aircraft/E-jet-family/Sounds/Cockpit/proc.wav</path>
+            <condition>
+                <property>/instrumentation/callouts/gearup</property>
+            </condition>
+            <volume>
+                <factor>1</factor>
+            </volume>
+        </callout-gearup>
 
         <!-- Master warning / caution -->
         <alarm>
@@ -1976,9 +2038,6 @@
                     </greater-than>
                 </and>
             </condition>
-            <volume>
-                <property>sim/current-view/internal</property>
-            </volume>
         </alarm>
         <alarm>
             <name>Master caution</name>
@@ -1998,9 +2057,6 @@
                     </greater-than>
                 </and>
             </condition>
-            <volume>
-                <property>sim/current-view/internal</property>
-            </volume>
         </alarm>
     </fx>
 

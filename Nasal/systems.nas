@@ -36,18 +36,23 @@ var engineLoop = func(engine_no) {
 	if (props.getNode("sim/failure-manager/engines/engine[" ~ engine_no ~ "]/serviceable").getBoolValue()) {
 		props.getNode(tree2 ~ "cutoff").setBoolValue(props.getNode(tree2 ~ "cutoff-switch").getBoolValue());
 	}
-
-	settimer(func {
-		engineLoop(engine_no);
-	}, 0);
 };
+
+var engineTimer = nil;
 
 # start the loop 2 seconds after the FDM initializes
 
 setlistener("sim/signals/fdm-initialized", func {
 	settimer(func {
-		engineLoop(0);
-		engineLoop(1);
+        if (engineTimer == nil) {
+            engineTimer = maketimer(0.5, func {
+                engineLoop(0);
+                engineLoop(1);
+            });
+            engineTimer.simulatedTime = 1;
+            engineTimer.singleShot = 0;
+            engineTimer.start();
+        }
 	}, 2);
 	# itaf.ap_init();
 });
@@ -110,113 +115,6 @@ controls.gearDown = func(v) {
 	}
 }
 
-## INSTRUMENTS
-##############
-
-var instruments = {
-	calcBugDeg: func(bug, limit) {
-		var heading = getprop("orientation/heading-magnetic-deg");
-		var bugDeg = 0;
-
-		while (bug < 0) {
-			bug += 360;
-		}
-		while (bug > 360) {
-			bug -= 360;
-		}
-		if (bug < limit) {
-			bug += 360;
-		}
-		if (heading < limit) {
-			heading += 360;
-		}
-		# bug is adjusted normally
-		var bugPos = heading - bug;
-
-		if (math.abs(bugPos) < limit) {
-			bugDeg = bugPos;
-		} else {
-			if (bugPos < 0) {
-				bugPos = math.abs(bugPos + 360);
-			}
-
-			# bug is on the far right
-			if (bugPos >= 180) {
-				bugDeg = -limit;
-			# bug is on the far left
-			} elsif (bugPos < 180){
-				bugDeg = limit;
-			}
-		}
-
-		return bugDeg;
-	},
-	loop: func {
-		instruments.setHSIBugsDeg();
-		instruments.setSpeedBugs();
-		instruments.setMPProps();
-		instruments.calcEGTDegC();
-
-		settimer(instruments.loop, 0);
-	},
-	# set the rotation of the HSI bugs
-	setHSIBugsDeg: func {
-		setprop("sim/model/ERJ/heading-bug-pfd-deg", instruments.calcBugDeg(getprop("autopilot/settings/heading-bug-deg"), 80));
-		setprop("sim/model/ERJ/heading-bug-deg", instruments.calcBugDeg(getprop("autopilot/settings/heading-bug-deg"), 37));
-		setprop("sim/model/ERJ/nav1-bug-deg", instruments.calcBugDeg(getprop("instrumentation/nav[0]/heading-deg"), 37));
-		setprop("sim/model/ERJ/nav2-bug-deg", instruments.calcBugDeg(getprop("instrumentation/nav[1]/heading-deg"), 37));
-		if (getprop("autopilot/route-manager/route/num") > 0 and getprop("autopilot/route-manager/wp[0]/bearing-deg") != nil) {
-			setprop("sim/model/ERJ/wp-bearing-deg", instruments.calcBugDeg(getprop("autopilot/route-manager/wp[0]/bearing-deg"), 45));
-		}
-	},
-	setSpeedBugs: func {
-		setprop("sim/model/ERJ/ias-bug-kt-norm", getprop("autopilot/settings/target-speed-kt") - getprop("velocities/airspeed-kt"));
-		setprop("sim/model/ERJ/mach-bug-kt-norm", (getprop("autopilot/settings/target-speed-mach") - getprop("velocities/mach")) * 600);
-	},
-	setMPProps: func {
-		var getCoord = func(tree) {
-			var x = getprop(tree ~ "position/global-x");
-			var y = getprop(tree ~ "position/global-y");
-			var z = getprop(tree ~ "position/global-z");
-			return geo.Coord.new().set_xyz(x, y, z);
-		};
-		var calcMPDistance = func(tree) {
-			var distance = nil;
-			call(func distance = geo.aircraft_position().distance_to(getCoord(tree)), nil, var err = []);
-			if (size(err) or distance == nil) {
-				return 0;
-			} else {
-				return distance;
-			}
-		};
-		var calcMPBearing = func(tree) {
-			return geo.aircraft_position().course_to(getCoord(tree));
-		};
-
-		for (var i = 0; i < 6; i += 1) {
-			var mp = "ai/models/multiplayer[" ~ i ~ "]/";
-			if (getprop(mp ~ "valid")) {
-				setprop("sim/model/ERJ/multiplayer-distance[" ~ i ~ "]", calcMPDistance(mp));
-				setprop("sim/model/ERJ/multiplayer-bearing[" ~ i ~ "]", instruments.calcBugDeg(calcMPBearing(mp), 45));
-			}
-		}
-	},
-	calcEGTDegC: func() {
-		foreach (var engine; props.getNode("engines").getChildren("engine")) {
-			var egt_degf = engine.getValue("egt-degf");
-
-			if (egt_degf != nil) {
-				engine.setValue("egt-degc", (egt_degf - 32) * 1.8);
-			}
-		}
-	}
-};
-
-# start the loop 2 seconds after the FDM initializes
-setlistener("sim/signals/fdm-initialized", func {
-	settimer(instruments.loop, 2);
-});
-
 ## AUTOMATIC A/T KTS/MACH SWITCHING
 ###################################
 
@@ -242,47 +140,21 @@ setlistener("sim/signals/fdm-initialized", func {
     settimer(atKtsMachLoop, 2);
 });
 
-## AUTOPILOT
-############
 
-# Selecting a different nav source on the active side, or switching sides,
-# when the autopilot is in LNAV or NAV mode, reverts the autopilot to HDG
-# mode.
-
-var checkNavDisengage = func () {
-    var side = getprop("/controls/flight/nav-src/side");
-    var navsrc = getprop("/instrumentation/pfd[" ~ side ~ "]/nav-src");
-    var apLat = getprop("/it-autoflight/output/lat");
-    var apNav2 = getprop("/it-autoflight/input/use-nav2-radio");
-    var apNavsrc = navsrc;
-    setprop("/controls/flight/nav-src/lat-mode", (navsrc == 0) ? 1 : 2);
-    setprop("/controls/flight/nav-src/nav2", (navsrc == 2) ? 1 : 0);
-    if (apLat == 1) {
-        # LNAV
-        apNavsrc = 0;
-    }
-    else if (apLat == 2) {
-        # VOR/LOC
-        if (apNav2) {
-            apNavsrc = 2;
-        }
-        else {
-            apNavsrc = 1;
+var resetTemperatures = func {
+    var tempC = getprop('/environment/temperature-degc');
+    var tempK = tempC + 273.2;
+    printf("Brake heat reset - temperature: %i°C / %i K", tempC, tempK);
+    foreach (var g; [1,2]) {
+        foreach (var b; [0,1]) {
+            var basepath = '/gear/gear[' ~ g ~ ']/brakes/brake[' ~ b ~ ']';
+            var c = getprop(basepath ~ '/heat-capacity');
+            var h = c * tempK;
+            setprop(basepath ~ '/heat', h);
         }
     }
-    else {
-        # Some other mode - no need to disengage anything
-        return;
-    }
-    if (apNavsrc != navsrc) {
-        # disengage!
-        # (select HDG HOLD)
-        setprop("/it-autoflight/input/lat", 3);
-    }
+    setprop('engines/apu/temp-c', tempC);
 };
 
-# once to initialize, and then on each change of any of the inputs.
-checkNavDisengage();
-setlistener("/controls/flight/nav-src/side", checkNavDisengage);
-setlistener("/instrumentation/pfd[0]/nav-src", checkNavDisengage);
-setlistener("/instrumentation/pfd[1]/nav-src", checkNavDisengage);
+setlistener("sim/signals/fdm-initialized", func settimer(func {resetTemperatures();}, 10));
+

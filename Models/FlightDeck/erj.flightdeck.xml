@@ -1727,66 +1727,20 @@
             <property>/systems/electrical/outputs/pushbutton-lights</property>
         </condition>
     </animation>
+
     <!-- NAV -->
-    
     <animation>
         <type>pick</type>
         <object-name>NAV</object-name>
-        <condition>
-            <or>
-                <equals>
-                    <property>it-autoflight/input/lat</property>
-                    <value>1</value>
-                </equals>
-                <equals>
-                    <property>it-autoflight/input/lat</property>
-                    <value>2</value>
-                </equals>
-            </or>
-        </condition>
         <action>
             <button>0</button>
             <repeatable type="bool">false</repeatable>
             <binding>
-                <command>property-assign</command>
-                <property>it-autoflight/input/lat</property>
-                <value>0</value>
+                <command>nasal</command>
+                <script>autoflight.navButton();</script>
             </binding>
         </action>
     </animation>
-    <animation>
-        <type>pick</type>
-        <object-name>NAV</object-name>
-        <condition>
-            <not>
-                <or>
-                    <equals>
-                        <property>it-autoflight/input/lat</property>
-                        <value>1</value>
-                    </equals>
-                    <equals>
-                        <property>it-autoflight/input/lat</property>
-                        <value>2</value>
-                    </equals>
-                </or>
-            </not>
-        </condition>
-        <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
-            <binding>
-                <command>property-assign</command>
-                <property>it-autoflight/input/lat</property>
-                <property>/controls/flight/nav-src/lat-mode</property>
-            </binding>
-            <binding>
-                <command>property-assign</command>
-                <property>it-autoflight/input/use-nav2-radio</property>
-                <property>/controls/flight/nav-src/nav2</property>
-            </binding>
-        </action>
-    </animation>
-    
     <animation>
         <type>select</type>
         <object-name>NAV.light</object-name>
@@ -1814,10 +1768,8 @@
             <button>0</button>
             <repeatable type="bool">false</repeatable>
             <binding>
-                <command>property-cycle</command>
-                <property>it-autoflight/input/lat</property>
-                <value>0</value>
-                <value>3</value>
+                <command>nasal</command>
+                <script>autoflight.hdgButton();</script>
             </binding>
         </action>
     </animation>
@@ -1842,16 +1794,8 @@
             <button>0</button>
             <repeatable type="bool">false</repeatable>
             <binding>
-                <command>property-cycle</command>
-                <property>it-autoflight/input/lat</property>
-                <value>2</value>
-                <value>3</value>
-            </binding>
-            <binding>
-                <command>property-cycle</command>
-                <property>it-autoflight/input/vert</property>
-                <value>2</value>
-                <value>0</value>
+                <command>nasal</command>
+                <script>autoflight.apprButton();</script>
             </binding>
         </action>
     </animation>
@@ -1910,14 +1854,24 @@
             <button>0</button>
             <repeatable type="bool">false</repeatable>
             <binding>
-                <command>property-toggle</command>
-                <property>it-autoflight/input/ap1</property>
+                <command>nasal</command>
+                <script>
+                    if (getprop('/it-autoflight/output/ap1') or getprop('/instrumentation/annun/ap-disconnect-warning')) {
+                        setprop('/controls/autoflight/disconnect', 1);
+                    }
+                    else {
+                        setprop('/it-autoflight/input/ap1', 1);
+                        setprop('/it-autoflight/input/ap2', 1);
+                    }
+                </script>
             </binding>
-            <binding>
-                <command>property-assign</command>
-                <property>it-autoflight/input/ap2</property>
-                <property>it-autoflight/input/ap1</property>
-            </binding>
+            <mod-up>
+                <binding>
+                    <command>property-assign</command>
+                    <property>controls/autoflight/disconnect</property>
+                    <value>0</value>
+                </binding>
+            </mod-up>
         </action>
     </animation>
     <animation>
@@ -1928,14 +1882,16 @@
             <repeatable type="bool">false</repeatable>
             <binding>
                 <command>property-assign</command>
-                <property>it-autoflight/input/ap1</property>
-                <value>0</value>
+                <property>controls/autoflight/disconnect</property>
+                <value>1</value>
             </binding>
-            <binding>
-                <command>property-assign</command>
-                <property>it-autoflight/input/ap2</property>
-                <value>0</value>
-            </binding>
+            <mod-up>
+                <binding>
+                    <command>property-assign</command>
+                    <property>controls/autoflight/disconnect</property>
+                    <value>0</value>
+                </binding>
+            </mod-up>
         </action>
     </animation>
     <animation>
@@ -2328,16 +2284,30 @@
             <button>0</button>
             <repeatable type="bool">false</repeatable>
             <binding>
-                <command>property-toggle</command>
-                <property>it-autoflight/input/athr</property>
+                <command>nasal</command>
+                <script>
+                    if (getprop('/it-autoflight/output/athr') or getprop('/instrumentation/annun/at-disconnect-warning')) {
+                        setprop('/controls/autoflight/at-disconnect', 1);
+                    }
+                    else {
+                        setprop('/it-autoflight/input/athr', 1);
+                    }
+                </script>
             </binding>
+            <mod-up>
+                <binding>
+                    <command>property-assign</command>
+                    <property>controls/autoflight/at-disconnect</property>
+                    <value>0</value>
+                </binding>
+            </mod-up>
         </action>
     </animation>
     <animation>
         <type>select</type>
         <object-name>AT.light</object-name>
         <condition>
-            <property>it-autoflight/input/athr</property>
+            <property>it-autoflight/output/athr</property>
             <property>/systems/electrical/outputs/pushbutton-lights</property>
         </condition>
     </animation>
@@ -3159,6 +3129,12 @@
                 <value>1</value>
             </binding>
         </action>
+    </animation>
+
+    <animation>
+        <type>material</type>
+        <object-name>fuselage</object-name>
+        <transparency><alpha>1</alpha></transparency>
     </animation>
     
 </PropertyList>

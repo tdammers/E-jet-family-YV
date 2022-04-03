@@ -107,6 +107,10 @@
 
         <systems>
             <autopilot>
+                <name>Gear AGL Altitude</name>
+                <path>Aircraft/E-jet-family/Systems/gear-agl-ft.xml</path>
+            </autopilot>
+            <autopilot>
                 <name>Autopilot</name>
                 <path>Aircraft/E-jet-family/Systems/fadec.xml</path>
             </autopilot>
@@ -141,10 +145,6 @@
             <autopilot>
                 <name>FMS VNAV</name>
                 <path>Aircraft/E-jet-family/Systems/vnav.xml</path>
-            </autopilot>
-            <autopilot>
-                <name>Gear AGL Altitude</name>
-                <path>Aircraft/E-jet-family/Systems/gear-agl-ft.xml</path>
             </autopilot>
             <autopilot>
                 <name>Spoilers</name>
@@ -196,15 +196,18 @@
                 <path>Aircraft/E-jet-family/Systems/brakes.xml</path>
             </property-rule>
             <property-rule n="107">
-                <path>Aircraft/E-jet-family/Systems/messages.xml</path>
+                <path>Aircraft/E-jet-family/Systems/ap-trip.xml</path>
             </property-rule>
             <property-rule n="108">
-                <path>Aircraft/E-jet-family/Systems/services.xml</path>
+                <path>Aircraft/E-jet-family/Systems/messages.xml</path>
             </property-rule>
             <property-rule n="109">
-                <path>Aircraft/E-jet-family/Systems/EFB.xml</path>
+                <path>Aircraft/E-jet-family/Systems/services.xml</path>
             </property-rule>
             <property-rule n="110">
+                <path>Aircraft/E-jet-family/Systems/EFB.xml</path>
+            </property-rule>
+            <property-rule n="111">
                 <path>Aircraft/E-jet-family/Systems/electrical/batteries.xml</path>
             </property-rule>
             <autopilot>
@@ -213,17 +216,20 @@
             <autopilot>
                 <path>Aircraft/E-jet-family/Systems/speed-limits.xml</path>
             </autopilot>
-            <property-rule n="111">
+            <property-rule n="112">
                 <path>Aircraft/E-jet-family/Systems/iess.xml</path>
             </property-rule>
-            <property-rule n="112">
+            <property-rule n="113">
                 <path>Aircraft/E-jet-family/Systems/chrono.xml</path>
             </property-rule>
-            <property-rule n="113">
+            <property-rule n="114">
                 <path>Aircraft/E-jet-family/Systems/cockpit-animations.xml</path>
             </property-rule>
-            <property-rule n="114">
+            <property-rule n="115">
                 <path>Aircraft/E-jet-family/Systems/views.xml</path>
+            </property-rule>
+            <property-rule n="116">
+                <path>Aircraft/E-jet-family/Systems/callouts.xml</path>
             </property-rule>
 
             <!--Disable XML electrical system-->
@@ -654,15 +660,15 @@
             </key>
             <key>
                 <name>w</name>
-                <desc>walk forward toward view direction</desc>
+                <desc>Walkable views: walk forward toward view direction; cockpit: TCS</desc>
             </key>
             <key>
                 <name>W</name>
-                <desc>run forward toward view direction</desc>
+                <desc>Walkable views: run forward toward view direction</desc>
             </key>
             <key>
                 <name>s</name>
-                <desc>walk backward from view direction</desc>
+                <desc>Walkable views: walk backward from view direction</desc>
             </key>
         </help>
 
@@ -694,6 +700,9 @@
         </system>
     </options>
 
+    <position>
+        <gear-agl-ft type="double">0</gear-agl-ft>
+    </position>
 
     <it-autoflight>
         <config>
@@ -725,21 +734,28 @@
             </rollout>
         </config>
         <settings>
-            <autoland-without-ap>1</autoland-without-ap> <!-- Engage LAND and FLARE Modes even if the AP is off -->
-            <auto-bank-max-deg>35</auto-bank-max-deg> <!-- Maximum Auto Bank Limit -->
-            <autothrottle-max>0.907</autothrottle-max>
-            <autothrottle-min>0.0</autothrottle-min>
-            <custom-fma>0</custom-fma>
-            <disable-final>0</disable-final>
-            <hdg-hld-separate>0</hdg-hld-separate> <!-- Separates the HDG HLD mode from the HDG SEL mode -->
-            <land-enable>1</land-enable> <!-- Enable/Disable Autoland -->
-            <land-flap>0.5</land-flap> <!-- Minimum Flap used for Landing -->
-            <lat-agl-ft>200</lat-agl-ft> <!-- Set to 999999 if you do not want T/O to change automatically to HDG, or LNAV -->
-            <reduc-agl-ft>1300</reduc-agl-ft> <!-- Set to 999999 if you do not want TOGA to change automatically to FLCH -->
-            <retard-enable>1</retard-enable> <!-- AGL to Thrust Retard -->
-            <retard-ft>30</retard-ft> <!-- Enable Thrust Retard -->
-            <togaspd>165</togaspd> <!-- V2 + 10kts -->
+            <accel-ft type="double">1300</accel-ft> <!-- Set to 999999 if you do not want TOGA to change automatically to FLCH -->
+            <auto-bank-max-deg type="double">35</auto-bank-max-deg> <!-- Maximum Auto Bank Limit -->
+            <autoland-without-ap type="bool">false</autoland-without-ap> <!-- Engage LAND and FLARE Modes even if the AP is off -->
+            <autothrottle-max type="double">0.907</autothrottle-max>
+            <autothrottle-min type="double">0.0</autothrottle-min>
+            <custom-fma type="bool">false</custom-fma>
+            <disable-final type="bool">false</disable-final>
+            <hdg-hld-separate type="bool">false</hdg-hld-separate> <!-- Separates the HDG HLD mode from the HDG SEL mode -->
+            <land-enable type="bool">true</land-enable> <!-- Enable/Disable Autoland -->
+            <land-flap type="double">0.5</land-flap> <!-- Minimum Flap used for Landing -->
+            <lnav-ft type="double">200</lnav-ft> <!-- Set to 999999 if you do not want T/O to change automatically to HDG, or LNAV -->
+            <retard-enable type="bool">true</retard-enable> <!-- AGL to Thrust Retard -->
+            <retard-ft type="double">30</retard-ft> <!-- Enable Thrust Retard -->
+            <toga-spd type="double">165</toga-spd> <!-- V2 + 10kts -->
+            <use-controls-engines type="bool">false</use-controls-engines>
+            <use-controls-flight type="bool">false</use-controls-flight>
         </settings>
+        <internal>
+            <aileron type="double">0</aileron>
+            <elevator type="double">0</elevator>
+            <rudder type="double">0</rudder>
+        </internal>
     </it-autoflight>
 
     <consumables>
@@ -777,6 +793,10 @@
          82704.1 J/K per brake disc.
 
          At 20°C (293.2), each disc stores 24249000 J.
+
+         Experience shows that an E190 at MLW causes a brake overheat even with
+         max reversers on a normal landing, so we bump it up to a nice even
+         90000 J/K to give ourselves some headroom.
     -->
     <gear>
         <brake-overheat type="bool">false</brake-overheat>
@@ -785,7 +805,7 @@
             <brakes>
                 <brake>
                     <!-- in joules per Kelvin -->
-                    <heat-capacity type="double">82704.1</heat-capacity>
+                    <heat-capacity type="double">90000</heat-capacity>
                     <!-- in joules -->
                     <heat type="double">24249000</heat>
                     <temperature-c type="double">20</temperature-c>
@@ -801,7 +821,7 @@
                 </brake>
                 <brake>
                     <!-- in joules per Kelvin -->
-                    <heat-capacity type="double">82704.1</heat-capacity>
+                    <heat-capacity type="double">90000</heat-capacity>
                     <!-- in joules -->
                     <heat type="double">24249000</heat>
                     <temperature-c type="double">20</temperature-c>
@@ -821,7 +841,7 @@
             <brakes>
                 <brake>
                     <!-- in joules per Kelvin -->
-                    <heat-capacity type="double">82704.1</heat-capacity>
+                    <heat-capacity type="double">90000</heat-capacity>
                     <!-- in joules -->
                     <heat type="double">24249000</heat>
                     <temperature-c type="double">20</temperature-c>
@@ -837,7 +857,7 @@
                 </brake>
                 <brake>
                     <!-- in joules per Kelvin -->
-                    <heat-capacity type="double">82704.1</heat-capacity>
+                    <heat-capacity type="double">90000</heat-capacity>
                     <!-- in joules -->
                     <heat type="double">24249000</heat>
                     <temperature-c type="double">20</temperature-c>
@@ -876,6 +896,12 @@
             <target-altitude-ft type="double">33000</target-altitude-ft>
             <vertical-speed-fpm type="double">2000</vertical-speed-fpm>
         </settings>
+
+        <disconnect-conditions>
+            <control-input type="double">0.0</control-input>
+            <control-input-filtered type="double">0.0</control-input-filtered>
+        </disconnect-conditions>
+
         <flight-director-serviceable type="bool">true</flight-director-serviceable>
         <autoflight-serviceable type="bool">true</autoflight-serviceable>
         <autothrottle-serviceable type="bool">true</autothrottle-serviceable>
@@ -947,7 +973,8 @@
         <ignition-switch type="int">1</ignition-switch>
         <trs-limit type="double">100.0</trs-limit>
         <configuration>
-            <throttle-toga-norm type="double">0.95</throttle-toga-norm>
+            <throttle-toga-norm type="double">0.72</throttle-toga-norm>
+            <throttle-toga-reserve type="double">0.82</throttle-toga-reserve>
         </configuration>
     </fadec>
 
@@ -1544,41 +1571,6 @@
             </pack>
         </pressurization>
 
-        <autoflight>
-            <autopilot>
-                <engage type="bool">false</engage>
-            </autopilot>
-
-            <flight-director>
-                <engage type="bool">false</engage>
-            </flight-director>
-
-            <yaw-damper>
-                <engage type="bool">false</engage>
-            </yaw-damper>
-
-            <yaw-damper>
-                <engage type="bool">false</engage>
-            </yaw-damper>
-
-            <altitude-select type="double">10000</altitude-select>
-            <autothrottle-engage type="bool">false</autothrottle-engage>
-            <basic-roll-mode type="int">0</basic-roll-mode>
-            <basic-roll-target-heading-deg type="double">0</basic-roll-target-heading-deg>
-            <basic-roll-target-roll-deg type="double">0</basic-roll-target-roll-deg>
-            <bank-angle-select type="float">30</bank-angle-select>
-            <disengage-pos-norm type="int">0</disengage-pos-norm>
-            <heading-select type="double">360</heading-select>
-            <lateral-mode type="int">-1</lateral-mode>
-            <mach-select type="double">0</mach-select>
-            <nav-mode type="int">0</nav-mode>
-            <pitch-select type="double">0</pitch-select>
-            <speed-mode type="int">0</speed-mode>
-            <speed-select type="double">160</speed-select>
-            <vertical-mode type="int">-1</vertical-mode>
-            <vertical-speed-select type="double">1800</vertical-speed-select>
-        </autoflight>
-
         <apu>
             <fire-switch type="bool">false</fire-switch>
             <master-switch type="bool">false</master-switch>
@@ -1617,6 +1609,7 @@
                 <cutoff-switch type="bool">true</cutoff-switch>
                 <starter type="bool">false</starter>
                 <starter-switch type="bool">false</starter-switch>
+                <itt-degc type="double">0</itt-degc>
             </engine>
 
             <engine n="1">
@@ -1624,6 +1617,7 @@
                 <cutoff-switch type="bool">true</cutoff-switch>
                 <starter type="bool">false</starter>
                 <starter-switch type="bool">false</starter-switch>
+                <itt-degc type="double">0</itt-degc>
             </engine>
         </engines>
         
@@ -1636,6 +1630,7 @@
             <ground-spoilers-armed type="bool">false</ground-spoilers-armed>
             <speedbrake-lever type="double">0</speedbrake-lever>
             <steep-approach type="bool">false</steep-approach>
+            <tcs type="bool">false</tcs>
 
             <!--
                 These are the pilot-selected v-speeds; any non-zero setting
@@ -1712,7 +1707,12 @@
                 <lat-mode type="int">0</lat-mode>
                 <nav2 type="bool">false</nav2>
             </nav-src>
+
         </flight>
+
+        <autoflight>
+            <disconnect type="bool">false</disconnect>
+        </autoflight>
 
         <gear>
             <brake-parking type="bool">true</brake-parking>
@@ -1770,6 +1770,7 @@
             <serviceable type="bool">true</serviceable>
             <feed type="int">-1</feed>
             <cutoff type="bool">true</cutoff>
+            <temp-c type="double">0</temp-c>
         </apu>
 
         <engine n="0">
@@ -1840,6 +1841,13 @@
         <IESS>
             <brightness type="float">0.75</brightness>
         </IESS>
+
+        <comm n="0">
+            <spacing type="string">25/8.33</spacing>
+        </comm>
+        <comm n="1">
+            <spacing type="string">25/8.33</spacing>
+        </comm>
 
         <eicas>
             <enabled type="bool">true</enabled>
@@ -1943,6 +1951,8 @@
 
             <ap-engaged type="bool">false</ap-engaged>
             <at-engaged type="bool">false</at-engaged>
+            <ap-disconnect-warning type="bool">false</ap-disconnect-warning>
+            <at-disconnect-warning type="bool">false</at-disconnect-warning>
 
             <lat-mode type="string"></lat-mode>
             <lat-mode-armed type="string"></lat-mode-armed>
@@ -1955,6 +1965,15 @@
 
             <hud-declutter type="int">0</hud-declutter>
         </annun>
+
+        <callouts>
+            <eighty type="bool">false</eighty>
+            <v1 type="bool">false</v1>
+            <v2 type="bool">false</v2>
+            <vr type="bool">false</vr>
+            <gearup type="bool">false</gearup>
+        </callouts>
+
 
         <pfd>
             <enabled type="bool">true</enabled>
@@ -2010,10 +2029,10 @@
                 <ete type="int">0</ete>
                 <ete-unit type="int">0</ete-unit>
             </waypoint>
-            <qnh-mode>0</qnh-mode>
-            <minimums-mode>0</minimums-mode>
-            <minimums-radio>200</minimums-radio>
-            <minimums-baro>400</minimums-baro>
+            <qnh-mode type="int">0</qnh-mode>
+            <minimums-mode type="int">1</minimums-mode>
+            <minimums-radio type="int">200</minimums-radio>
+            <minimums-baro type="int">400</minimums-baro>
             <minimums-visible type="bool">true</minimums-visible>
             <groundspeed-kt type="int">0</groundspeed-kt>
             <wind-speed-kt type="int">0</wind-speed-kt>
@@ -2033,6 +2052,11 @@
                 <lat-offset-deg type="double">0</lat-offset-deg>
                 <vert-offset-deg type="double">0</vert-offset-deg>
             </fd>
+            <fma>
+                <ap type="int">0</ap>
+                <at type="int">0</at>
+            </fma>
+            <blink-state type="bool">false</blink-state>
         </pfd>
 
         <pfd>
@@ -2088,10 +2112,10 @@
                 <ete type="int">0</ete>
                 <ete-unit type="int">0</ete-unit>
             </waypoint>
-            <qnh-mode>0</qnh-mode>
-            <minimums-mode>0</minimums-mode>
-            <minimums-radio>200</minimums-radio>
-            <minimums-baro>400</minimums-baro>
+            <qnh-mode type="int">0</qnh-mode>
+            <minimums-mode type="int">1</minimums-mode>
+            <minimums-radio type="int">200</minimums-radio>
+            <minimums-baro type="int">400</minimums-baro>
             <minimums-visible type="bool">true</minimums-visible>
             <groundspeed-kt type="int">0</groundspeed-kt>
             <wind-speed-kt type="int">0</wind-speed-kt>
@@ -2111,6 +2135,11 @@
                 <lat-offset-deg type="double">0</lat-offset-deg>
                 <vert-offset-deg type="double">0</vert-offset-deg>
             </fd>
+            <fma>
+                <ap type="int">0</ap>
+                <at type="int">0</at>
+            </fma>
+            <blink-state type="bool">false</blink-state>
         </pfd>
 
         <mfd>
@@ -2279,14 +2308,41 @@
             </key>
             <key n="119">
                 <name>w</name>
-                <desc>Walk forward toward view</desc>
+                <desc>TCS / Walk forward toward view</desc>
                 <repeatable type="bool">true</repeatable>
                 <binding>
+                    <enable>
+                        <condition>
+                            <property>/sim/current-view/config/walkable</property>
+                        </condition>
+                    </enable>
                     <command>nasal</command>
                     <script>
                         walk.walk_about(0.1);
                     </script>
                 </binding>
+                <binding>
+                    <enable>
+                        <condition>
+                            <not><property>/sim/current-view/config/walkable</property></not>
+                        </condition>
+                    </enable>
+                    <command>property-assign</command>
+                    <property>controls/flight/tcs</property>
+                    <value type="bool">true</value>
+                </binding>
+                <mod-up>
+                    <binding>
+                        <enable>
+                            <condition>
+                                <not><property>/sim/current-view/config/walkable</property></not>
+                            </condition>
+                        </enable>
+                        <command>property-assign</command>
+                        <property>controls/flight/tcs</property>
+                        <value type="bool">false</value>
+                    </binding>
+                </mod-up>
             </key>
             <key n="113">
                 <name>q</name>
@@ -2369,16 +2425,28 @@
             <!-- Custom autopilot hotkeys -->
             <key n="26">
                 <name>Ctrl-Z</name>
-                <desc>Toggle master autopilot switch</desc>
+                <desc>Master autopilot on</desc>
                 <binding>
-                    <command>property-toggle</command>
+                    <command>property-assign</command>
                     <property>it-autoflight/input/ap1</property>
+                    <value>1</value>
                 </binding>
+            </key>
+            <key n="122">
+                <name>z</name>
+                <desc>Autopilot disconnect</desc>
                 <binding>
-                    <command>property-set</command>
-                    <property>it-autoflight/input/ap2</property>
-                    <property>it-autoflight/input/ap1</property>
+                    <command type="string">property-assign</command>
+                    <property>controls/autoflight/disconnect</property>
+                    <value type="bool">true</value>
                 </binding>
+                <mod-up>
+                    <binding>
+                        <command type="string">property-assign</command>
+                        <property>controls/autoflight/disconnect</property>
+                        <value type="bool">false</value>
+                    </binding>
+                </mod-up>
             </key>
             <key n="25">
                 <name>Ctrl-Y</name>
@@ -2423,6 +2491,10 @@
             <file>Aircraft/E-jet-family/Nasal/ELTmessage.nas</file>
         </ELT>
 
+        <viewLogic>
+            <file>Aircraft/E-jet-family/Nasal/view.nas</file>
+        </viewLogic>
+
         <itaf>
             <file>Aircraft/E-jet-family/Nasal/it-autoflight.nas</file>
         </itaf>
@@ -2459,6 +2531,9 @@
             <file>Aircraft/E-jet-family/Nasal/systems.nas</file>
             <file>Aircraft/E-jet-family/Nasal/limits.nas</file>
         </systems>
+        <autoflight>
+            <file>Aircraft/E-jet-family/Nasal/autopilot-control.nas</file>
+        </autoflight>
         <reversethrust>
             <file>Aircraft/E-jet-family/Nasal/reversethrust.nas</file>
         </reversethrust>
