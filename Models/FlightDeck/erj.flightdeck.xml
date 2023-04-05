@@ -801,69 +801,37 @@
     </effect>
     
     <animation>
-        <type>pick</type>
+        <type>knob</type>
         <object-name>e1.case</object-name>
-        <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
-            <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("eng1-control");
-                </script>
-            </binding>
-        </action>
-    </animation>
-    
-    <animation>
-        <name>Engine Cover Left</name>
-        <type>rotate</type>
-        <object-name>e1.case</object-name>
-        <property>sim/model/door-positions/eng1-control/position-norm</property>
-        <interpolation>
-            <entry>
-                <ind>0</ind><dep>0</dep>
-            </entry>
-            <entry>
-                <ind>1</ind><dep>-95</dep>
-            </entry>
-        </interpolation>
+        <property>controls/switches/eng-case-pos[0]</property>
+        <factor>-95</factor>
         <axis>
             <object-name>e1.case.axis</object-name>
         </axis>
-    </animation>
-    
-    <animation>
-        <type>pick</type>
-        <object-name>e2.case</object-name>
         <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
+            <repeatable>false</repeatable>
             <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("eng2-control");
-                </script>
+                <command>property-toggle</command>
+                <property>controls/switches/eng-case[0]</property>
             </binding>
         </action>
     </animation>
     
     <animation>
-        <name>Engine Cover Right</name>
-        <type>rotate</type>
+        <type>knob</type>
         <object-name>e2.case</object-name>
-        <property>sim/model/door-positions/eng2-control/position-norm</property>
-        <interpolation>
-            <entry>
-                <ind>0</ind><dep>0</dep>
-            </entry>
-            <entry>
-                <ind>1</ind><dep>-95</dep>
-            </entry>
-        </interpolation>
+        <property>controls/switches/eng-case-pos[1]</property>
+        <factor>-95</factor>
         <axis>
             <object-name>e2.case.axis</object-name>
         </axis>
+        <action>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>property-toggle</command>
+                <property>controls/switches/eng-case[1]</property>
+            </binding>
+        </action>
     </animation>
     
     <!-- Overhead Panel -->
@@ -3131,35 +3099,20 @@
     <!-- FCM - Elevator -->
     
     <animation>
-        <type>pick</type>
+        <type>knob</type>
         <object-name>FCM.elevator.case</object-name>
-        <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
-            <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-elevator");
-                </script>
-            </binding>
-        </action>
-    </animation>
-    <animation>
-        <name>FCM Elevator case</name>
-        <type>rotate</type>
-        <object-name>FCM.elevator.case</object-name>
-        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
-        <interpolation>
-            <entry>
-                <ind>0</ind><dep>0</dep>
-            </entry>
-            <entry>
-                <ind>1</ind><dep>110</dep>
-            </entry>
-        </interpolation>
+        <property>controls/switches/fcm-case-pos[0]</property>
+        <factor>110</factor>
         <axis>
             <object-name>FCM.elevator.case.axis</object-name>
         </axis>
+        <action>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[0]</property>
+            </binding>
+        </action>
     </animation>
     
     <animation>
@@ -3171,7 +3124,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3181,7 +3134,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-elevator/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3195,44 +3148,30 @@
         <type>select</type>
         <object-name>FCM.elevator.light</object-name>
         <condition>
-            <not>
-                <property>fbw/elevator/law</property>
-            </not>
+			<not>
+				<property>fbw/elevator/law</property>
+			</not>
+			<property>/systems/electrical/outputs/pushbutton-lights</property>
         </condition>
     </animation>
     
     <!-- FCM - Rudder -->
     
     <animation>
-        <type>pick</type>
+        <type>knob</type>
         <object-name>FCM.rudder.case</object-name>
-        <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
-            <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-rudder");
-                </script>
-            </binding>
-        </action>
-    </animation>
-    <animation>
-        <name>FCM Rudder case</name>
-        <type>rotate</type>
-        <object-name>FCM.rudder.case</object-name>
-        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
-        <interpolation>
-            <entry>
-                <ind>0</ind><dep>0</dep>
-            </entry>
-            <entry>
-                <ind>1</ind><dep>110</dep>
-            </entry>
-        </interpolation>
+        <property>controls/switches/fcm-case-pos[1]</property>
+        <factor>110</factor>
         <axis>
             <object-name>FCM.rudder.case.axis</object-name>
         </axis>
+        <action>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[1]</property>
+            </binding>
+        </action>
     </animation>
     
     <animation>
@@ -3244,7 +3183,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3254,7 +3193,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-rudder/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3268,44 +3207,30 @@
         <type>select</type>
         <object-name>FCM.rudder.light</object-name>
         <condition>
-            <not>
-                <property>fbw/rudder/law</property>
-            </not>
+			<not>
+				<property>fbw/rudder/law</property>
+			</not>
+			<property>/systems/electrical/outputs/pushbutton-lights</property>
         </condition>
     </animation>
     
     <!-- FCM - Spoilers -->
     
     <animation>
-        <type>pick</type>
+        <type>knob</type>
         <object-name>FCM.spoilers.case</object-name>
-        <action>
-            <button>0</button>
-            <repeatable type="bool">false</repeatable>
-            <binding>
-                <command>nasal</command>
-                <script>
-                    erj.doors.toggle("fcm-spoilers");
-                </script>
-            </binding>
-        </action>
-    </animation>
-    <animation>
-        <name>FCM Spoilers case</name>
-        <type>rotate</type>
-        <object-name>FCM.spoilers.case</object-name>
-        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
-        <interpolation>
-            <entry>
-                <ind>0</ind><dep>0</dep>
-            </entry>
-            <entry>
-                <ind>1</ind><dep>110</dep>
-            </entry>
-        </interpolation>
+        <property>controls/switches/fcm-case-pos[2]</property>
+        <factor>110</factor>
         <axis>
             <object-name>FCM.spoilers.case.axis</object-name>
         </axis>
+        <action>
+            <repeatable>false</repeatable>
+            <binding>
+                <command>property-toggle</command>
+                <property>controls/switches/fcm-case[2]</property>
+            </binding>
+        </action>
     </animation>
     
     <animation>
@@ -3317,7 +3242,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[2]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3327,7 +3252,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/fcm-spoilers/position-norm</property>
+                        <property>controls/switches/fcm-case-pos[2]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3341,9 +3266,10 @@
         <type>select</type>
         <object-name>FCM.spoilers.light</object-name>
         <condition>
-            <not>
-                <property>fbw/spoilers/law</property>
-            </not>
+			<not>
+				<property>fbw/spoilers/law</property>
+			</not>
+			<property>/systems/electrical/outputs/pushbutton-lights</property>
         </condition>
     </animation>
     
@@ -3742,7 +3668,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/eng1-control/position-norm</property>
+                        <property>controls/switches/eng-case-pos[0]</property>
                         <value>1</value>
                     </equals>
                 </condition>
@@ -3789,7 +3715,7 @@
             <binding>
                 <condition>
                     <equals>
-                        <property>sim/model/door-positions/eng2-control/position-norm</property>
+                        <property>controls/switches/eng-case-pos[1]</property>
                         <value>1</value>
                     </equals>
                 </condition>
