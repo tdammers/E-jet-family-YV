@@ -101,18 +101,6 @@
         </action>
     </animation>
 
-    <!-- HDR -->
-    <effect>
-        <name>LCD</name>
-        <inherits-from>Models/Effects/lcd</inherits-from>
-        <object-name>IESS_screen</object-name>
-        <parameters>
-            <dirt-factor>0</dirt-factor>
-            <threshold>0.01</threshold>
-            <brightness><use>/instrumentation/IESS/brightness-pbr</use></brightness>
-        </parameters>
-    </effect>
-
     <!-- ALS -->
     <animation>
         <type>material</type>

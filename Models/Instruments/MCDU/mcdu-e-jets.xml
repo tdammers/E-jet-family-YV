@@ -31,16 +31,6 @@
 </animation>
 
 <effect>
-    <name>LCD</name>
-    <inherits-from>Models/Effects/lcd</inherits-from>
-    <object-name>MCDU0</object-name>
-    <object-name>MCDU1</object-name>
-    <parameters>
-        <dirt-factor>0</dirt-factor>
-    </parameters>
-</effect>
-
-<effect>
 	<inherits-from>Effects/lightmap</inherits-from>
 	<parameters>
 		<texture n="1">

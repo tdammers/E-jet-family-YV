@@ -1,18 +1,6 @@
 <PropertyList>
     <path>../../Models/Instruments/Chrono/chronometer.ac</path>
 
-    <!-- HDR -->
-    <effect>
-        <name>LCD</name>
-        <inherits-from>Models/Effects/lcd</inherits-from>
-        <object-name>chrono_screen</object-name>
-        <parameters>
-            <dirt-factor>0</dirt-factor>
-            <threshold>0.01</threshold>
-            <brightness><use>/instrumentation/chrono/brightness-pbr</use></brightness>
-        </parameters>
-    </effect>
-
     <!-- ALS -->
     <animation>
         <type>material</type>

@@ -37,17 +37,6 @@
         </action>
     </animation>
 
-    <!-- HDR -->
-    <effect>
-        <name>LCD</name>
-        <inherits-from>Models/Effects/lcd</inherits-from>
-        <object-name>MFD1</object-name>
-        <parameters>
-            <gamma>0.4</gamma>
-            <brightness><use>/instrumentation/mfd[1]/brightness-pbr</use></brightness>
-        </parameters>
-    </effect>
-
     <!-- ALS -->
     <animation>
         <type>material</type>
