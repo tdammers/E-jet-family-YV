@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<PropertyList>
+    <path>Aircraft/E-jet-family/Models/e170-fuselage.ac</path>
+
+    <model>
+        <name>Flightdeck</name>
+        <path>Aircraft/E-jet-family/Models/FlightDeck/flightdeck.xml</path>
+    </model>
+
+    <animation>
+        <type>select</type>
+        <object-name>Flightdeck</object-name>
+        <condition>
+            <not>
+                <property>sim/fdm-initialized</property>
+            </not>
+        </condition>
+    </animation>
+
+    <!-- AILERONS -->
+    <animation>
+        <type>rotate</type>
+        <object-name>aileron.l</object-name>
+        <axis>
+            <object-name>aileron.l.axis</object-name>
+        </axis>
+        <property>surface-positions/left-aileron-pos-norm</property>
+        <factor>30</factor>
+    </animation>
+
+    <!-- FLAPS -->
+    <animation>
+        <type>rotate</type>
+        <object-name>flap.l.1.2</object-name>
+        <object-name>flap.l.001</object-name>
+        <axis>
+            <object-name>flap.l.1.2.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>-45</factor>
+    </animation>
+    <animation>
+        <type>rotate</type>
+        <object-name>flap.l.1.1</object-name>
+        <object-name>flap.l.1.2</object-name>
+        <object-name>flap.l.001</object-name>
+        <object-name>flap.l.008</object-name>
+        <axis>
+            <object-name>flap.l.1.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>45</factor>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>flap.l.2.2</object-name>
+        <axis>
+            <object-name>flap.l.2.2.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>45</factor>
+    </animation>
+    <animation>
+        <type>rotate</type>
+        <object-name>flap.l.2.1</object-name>
+        <object-name>flap.l.2.2</object-name>
+        <axis>
+            <object-name>flap.l.2.1.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>45</factor>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>flap_fairing.l.1</object-name>
+        <axis>
+            <object-name>flap_fairing.l.1.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>-75</factor>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>flap_fairing.l.3</object-name>
+        <axis>
+            <object-name>flap_fairing.l.3.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>75</factor>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>flap_fairing.l.4</object-name>
+        <axis>
+            <object-name>flap_fairing.l.4.axis</object-name>
+        </axis>
+        <property>surface-positions/flap-pos-norm</property>
+        <factor>75</factor>
+    </animation>
+</PropertyList>
