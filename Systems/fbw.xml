@@ -225,17 +225,47 @@
 
     <!-- Multi-purpose spoiler FBW -->
     <filter>
+        <name>Ailerons to spoilers, master</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <product>
+                    <!-- deadzone -->
+                    <table>
+                        <property>/it-autoflight/internal/aileron</property>
+                        <entry><ind>-1</ind><dep>-1</dep></entry>
+                        <entry><ind>-0.2</ind><dep>0</dep></entry>
+                        <entry><ind>0</ind><dep>0</dep></entry>
+                        <entry><ind>0.2</ind><dep>0</dep></entry>
+                        <entry><ind>1</ind><dep>1</dep></entry>
+                    </table>
+                    <!-- airspeed-dependent augmentation -->
+                    <table>
+                        <property>/instrumentation/airspeed-indicator/indicated-speed-kt</property>
+                        <entry><ind>0</ind><dep>1</dep></entry>
+                        <entry><ind>200</ind><dep>1</dep></entry>
+                        <entry><ind>280</ind><dep>0</dep></entry>
+                        <entry><ind>340</ind><dep>-1</dep></entry>
+                    </table>
+                </product>
+            </expression>
+        </input>
+        <output>/fbw/spoilers/bank-master</output>
+    </filter>
+
+    <filter>
         <name>Ailerons to spoilers, left</name>
         <type>gain</type>
         <gain>-1</gain>
-        <input>/controls/flight/aileron</input>
+        <input>/fbw/spoilers/bank-master</input>
         <output>/fbw/spoilers/bank-left</output>
     </filter>
     <filter>
         <name>Ailerons to spoilers, right</name>
         <type>gain</type>
         <gain>1</gain>
-        <input>/controls/flight/aileron</input>
+        <input>/fbw/spoilers/bank-master</input>
         <output>/fbw/spoilers/bank-right</output>
     </filter>
 

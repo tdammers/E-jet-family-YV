@@ -755,9 +755,9 @@
     <it-autoflight>
         <config>
             <roll>
-                <kp-low>0.2</kp-low>
-                <kp-high>0.04</kp-high>
-                <ti>1.0</ti>
+                <kp-low>0.8</kp-low>
+                <kp-high>0.6</kp-high>
+                <ti>4.0</ti>
                 <td>0.0001</td>
             </roll>
             <pitch>
@@ -3220,8 +3220,8 @@
                     <drag-mfs type="double">0.01</drag-mfs>
                     <yaw-mfs type="double">0.01</yaw-mfs>
                     <bank-mfs type="double">0.01</bank-mfs>
-                    <yaw-damper-beta type="double">-5</yaw-damper-beta>
-                    <yaw-damper-rate type="double">2</yaw-damper-rate>
+                    <yaw-damper-beta type="double">-10</yaw-damper-beta>
+                    <yaw-damper-rate type="double">5</yaw-damper-rate>
                 </coefficients>
             </aero-config>
         </jsbsim>
