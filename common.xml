@@ -755,8 +755,8 @@
     <it-autoflight>
         <config>
             <roll>
-                <kp-low>0.8</kp-low>
-                <kp-high>0.6</kp-high>
+                <kp-low>0.4</kp-low>
+                <kp-high>0.4</kp-high>
                 <ti>4.0</ti>
                 <td>0.0001</td>
             </roll>
@@ -3208,9 +3208,12 @@
             </external_reactions>
             <aero-config>
                 <coefficients>
+                    <lift-elevator type="double">0.2</lift-elevator>
+                    <lift-hstab type="double">0.4</lift-hstab>
                     <drag-alpha type="double">2.0</drag-alpha>
                     <drag-beta type="double">1.0</drag-beta>
-                    <drag-elevator type="double">0.01</drag-elevator>
+                    <drag-elevator type="double">0.02</drag-elevator>
+                    <drag-hstab type="double">0.01</drag-hstab>
                     <drag-flap type="double">0.04</drag-flap>
                     <drag-gear type="double">0.04</drag-gear>
                     <drag-induced type="double">0.03</drag-induced>

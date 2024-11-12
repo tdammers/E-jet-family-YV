@@ -177,10 +177,18 @@
                 <property>aero/qbar-psf</property>
                 <property>metrics/Sw-sqft</property>
                 <property>fcs/elevator-pos-rad</property>
-                <value>0.2</value>
+                <property>aero-config/coefficients/lift-elevator</property>
             </product>
         </function>
-
+        <function name="aero/force/Lift_hstab">
+            <description>Lift due to Horizontal Stabilizer Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>fcs/hstab-pos-rad</property>
+                <property>aero-config/coefficients/lift-hstab</property>
+            </product>
+        </function>
     </axis>
 
     <axis name="DRAG">
@@ -417,10 +425,21 @@
                 <abs>
                     <property>fcs/elevator-pos-norm</property>
                 </abs>
-                <!-- <value>0.01</value> -->
                 <property>aero-config/coefficients/drag-elevator</property>
             </product>
         </function>
+        <function name="aero/force/Drag_hstab">
+            <description>Drag due to HStab Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <abs>
+                    <property>fcs/hstab-pos-norm</property>
+                </abs>
+                <property>aero-config/coefficients/drag-hstab</property>
+            </product>
+        </function>
+
 
     </axis>
 
@@ -654,6 +673,29 @@
                 <value>-1.8</value>
             </product>
         </function>
+
+        <function name="aero/moment/Pitch_hstab">
+            <description>Pitch moment due to hstab</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>metrics/cbarw-ft</property>
+                <property>fcs/hstab-pos-rad</property>
+                <table>
+                    <independentVar lookup="row">velocities/mach</independentVar>
+                    <tableData>
+                        0.09    1.00
+                        0.70    1.00
+                        0.82    0.80
+                        0.85    0.50
+                        1.00    0.10
+                        2.00    0.33
+                    </tableData>
+                </table>
+                <value>-3.6</value>
+            </product>
+        </function>
+
 
         <function name="aero/moment/Pitch_damp">
             <description>Pitch moment due to pitch rate</description>

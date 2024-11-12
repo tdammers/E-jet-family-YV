@@ -2,22 +2,9 @@
 
 <flight_control name="FCS: E-Jet-Family">
     <channel name="Pitch">
-        <summer name="fcs/elevator-sum">
-            <input>/it-autoflight/internal/elevator</input>
-            <output>fcs/elevator-sum</output>
-        </summer>
 
-        <summer name="Pitch Trim Sum">
-            <input>fcs/elevator-cmd-fbw</input>
-            <input>fcs/pitch-trim-cmd-norm</input>
-            <clipto>
-                <min> -1.5 </min>
-                <max>  1.5 </max>
-            </clipto>
-        </summer>
-        
         <aerosurface_scale name="Elevator Control">
-            <input>fcs/pitch-trim-sum</input>
+            <input>fcs/elevator-cmd-fbw</input>
             <range>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
@@ -25,7 +12,7 @@
             <output>fcs/elevator-pos-rad</output>
         </aerosurface_scale>
         
-        <aerosurface_scale name="elevator normalization">
+        <aerosurface_scale name="Elevator Normalization">
             <input>fcs/elevator-pos-rad</input>
             <domain>
                 <min> -0.25 </min>
@@ -36,6 +23,28 @@
                 <max>  1 </max>
             </range>
             <output>fcs/elevator-pos-norm</output>
+        </aerosurface_scale>
+
+        <aerosurface_scale name="HStab Control">
+            <input>fcs/pitch-trim-cmd-norm</input>
+            <range>
+                <min> -0.25 </min>
+                <max>  0.25 </max>
+            </range>
+            <output>fcs/hstab-pos-rad</output>
+        </aerosurface_scale>
+        
+        <aerosurface_scale name="HStab Normalization">
+            <input>fcs/hstab-pos-rad</input>
+            <domain>
+                <min> -0.25 </min>
+                <max>  0.25 </max>
+            </domain>
+            <range>
+                <min> -1 </min>
+                <max>  1 </max>
+            </range>
+            <output>fcs/hstab-pos-norm</output>
         </aerosurface_scale>
     </channel>
     

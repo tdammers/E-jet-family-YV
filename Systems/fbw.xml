@@ -194,7 +194,7 @@
         <input>
             <expression>
                 <sum>
-                    <property>/fdm/jsbsim/fcs/elevator-sum</property>
+                    <property>/it-autoflight/internal/elevator</property>
                     <property>/fbw/elevator/etc</property>
                     <property>/fbw/elevator/tsa/elevator-command</property>
                 </sum>
