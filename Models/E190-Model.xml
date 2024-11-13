@@ -1,72 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <PropertyList>
-    
+
     <path>../Models/erj190.ac</path>
-    
-    <!-- Lightmap -->
-    <!--
-    <effect>
-        <inherits-from>../Models/Effects/reflect</inherits-from>
-        <parameters>
-            <lightmap-multi>1</lightmap-multi>
-            <lightmap-factor n="1">
-                <use>/systems/electrical/outputs/landing-lights-norm[1]</use>
-            </lightmap-factor>
-            <lightmap-factor n="2">
-                <use>/systems/electrical/outputs/logo-lights-norm</use>
-            </lightmap-factor>
-            <lightmap-factor n="3">0</lightmap-factor>
-        </parameters>
-        <object-name>rudder</object-name>
-        <object-name>vstab</object-name>
-        <object-name>fuselage</object-name>
-        <object-name>fuselage.001</object-name>
-        <object-name>reverser.001</object-name>
-        <object-name>nacelle.001</object-name>
-        <object-name>reverser</object-name>
-        <object-name>nacelle</object-name>
-        <object-name>door.l1</object-name>
-        <object-name>door.l2</object-name>
-    </effect>
-    <effect>
-        <inherits-from>../Models/Effects/reflect-nolightmap</inherits-from>
-        <object-name>fuselage.001</object-name>
-        <object-name>reverser.001</object-name>
-        <object-name>nacelle.001</object-name>
-        <object-name>reverser</object-name>
-        <object-name>nacelle</object-name>
-        <object-name>winglet.l</object-name>
-        <object-name>winglet.r</object-name>
-        <object-name>geardoor.b.l</object-name>
-        <object-name>geardoor.b.r</object-name>
-        <object-name>geardoor.f.l</object-name>
-        <object-name>geardoor.f.r</object-name>
-        <object-name>door.l1</object-name>
-        <object-name>door.l2</object-name>
-        <object-name>door.r1</object-name>
-        <object-name>door.r2</object-name>
-        <object-name>wing.l.1</object-name>
-        <object-name>wing.l.2</object-name>
-        <object-name>wing.l.3</object-name>
-        <object-name>wing.r.1</object-name>
-        <object-name>wing.r.2</object-name>
-        <object-name>wing.r.3</object-name>
-    </effect>
-    -->
-    
+
     <!-- Livery Selection Animation -->
-    
+
     <nasal>
         <load>
             var livery_update = aircraft.livery_update.new("Aircraft/E-jet-family/Models/Liveries/E190");
         </load>
-        
+
         <unload>
             livery_update.stop();
         </unload>
     </nasal>
-    
+
     <animation>
         <type>material</type>
         <object-name>fuselage</object-name>
@@ -94,7 +43,7 @@
         <texture>blank.png</texture>
         <transparency><alpha>1</alpha></transparency>
     </animation>
-    
+
     <!-- Door Illumination (only inside) -->
     <animation>
         <name>Doors Inside Illumination</name>
@@ -110,13 +59,13 @@
             <factor-prop>controls/lighting/cabin</factor-prop>
         </emission>
     </animation>
-    
-    
+
+
     <!-- Wing Flex Animation -->
     <!-- NOTE - wing segments and other surfaces are already grouped in ac3d -->
-    
+
     <!-- Left Wing Flex -->
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.l.1</object-name>
@@ -128,7 +77,7 @@
         <object-name>strobe.left</object-name>
         <property>fdm/jsbsim/aero/coefficient/CLalpha</property>
         <factor>-0.000009</factor>
-        <offset-deg>0</offset-deg>   
+        <offset-deg>0</offset-deg>
         <center>
             <x-m> 0.00</x-m>
             <y-m>-1.42</y-m>
@@ -140,7 +89,7 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.l.2</object-name>
@@ -150,7 +99,7 @@
         <object-name>wingtiptrails.left</object-name>
         <property>fdm/jsbsim/aero/coefficient/CLalpha</property>
         <factor>-0.000009</factor>
-        <offset-deg>0</offset-deg>   
+        <offset-deg>0</offset-deg>
         <center>
             <x-m> 0.00</x-m>
             <y-m>-4.34</y-m>
@@ -162,7 +111,7 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.l.3</object-name>
@@ -183,9 +132,9 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <!-- Right Wing Flex -->
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.r.1</object-name>
@@ -197,7 +146,7 @@
         <object-name>wingtiptrails.right</object-name>
         <property>fdm/jsbsim/aero/coefficient/CLalpha</property>
         <factor>-0.000009</factor>
-        <offset-deg>0</offset-deg>   
+        <offset-deg>0</offset-deg>
         <center>
             <x-m> 0.00</x-m>
             <y-m> 1.42</y-m>
@@ -209,7 +158,7 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.r.2</object-name>
@@ -219,7 +168,7 @@
         <object-name>wingtiptrails.right</object-name>
         <property>fdm/jsbsim/aero/coefficient/CLalpha</property>
         <factor>-0.000009</factor>
-        <offset-deg>0</offset-deg>   
+        <offset-deg>0</offset-deg>
         <center>
             <x-m> 0.00</x-m>
             <y-m> 4.34</y-m>
@@ -231,7 +180,7 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>wing.r.3</object-name>
@@ -252,9 +201,9 @@
             <z>0.0</z>
         </axis>
     </animation>
-    
+
     <!-- Control Surfaces -->
-    
+
     <!-- Rudder -->
     <animation>
         <name>Rudder</name>
@@ -377,9 +326,9 @@
             <z2-m>0.50</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Flaps -->
-    
+
     <!-- Left Wing Inner Flaps -->
     <animation>
         <type>rotate</type>
@@ -402,7 +351,7 @@
             <z2-m>0.01</z2-m>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>flap.l.005</object-name>
@@ -423,7 +372,7 @@
             <z-m>-0.187291</z-m>
         </center>
     </animation>
-    
+
     <!-- Left Wing Outer Flaps -->
     <animation>
         <type>rotate</type>
@@ -448,7 +397,7 @@
             <z2-m>0.48</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Right Wing Inner Flaps -->
     <animation>
         <type>rotate</type>
@@ -471,7 +420,7 @@
             <z2-m>0.01</z2-m>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>flap.r.003</object-name>
@@ -492,7 +441,7 @@
             <z-m>-0.187291</z-m>
         </center>
     </animation>
-    
+
     <!-- Right Wing Outer Flaps -->
     <animation>
         <type>rotate</type>
@@ -517,7 +466,7 @@
             <z2-m>0.48</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Spoilers -->
     <animation>
         <name>Left Inner Spoiler</name>
@@ -579,9 +528,9 @@
             <z2-m>0.37</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Engine Thrust Reverser -->
-    
+
     <animation>
         <type>translate</type>
         <object-name>reverser.001</object-name>
@@ -593,7 +542,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>translate</type>
         <object-name>reverser</object-name>
@@ -605,30 +554,30 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <!-- Landing Gear Animations -->
-    
+
     <!-- Sub Definitions -->
     <animation>
         <name>NoseGear</name>
         <object-name>gear.n</object-name>
         <object-name>tire.n</object-name>
     </animation>
-    
+
     <animation>
         <name>LeftGear</name>
         <object-name>gear.l</object-name>
         <object-name>gear.l.001</object-name>
         <object-name>tire.l</object-name>
     </animation>
-    
+
     <animation>
         <name>RightGear</name>
         <object-name>gear.r</object-name>
         <object-name>gear.r.001</object-name>
         <object-name>tire.r</object-name>
     </animation>
-    
+
     <!-- Nose Gear -->
     <animation>
         <type>rotate</type>
@@ -646,7 +595,7 @@
             <z>-1.0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>NoseGear</object-name>
@@ -676,7 +625,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>translate</type>
         <object-name>tire.n</object-name>
@@ -695,7 +644,7 @@
             <z>1</z>
         </axis>
     </animation>
-    
+
     <!-- Left Gear -->
     <animation>
         <type>rotate</type>
@@ -725,7 +674,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>translate</type>
         <object-name>tire.l</object-name>
@@ -744,7 +693,7 @@
             <z>1</z>
         </axis>
     </animation>
-    
+
     <!-- Right Gear -->
     <animation>
         <type>rotate</type>
@@ -774,7 +723,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>translate</type>
         <object-name>tire.r</object-name>
@@ -793,9 +742,9 @@
             <z>1</z>
         </axis>
     </animation>
-    
+
     <!-- Main Gear Translate to fit into the socket -->
-    
+
     <animation>
         <type>translate</type>
         <object-name>LeftGear</object-name>
@@ -814,7 +763,7 @@
             <z>-1</z>
         </axis>
     </animation>
-    
+
     <animation>
         <type>translate</type>
         <object-name>RightGear</object-name>
@@ -833,9 +782,9 @@
             <z>-1</z>
         </axis>
     </animation>
-    
+
     <!-- Tyres Rolling Animation -->
-    
+
     <animation>
         <type>spin</type>
         <object-name>tire.n</object-name>
@@ -852,7 +801,7 @@
             <z-m>-2.0022</z-m>
         </center>
     </animation>
-    
+
     <animation>
         <type>spin</type>
         <object-name>tire.l</object-name>
@@ -869,7 +818,7 @@
             <z-m>-1.9614</z-m>
         </center>
     </animation>
-    
+
     <animation>
         <type>spin</type>
         <object-name>tire.r</object-name>
@@ -886,9 +835,9 @@
             <z-m>-1.9614</z-m>
         </center>
     </animation>
-    
+
     <!-- Gear Door Animations -->
-    
+
     <!-- Nose Gear Door -->
     <animation>
         <type>rotate</type>
@@ -921,7 +870,7 @@
             <z2-m>-0.93</z2-m>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>geardoor.f.r</object-name>
@@ -953,7 +902,7 @@
             <z2-m>-0.93</z2-m>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>geardoor.b.l</object-name>
@@ -981,7 +930,7 @@
             <z2-m>-0.96</z2-m>
         </axis>
     </animation>
-    
+
     <animation>
         <type>rotate</type>
         <object-name>geardoor.b.r</object-name>
@@ -1009,7 +958,7 @@
             <z2-m>-0.96</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Left Engine Fan -->
     <animation>
         <name>Left Fan</name>
@@ -1027,7 +976,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <!-- Right Engine Fan -->
     <animation>
         <name>Right Fan</name>
@@ -1045,7 +994,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <!-- Door Pick Animations -->
     <animation>
         <type>pick</type>
@@ -1107,9 +1056,9 @@
             </binding>
         </action>
     </animation>
-    
+
     <!-- Door Translate Animations -->
-    
+
     <animation>
         <name>L1 Door X-translate</name>
         <type>translate</type>
@@ -1156,7 +1105,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <name>L2 Door X-translate</name>
         <type>translate</type>
@@ -1203,7 +1152,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <name>r1 Door X-translate</name>
         <type>translate</type>
@@ -1250,7 +1199,7 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <animation>
         <name>r2 Door X-translate</name>
         <type>translate</type>
@@ -1297,16 +1246,16 @@
             <z>0</z>
         </axis>
     </animation>
-    
+
     <!-- Strobe and Navigation Lights -->
-    
+
     <model>
         <name>RedLight</name>
         <path>Aircraft/E-jet-family/Models/Lights/RedLight.xml</path>
         <offsets>
             <x-m>2.49</x-m>
             <y-m>-13.6</y-m>
-            <z-m>0.769</z-m>  
+            <z-m>0.769</z-m>
         </offsets>
     </model>
     <model>
@@ -1315,17 +1264,17 @@
         <offsets>
             <x-m>2.49</x-m>
             <y-m>-13.6</y-m>
-            <z-m>0.769</z-m>  
+            <z-m>0.769</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <name>GreenLight</name>
         <path>Aircraft/E-jet-family/Models/Lights/GreenLight.xml</path>
         <offsets>
             <x-m>2.49</x-m>
             <y-m>13.6</y-m>
-            <z-m>0.769</z-m>  
+            <z-m>0.769</z-m>
         </offsets>
     </model>
     <model>
@@ -1334,17 +1283,17 @@
         <offsets>
             <x-m>2.49</x-m>
             <y-m>13.6</y-m>
-            <z-m>0.769</z-m>  
+            <z-m>0.769</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <name>LeftStrobe</name>
         <path>Aircraft/E-jet-family/Models/Lights/StrobeLight.xml</path>
         <offsets>
             <x-m>2.49</x-m>
             <y-m>-13.6</y-m>
-            <z-m>0.769</z-m> 
+            <z-m>0.769</z-m>
         </offsets>
     </model>
     <model>
@@ -1353,17 +1302,17 @@
         <offsets>
             <x-m>2.49</x-m>
             <y-m>-13.6</y-m>
-            <z-m>0.769</z-m> 
+            <z-m>0.769</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <name>RightStrobe</name>
         <path>Aircraft/E-jet-family/Models/Lights/StrobeLight.xml</path>
         <offsets>
             <x-m>2.49</x-m>
             <y-m>13.6</y-m>
-            <z-m>0.769</z-m> 
+            <z-m>0.769</z-m>
         </offsets>
     </model>
     <model>
@@ -1372,11 +1321,11 @@
         <offsets>
             <x-m>2.49</x-m>
             <y-m>13.6</y-m>
-            <z-m>0.769</z-m> 
+            <z-m>0.769</z-m>
         </offsets>
     </model>
-    
-    
+
+
     <animation>
         <type>select</type>
         <object-name>RedLight</object-name>
@@ -1399,89 +1348,89 @@
             <property>/sim/rendering/shaders/skydome</property>
         </condition>
     </animation>
-    
+
     <!-- Effects -->
-    
+
     <effect>
         <inherits-from>Effects/model-transparent</inherits-from>
         <object-name>Windscreen</object-name>
         <object-name>PassengerWindow</object-name>
     </effect>
-    
+
     <!-- Contrails -->
-    
+
     <model>
         <path>Aircraft/E-jet-family/Models/Effects/Contrail/contrail.xml</path>
-        <name>contrails.left</name>     
+        <name>contrails.left</name>
         <offsets>
             <x-m>-1.07</x-m>
             <y-m>-4.04</y-m>
-            <z-m>-1.09</z-m>     
+            <z-m>-1.09</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <path>Aircraft/E-jet-family/Models/Effects/Contrail/contrail.xml</path>
-        <name>contrails.right</name>     
+        <name>contrails.right</name>
         <offsets>
             <x-m>-1.07</x-m>
             <y-m>4.04</y-m>
-            <z-m>-1.09</z-m>     
+            <z-m>-1.09</z-m>
         </offsets>
     </model>
-    
+
     <!-- Wing Tip Trails
 
 <model>
 <path>Aircraft/E-jet-family/Models/Effects/wingtip-trails.xml</path>
-<name>wingtiptrails.left</name>     
+<name>wingtiptrails.left</name>
 <offsets>
 <x-m>1.81</x-m>
 <y-m>-12.42</y-m>
-<z-m>0.76</z-m>  
+<z-m>0.76</z-m>
 </offsets>
 </model>
 
 <model>
 <path>Aircraft/E-jet-family/Models/Effects/wingtip-trails.xml</path>
-<name>wingtiptrails.right</name>     
+<name>wingtiptrails.right</name>
 <offsets>
 <x-m>1.81</x-m>
 <y-m>12.42</y-m>
-<z-m>0.76</z-m>     
+<z-m>0.76</z-m>
 </offsets>
 </model> -->
-    
+
     <!-- Wet Runway Moisture -->
-    
+
     <model>
         <path>Aircraft/E-jet-family/Models/Effects/wet-runway-nose.xml</path>
-        <name>wet-runway-nose</name>     
+        <name>wet-runway-nose</name>
         <offsets>
             <x-m>-12.77</x-m>
             <y-m>0</y-m>
-            <z-m>-2.39</z-m>      
+            <z-m>-2.39</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <path>Aircraft/E-jet-family/Models/Effects/wet-runway.xml</path>
-        <name>wet-runway-left</name>     
+        <name>wet-runway-left</name>
         <offsets>
             <x-m>-1.07</x-m>
             <y-m>-2.55</y-m>
-            <z-m>-2.5</z-m>      
+            <z-m>-2.5</z-m>
         </offsets>
     </model>
-    
+
     <model>
         <path>Aircraft/E-jet-family/Models/Effects/wet-runway.xml</path>
-        <name>wet-runway-right</name>     
+        <name>wet-runway-right</name>
         <offsets>
             <x-m>-1.07</x-m>
             <y-m>2.55</y-m>
-            <z-m>-2.5</z-m>      
+            <z-m>-2.5</z-m>
         </offsets>
     </model>
-    
+
 </PropertyList>
