@@ -15,7 +15,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[0]/demand</property>
-                        <value>0.02</value>
+                        <value>0.2</value>
                     </sum>
                 </difference>
             </expression>
@@ -164,10 +164,10 @@
                         <ind>0</ind><dep>100</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>1600</dep>
+                        <ind>0.1</ind><dep>2500</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>1900</dep>
+                        <ind>1.0</ind><dep>3100</dep>
                     </entry>
                 </table>
             </expression>
@@ -190,7 +190,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[1]/demand</property>
-                        <value>0.02</value>
+                        <value>0.2</value>
                     </sum>
                 </difference>
             </expression>
@@ -342,10 +342,10 @@
                         <ind>0</ind><dep>100</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>1600</dep>
+                        <ind>0.1</ind><dep>2500</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>1900</dep>
+                        <ind>1.0</ind><dep>3100</dep>
                     </entry>
                 </table>
             </expression>
@@ -375,7 +375,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[2]/demand</property>
-                        <value>0.02</value>
+                        <value>0.2</value>
                     </sum>
                 </difference>
             </expression>
@@ -517,10 +517,10 @@
                         <ind>0</ind><dep>100</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>1600</dep>
+                        <ind>0.1</ind><dep>2500</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>1900</dep>
+                        <ind>1.0</ind><dep>3100</dep>
                     </entry>
                 </table>
             </expression>

@@ -3,8 +3,24 @@
 <flight_control name="FCS: E-Jet-Family">
     <channel name="Pitch">
 
+        <switch>
+            <output>fcs/elevator-cmd-powered</output>
+            <default value="1" />
+            <test logic="OR" value="fcs/elevator-cmd-fbw">
+                /systems/hydraulic/system[0]/accumulator &gt; 0.2
+                /systems/hydraulic/system[1]/accumulator &gt; 0.2
+                /systems/hydraulic/system[2]/accumulator &gt; 0.2
+            </test>
+        </switch>
+        
+        <actuator name="Elevator Master">
+            <input>fcs/elevator-cmd-powered</input>
+            <rate_limit>1</rate_limit>
+            <output>fcs/elevator-master</output>
+        </actuator>
+        
         <aerosurface_scale name="Elevator Control">
-            <input>fcs/elevator-cmd-fbw</input>
+            <input>fcs/elevator-master</input>
             <range>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
@@ -196,9 +212,30 @@
                 <max>  1 </max>
             </clipto>
         </summer>
+
+        <pure_gain>
+            <output>fcs/rudder-rate-limit</output>
+            <input>/systems/hydraulic/system[2]/pressure-psi</input>
+            <table>
+                <independentVar>/systems/hydraulic/system[2]/pressure-psi</independentVar>
+                <tableData>
+                    0        0.0
+                    500      0.0
+                    2900     1.0
+                    4000     1.0
+                </tableData>
+            </table>
+            <gain>0.00033</gain>
+        </pure_gain>
+        
+        <actuator>
+            <input>fcs/rudder-sum</input>
+            <rate_limit>fcs/rudder-rate-limit</rate_limit>
+            <output>fcs/rudder-master</output>
+        </actuator>
         
         <aerosurface_scale name="Rudder Control">
-            <input>fcs/rudder-sum</input>
+            <input>fcs/rudder-master</input>
             <range>
                 <min> -0.530 </min>
                 <max>  0.530 </max>
