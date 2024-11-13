@@ -26,6 +26,109 @@
         <u_max>1.0</u_max>
     </filter>
 
+    <flipflop>
+        <type>RS</type>
+        <name>Accumulator 1 Low</name>
+        <S>
+            <less-than>
+                <property>systems/hydraulic/system[0]/accumulator</property>
+                <value>0.95</value>
+            </less-than>
+        </S>
+        <R>
+            <greater-than>
+                <property>systems/hydraulic/system[0]/accumulator</property>
+                <value>0.9999</value>
+            </greater-than>
+        </R>
+        <output>systems/hydraulic/system[0]/accumulator-low</output>
+    </flipflop>
+
+    <logic>
+        <name>EDP 1 engage logic</name>
+        <input>
+            <and>
+                <not>
+                    <property>controls/hydraulic/edp-shutoff[0]</property>
+                </not>
+                <greater-than>
+                    <property>engines/engine[0]/n1</property>
+                    <value>18</value>
+                </greater-than>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[0]/edp/engaged</output>
+    </logic>
+    <logic>
+        <name>EHP 1 engage logic</name>
+        <input>
+            <and>
+                <or>
+                    <and>
+                        <equals>
+                            <property>controls/hydraulic/ehp[0]</property>
+                            <value>0</value>
+                        </equals>
+                        <less-than>
+                            <property>systems/hydraulic/system[0]/edp/power</property>
+                            <value>0.9</value>
+                        </less-than>
+                        <property>systems/hydraulic/system[0]/accumulator-low</property>
+                    </and>
+                    <equals>
+                        <property>controls/hydraulic/ehp[0]</property>
+                        <value>1</value>
+                    </equals>
+                </or>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[0]/ehp/engaged</output>
+    </logic>
+
+    <filter>
+        <name>EDP 1</name>
+        <type>gain</type>
+        <gain>0.15</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[0]/edp/engaged</property>
+            </condition>
+            <expression>
+                <difference>
+                    <property>engines/engine[0]/n1</property>
+                    <value>18</value>
+                </difference>
+            </expression>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[0]/edp/power</output>
+    </filter>
+
+    <filter>
+        <name>EHP 1</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <greater-than>
+                    <property>systems/electrical/outputs/ehp[0]</property>
+                    <value>20</value>
+                </greater-than>
+            </condition>
+            <value>1</value>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[0]/ehp/power</output>
+    </filter>
+
     <filter>
         <name>Demand 1</name>
         <type>gain</type>
@@ -76,14 +179,14 @@
     <filter>
         <name>Accumulator level 2</name>
         <type>integrator</type>
-        <gain>0.2</gain>
+        <gain>0.1</gain>
         <input>
             <expression>
                 <difference>
                     <sum>
                         <property>systems/hydraulic/system[1]/edp/power</property>
                         <property>systems/hydraulic/system[1]/ehp/power</property>
-                        <property>systems/hydraulic/system[2]/ptu/power</property>
+                        <property>systems/hydraulic/system[1]/ptu/power</property>
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[1]/demand</property>
@@ -96,6 +199,109 @@
         <initialize-to>output</initialize-to>
         <u_min>0.0</u_min>
         <u_max>1.0</u_max>
+    </filter>
+
+    <flipflop>
+        <type>RS</type>
+        <name>Accumulator 2 Low</name>
+        <S>
+            <less-than>
+                <property>systems/hydraulic/system[1]/accumulator</property>
+                <value>0.95</value>
+            </less-than>
+        </S>
+        <R>
+            <greater-than>
+                <property>systems/hydraulic/system[1]/accumulator</property>
+                <value>0.9999</value>
+            </greater-than>
+        </R>
+        <output>systems/hydraulic/system[1]/accumulator-low</output>
+    </flipflop>
+
+    <logic>
+        <name>EDP 2 engage logic</name>
+        <input>
+            <and>
+                <not>
+                    <property>controls/hydraulic/edp-shutoff[1]</property>
+                </not>
+                <greater-than>
+                    <property>engines/engine[1]/n1</property>
+                    <value>18</value>
+                </greater-than>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[1]/edp/engaged</output>
+    </logic>
+    <logic>
+        <name>EHP 2 engage logic</name>
+        <input>
+            <and>
+                <or>
+                    <and>
+                        <equals>
+                            <property>controls/hydraulic/ehp[1]</property>
+                            <value>0</value>
+                        </equals>
+                        <less-than>
+                            <property>systems/hydraulic/system[1]/edp/power</property>
+                            <value>0.9</value>
+                        </less-than>
+                        <property>systems/hydraulic/system[1]/accumulator-low</property>
+                    </and>
+                    <equals>
+                        <property>controls/hydraulic/ehp[1]</property>
+                        <value>1</value>
+                    </equals>
+                </or>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[1]/ehp/engaged</output>
+    </logic>
+
+    <filter>
+        <name>EDP 2</name>
+        <type>gain</type>
+        <gain>0.15</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[1]/edp/engaged</property>
+            </condition>
+            <expression>
+                <difference>
+                    <property>engines/engine[1]/n1</property>
+                    <value>18</value>
+                </difference>
+            </expression>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[1]/edp/power</output>
+    </filter>
+
+    <filter>
+        <name>EHP 2</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <greater-than>
+                    <property>systems/electrical/outputs/ehp[1]</property>
+                    <value>20</value>
+                </greater-than>
+            </condition>
+            <value>1</value>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[1]/ehp/power</output>
     </filter>
 
     <filter>
@@ -155,4 +361,170 @@
         <output>systems/hydraulic/system[1]/sinks/nosewheel-steering</output>
     </filter>
 
+    <!-- HYDRAULIC SYSTEM 3 -->
+    <filter>
+        <name>Accumulator level 3</name>
+        <type>integrator</type>
+        <gain>0.1</gain>
+        <input>
+            <expression>
+                <difference>
+                    <sum>
+                        <property>systems/hydraulic/system[2]/ehp[0]/power</property>
+                        <property>systems/hydraulic/system[2]/ehp[1]/power</property>
+                    </sum>
+                    <sum>
+                        <property>systems/hydraulic/system[2]/demand</property>
+                        <value>0.02</value>
+                    </sum>
+                </difference>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[2]/accumulator</output>
+        <initialize-to>output</initialize-to>
+        <u_min>0.0</u_min>
+        <u_max>1.0</u_max>
+    </filter>
+
+    <flipflop>
+        <type>RS</type>
+        <name>Accumulator 3 Low</name>
+        <S>
+            <less-than>
+                <property>systems/hydraulic/system[2]/accumulator</property>
+                <value>0.95</value>
+            </less-than>
+        </S>
+        <R>
+            <greater-than>
+                <property>systems/hydraulic/system[2]/accumulator</property>
+                <value>0.9999</value>
+            </greater-than>
+        </R>
+        <output>systems/hydraulic/system[2]/accumulator-low</output>
+    </flipflop>
+
+    <logic>
+        <name>EHP 3A engage logic</name>
+        <input>
+            <and>
+                <or>
+                    <equals>
+                        <property>controls/hydraulic/ehp[2]</property>
+                        <value>0</value>
+                    </equals>
+                    <equals>
+                        <property>controls/hydraulic/ehp[2]</property>
+                        <value>1</value>
+                    </equals>
+                </or>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[2]/ehp[0]/engaged</output>
+    </logic>
+    <logic>
+        <name>EHP 3B engage logic</name>
+        <input>
+            <or>
+                <and>
+                    <equals>
+                        <property>controls/hydraulic/ehp[3]</property>
+                        <value>0</value>
+                    </equals>
+                    <property>systems/hydraulic/system[2]/accumulator-low</property>
+                    <less-than>
+                        <property>systems/hydraulic/system[2]/ehp[0]/power</property>
+                        <value>0.9</value>
+                    </less-than>
+                </and>
+                <equals>
+                    <property>controls/hydraulic/ehp[3]</property>
+                    <value>1</value>
+                </equals>
+            </or>
+        </input>
+        <output>systems/hydraulic/system[2]/ehp[1]/engaged</output>
+    </logic>
+
+
+    <filter>
+        <name>EHP 3A</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <greater-than>
+                    <property>systems/electrical/outputs/ehp[2]</property>
+                    <value>20</value>
+                </greater-than>
+            </condition>
+            <value>1</value>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[2]/ehp[0]/power</output>
+    </filter>
+    <filter>
+        <name>EHP 3B</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <greater-than>
+                    <property>systems/electrical/outputs/ehp[3]</property>
+                    <value>20</value>
+                </greater-than>
+            </condition>
+            <value>1</value>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[2]/ehp[1]/power</output>
+    </filter>
+
+    <filter>
+        <name>Demand 3</name>
+        <type>gain</type>
+        <gain>0.01</gain>
+        <input>
+            <expression>
+                <sum>
+                    <abs><property>systems/hydraulic/system[2]/sinks/elevator-right-outboard</property></abs>
+                    <abs><property>systems/hydraulic/system[2]/sinks/rudder-lower</property></abs>
+                    <abs><property>systems/hydraulic/system[2]/sinks/aileron-left-outboard</property></abs>
+                    <abs><property>systems/hydraulic/system[2]/sinks/aileron-right-outboard</property></abs>
+                </sum>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[2]/demand</output>
+    </filter>
+
+    <filter>
+        <name>Pressure 3</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <table>
+                    <property>systems/hydraulic/system[2]/accumulator</property>
+                    <entry>
+                        <ind>0</ind><dep>100</dep>
+                    </entry>
+                    <entry>
+                        <ind>0.1</ind><dep>1600</dep>
+                    </entry>
+                    <entry>
+                        <ind>1.0</ind><dep>1900</dep>
+                    </entry>
+                </table>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[2]/pressure-psi</output>
+    </filter>
 </PropertyList>

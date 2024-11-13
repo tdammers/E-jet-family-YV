@@ -852,6 +852,29 @@
         </input>
         <output>/systems/electrical/outputs/fuel-pump[0]</output>
     </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[0]/ehp/engaged</property>
+            </condition>
+            <property>/systems/electrical/buses/ac[1]/volts</property>
+        </input>
+        <output>/systems/electrical/outputs/ehp[0]</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[1]/ehp/engaged</property>
+            </condition>
+            <property>/systems/electrical/buses/ac[1]/volts</property>
+        </input>
+        <output>/systems/electrical/outputs/ehp[1]</output>
+    </filter>
+
     <!-- AC BUS 1 LOAD -->
     <filter>
         <type>gain</type>
@@ -909,6 +932,14 @@
                             <product>
                                 <property>/systems/electrical/outputs/fuel-pump[0]</property>
                                 <property>/systems/fuel/fuel-pump[0]/demand</property>
+                                <value>50</value>
+                            </product>
+                            <product>
+                                <property>/systems/electrical/outputs/ehp[0]</property>
+                                <value>50</value>
+                            </product>
+                            <product>
+                                <property>/systems/electrical/outputs/ehp[1]</property>
                                 <value>50</value>
                             </product>
                         </sum>
@@ -978,6 +1009,17 @@
         </input>
         <output>/systems/electrical/outputs/fuel-pump[2]</output>
     </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[2]/ehp[1]/engaged</property>
+            </condition>
+            <property>/systems/electrical/buses/ac[1]/volts</property>
+        </input>
+        <output>/systems/electrical/outputs/ehp[3]</output>
+    </filter>
     <!-- AC BUS 2 LOAD -->
     <filter>
         <type>gain</type>
@@ -1025,6 +1067,10 @@
                                 <property>/systems/fuel/fuel-pump[2]/demand</property>
                                 <value>50</value>
                             </product>
+                            <product>
+                                <property>/systems/electrical/outputs/ehp[3]</property>
+                                <value>50</value>
+                            </product>
                         </sum>
                         <property>/systems/electrical/buses/ac[2]/volts</property>
                     </div>
@@ -1055,6 +1101,18 @@
         <gain>1</gain>
         <input>
             <condition>
+                <property>systems/hydraulic/system[2]/ehp[0]/engaged</property>
+            </condition>
+            <property>/systems/electrical/buses/ac[3]/volts</property>
+        </input>
+        <output>/systems/electrical/outputs/ehp[2]</output>
+    </filter>
+
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
                 <property>/systems/electrical/buses/ac[3]/powered</property>
             </condition>
             <expression>
@@ -1064,6 +1122,10 @@
                             <product>
                                 <property>/systems/electrical/outputs/fuel-pump[1]</property>
                                 <property>/systems/fuel/fuel-pump[1]/demand</property>
+                                <value>50</value>
+                            </product>
+                            <product>
+                                <property>/systems/electrical/outputs/ehp[2]</property>
                                 <value>50</value>
                             </product>
                         </sum>
