@@ -487,10 +487,24 @@
           </function>
         </fcs_function>
         
+        <fcs_function name="Gear Nose Rate">
+            <function name="fcs/steer-nose-rate">
+                <table>
+                    <independentVar lookup="row">/systems/hydraulic/system[1]/pressure-psi</independentVar>
+                    <tableData>
+                        0 0
+                        1200 0
+                        1600 70
+                        3000 70
+                    </tableData>
+                </table>
+            </function>
+        </fcs_function>
+
         <actuator name="Gear Nose Actuator">
-          <input>fcs/steer-nose-deg[0]</input>
-          <rate_limit>70</rate_limit>
-          <output>fcs/steer-pos-deg[0]</output>
+            <input>fcs/steer-nose-deg[0]</input>
+            <rate_limit>fcs/steer-nose-rate</rate_limit>
+            <output>fcs/steer-pos-deg[0]</output>
         </actuator>
     </channel>
     

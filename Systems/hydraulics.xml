@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PropertyList>
+    <!-- HYDRAULIC SYSTEM 1 -->
+    <filter>
+        <name>Accumulator level 1</name>
+        <type>integrator</type>
+        <gain>0.1</gain>
+        <input>
+            <expression>
+                <difference>
+                    <sum>
+                        <property>systems/hydraulic/system[0]/edp/power</property>
+                        <property>systems/hydraulic/system[0]/ehp/power</property>
+                    </sum>
+                    <sum>
+                        <property>systems/hydraulic/system[0]/demand</property>
+                        <value>0.02</value>
+                    </sum>
+                </difference>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[0]/accumulator</output>
+        <initialize-to>output</initialize-to>
+        <u_min>0.0</u_min>
+        <u_max>1.0</u_max>
+    </filter>
+
+    <filter>
+        <name>Demand 1</name>
+        <type>gain</type>
+        <gain>0.01</gain>
+        <input>
+            <expression>
+                <sum>
+                    <property>systems/hydraulic/system[0]/sinks/elevator-left-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/rudder-upper</property>
+                    <property>systems/hydraulic/system[0]/sinks/thrust-reverser-left</property>
+                    <property>systems/hydraulic/system[0]/sinks/mfs-left-outer-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/mfs-left-inner-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/mfs-right-outer-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/mfs-right-inner-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/brake-outboard</property>
+                    <property>systems/hydraulic/system[0]/sinks/parking-brake</property>
+                    <property>systems/hydraulic/system[0]/sinks/ptu</property>
+                </sum>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[0]/demand</output>
+    </filter>
+
+    <filter>
+        <name>Pressure 1</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <table>
+                    <property>systems/hydraulic/system[0]/accumulator</property>
+                    <entry>
+                        <ind>0</ind><dep>100</dep>
+                    </entry>
+                    <entry>
+                        <ind>0.1</ind><dep>1600</dep>
+                    </entry>
+                    <entry>
+                        <ind>1.0</ind><dep>1900</dep>
+                    </entry>
+                </table>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[0]/pressure-psi</output>
+    </filter>
+
+    <!-- HYDRAULIC SYSTEM 2 -->
+    <filter>
+        <name>Accumulator level 2</name>
+        <type>integrator</type>
+        <gain>0.2</gain>
+        <input>
+            <expression>
+                <difference>
+                    <sum>
+                        <property>systems/hydraulic/system[1]/edp/power</property>
+                        <property>systems/hydraulic/system[1]/ehp/power</property>
+                        <property>systems/hydraulic/system[2]/ptu/power</property>
+                    </sum>
+                    <sum>
+                        <property>systems/hydraulic/system[1]/demand</property>
+                        <value>0.02</value>
+                    </sum>
+                </difference>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[1]/accumulator</output>
+        <initialize-to>output</initialize-to>
+        <u_min>0.0</u_min>
+        <u_max>1.0</u_max>
+    </filter>
+
+    <filter>
+        <name>Demand 2</name>
+        <type>gain</type>
+        <gain>0.01</gain>
+        <input>
+            <expression>
+                <sum>
+                    <abs><property>systems/hydraulic/system[1]/sinks/elevator-left-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/elevator-right-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/aileron-left-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/aileron-right-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/thrust-reverser-right</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-left-outer-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-left-inner-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-right-outer-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-right-inner-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/brake-inboard</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/nosewheel-steering</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/landing-gear</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/parking-brake</property></abs>
+                </sum>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[1]/demand</output>
+    </filter>
+
+    <filter>
+        <name>Pressure 2</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <expression>
+                <table>
+                    <property>systems/hydraulic/system[1]/accumulator</property>
+                    <entry>
+                        <ind>0</ind><dep>100</dep>
+                    </entry>
+                    <entry>
+                        <ind>0.1</ind><dep>1600</dep>
+                    </entry>
+                    <entry>
+                        <ind>1.0</ind><dep>1900</dep>
+                    </entry>
+                </table>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[1]/pressure-psi</output>
+    </filter>
+
+    <filter>
+        <name>Nosewheel Steering</name>
+        <type>derivative</type>
+        <filter-time>0.15</filter-time>
+        <input>/fdm/jsbsim/fcs/steer-pos-deg[0]</input>
+        <output>systems/hydraulic/system[1]/sinks/nosewheel-steering</output>
+    </filter>
+
+</PropertyList>

@@ -199,6 +199,10 @@
                 <path>Aircraft/E-jet-family/Systems/pneumatic.xml</path>
             </autopilot>
             <autopilot>
+                <name>Hydraulics</name>
+                <path>Aircraft/E-jet-family/Systems/hydraulics.xml</path>
+            </autopilot>
+            <autopilot>
                 <name>Pressurization</name>
                 <path>Aircraft/E-jet-family/Systems/pressurization.xml</path>
             </autopilot>
@@ -1677,6 +1681,86 @@
                 <apu type="double">0</apu>
             </external-flow>
         </fuel>
+        <hydraulic>
+            <system n="0">
+                <edp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">0.0</power>
+                </edp>
+                <ehp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">1.0</power>
+                </ehp>
+                <pressure-psi type="double">0.0</pressure-psi>
+                <fill-ratio type="double">0.9</fill-ratio>
+                <accumulator type="double">0.0</accumulator>
+                <emergency-accumulator type="double">0.0</emergency-accumulator>
+                <sinks>
+                    <elevator-left-outboard type="double">0.0</elevator-left-outboard>
+                    <rudder-upper type="double">0.0</rudder-upper>
+                    <thrust-reverser-left type="double">0.0</thrust-reverser-left>
+                    <mfs-left-outer-outboard type="double">0.0</mfs-left-outer-outboard>
+                    <mfs-left-inner-outboard type="double">0.0</mfs-left-inner-outboard>
+                    <mfs-right-outer-outboard type="double">0.0</mfs-right-outer-outboard>
+                    <mfs-right-inner-outboard type="double">0.0</mfs-right-inner-outboard>
+                    <brake-outboard type="double">0.0</brake-outboard>
+                    <parking-brake type="double">0.0</parking-brake>
+                    <ptu type="double">0.0</ptu>
+                </sinks>
+            </system>
+            <system n="1">
+                <edp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">0.0</power>
+                </edp>
+                <ehp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">1.0</power>
+                </ehp>
+                <ptu>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">0.0</power>
+                </ptu>
+                <pressure-psi type="double">0.0</pressure-psi>
+                <fill-ratio type="double">0.9</fill-ratio>
+                <accumulator type="double">0.0</accumulator>
+                <emergency-accumulator type="double">0.0</emergency-accumulator>
+                <sinks>
+                    <elevator-left-inboard type="double">0.0</elevator-left-inboard>
+                    <elevator-right-inboard type="double">0.0</elevator-right-inboard>
+                    <aileron-left-inboard type="double">0.0</aileron-left-inboard>
+                    <aileron-right-inboard type="double">0.0</aileron-right-inboard>
+                    <thrust-reverser-right type="double">0.0</thrust-reverser-right>
+                    <mfs-left-outer-inboard type="double">0.0</mfs-left-outer-inboard>
+                    <mfs-left-inner-inboard type="double">0.0</mfs-left-inner-inboard>
+                    <mfs-right-outer-inboard type="double">0.0</mfs-right-outer-inboard>
+                    <mfs-right-inner-inboard type="double">0.0</mfs-right-inner-inboard>
+                    <brake-inboard type="double">0.0</brake-inboard>
+                    <nosewheel-steering type="double">0.0</nosewheel-steering>
+                    <landing-gear type="double">0.0</landing-gear>
+                    <parking-brake type="double">0.0</parking-brake>
+                </sinks>
+            </system>
+            <system n="2">
+                <ehp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">1.0</power>
+                </ehp>
+                <ehp>
+                    <engaged type="bool">false</engaged>
+                    <power type="double">0.0</power>
+                </ehp>
+                <pressure-psi type="double">0.0</pressure-psi>
+                <fill-ratio type="double">0.9</fill-ratio>
+                <accumulator type="double">0.0</accumulator>
+                <sinks>
+                    <elevator-right-outboard type="double">0.0</elevator-right-outboard>
+                    <rudder-lower type="double">0.0</rudder-lower>
+                    <aileron-left-outboard type="double">0.0</aileron-left-outboard>
+                    <aileron-right-outboard type="double">0.0</aileron-right-outboard>
+                </sinks>
+            </system>
+        </hydraulic>
         <pneumatic>
             <valves>
                 <xbleed>
@@ -1921,8 +2005,28 @@
             <engine-bleed n="0" type="bool">false</engine-bleed>
             <engine-bleed n="1" type="bool">false</engine-bleed>
             <xbleed type="bool">false</xbleed>
-
         </pneumatic>
+
+        <hydraulic>
+            <edp-shutoff n="0" type="bool">0</edp-shutoff>
+            <edp-shutoff n="1" type="bool">0</edp-shutoff>
+
+            <!-- -1 = off, 0 = auto, 1 = on -->
+            <ptu type="int">0</ptu>
+
+            <!-- EHP1 -->
+            <!-- -1 = off, 0 = auto, 1 = on -->
+            <ehp n="0" type="int">0</ehp>
+            <!-- EHP2 -->
+            <!-- -1 = off, 0 = auto, 1 = on -->
+            <ehp n="1" type="int">0</ehp>
+            <!-- EHP3A -->
+            <!-- -1 = off, 0 or 1 = on -->
+            <ehp n="2" type="int">0</ehp>
+            <!-- EHP3B -->
+            <!-- -1 = off, 0 = auto, 1 = on -->
+            <ehp n="3" type="int">0</ehp>
+        </hydraulic>
 
         <apu>
             <fire-switch type="bool">false</fire-switch>
