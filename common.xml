@@ -171,6 +171,10 @@
                 <path>Aircraft/E-jet-family/Systems/spoilers.xml</path>
             </autopilot>
             <autopilot>
+                <name>HStab</name>
+                <path>Aircraft/E-jet-family/Systems/stabilizer.xml</path>
+            </autopilot>
+            <autopilot>
                 <name>Pushback</name>
                 <path>Aircraft/E-jet-family/Systems/pushback-steering.xml</path>
             </autopilot>

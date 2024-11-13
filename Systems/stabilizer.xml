@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<PropertyList>
+    <filter>
+        <name>hstab position</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>fdm/jsbsim/fcs/hstab-pos-norm</input>
+        <output>surface-positions/hstab-pos-norm</output>
+    </filter>
+</PropertyList>

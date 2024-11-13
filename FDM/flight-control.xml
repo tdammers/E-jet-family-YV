@@ -46,6 +46,19 @@
             </range>
             <output>fcs/hstab-pos-norm</output>
         </aerosurface_scale>
+
+        <aerosurface_scale name="HStab Degrees">
+            <input>fcs/hstab-pos-rad</input>
+            <domain>
+                <min> -0.25 </min>
+                <max>  0.25 </max>
+            </domain>
+            <range>
+                <min> -14.3239448782705 </min>
+                <max>  14.3239448782705 </max>
+            </range>
+            <output>fcs/hstab-pos-deg</output>
+        </aerosurface_scale>
     </channel>
     
     <channel name="Roll">

@@ -271,19 +271,16 @@
             <z2-m>8.335</z2-m>
         </axis>
     </animation>
-    
+
     <!-- Elevators -->
     <animation>
         <name>Left elevator</name>
         <type>rotate</type>
         <object-name>elevator.l</object-name>
-        <property>controls/flight/elevator</property>
+        <property>surface-positions/elevator-pos-norm</property>
         <interpolation>
             <entry>
-                <ind>-1.0</ind><dep>30.0</dep>
-            </entry>
-            <entry>
-                <ind>0.0</ind><dep>0.0</dep>
+                <ind>-1.0</ind><dep>15.0</dep>
             </entry>
             <entry>
                 <ind>1.0</ind><dep>-15.0</dep>
@@ -302,13 +299,10 @@
         <name>Right elevator</name>
         <type>rotate</type>
         <object-name>elevator.r</object-name>
-        <property>controls/flight/elevator</property>
+        <property>surface-positions/elevator-pos-norm</property>
         <interpolation>
             <entry>
-                <ind>-1.0</ind><dep>-30.0</dep>
-            </entry>
-            <entry>
-                <ind>0.0</ind><dep>0.0</dep>
+                <ind>-1.0</ind><dep>-15.0</dep>
             </entry>
             <entry>
                 <ind>1.0</ind><dep>15.0</dep>
@@ -323,7 +317,35 @@
             <z2-m>1.9713</z2-m>
         </axis>
     </animation>
-    
+
+    <!-- HStab -->
+    <animation>
+        <name>Horizontal Stabilizer</name>
+        <type>rotate</type>
+        <object-name>hstab</object-name>
+        <object-name>elevator.l</object-name>
+        <object-name>elevator.r</object-name>
+        <property>surface-positions/hstab-pos-norm</property>
+        <interpolation>
+            <entry>
+                <ind>-1.0</ind><dep>-15</dep>
+            </entry>
+            <entry>
+                <ind>1.0</ind><dep>15</dep>
+            </entry>
+        </interpolation>
+        <center>
+            <x-m>15.294</x-m>
+            <y-m>0.0</y-m>
+            <z-m>2.0</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+
     <!-- Ailerons -->
     <animation>
         <name>Left aileron</name>
