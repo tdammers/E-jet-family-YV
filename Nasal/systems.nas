@@ -63,6 +63,9 @@ var startup = func {
 	props.setAll("controls/electric/engine", "generator", 1);
 	props.setAll("controls/engines/engine", "cutoff-switch", 1);
 
+    var oddDay = rand() < 0.5;
+    setprop('/systems/actuators/odd-day', oddDay);
+
 	var listener1 = setlistener("engines/apu/running", func {
 		if (props.getNode("engines/apu/running").getBoolValue()) {
 			setprop("controls/engines/engine-start-switch", 2);

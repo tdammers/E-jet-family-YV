@@ -281,9 +281,21 @@ var MFD = {
         me.registerProp('resolution', "instrumentation/mfd[" ~ me.side ~ "]/resolution");
         me.registerProp('scan-rate', "instrumentation/mfd[" ~ me.side ~ "]/scan-rate");
 
+        me.registerProp('hyd-sys-rudder', "systems/actuators/rudder/hydraulic-system");
+        me.registerProp('hyd-sys-elevator-lh', "systems/actuators/elevator/hydraulic-system[0]");
+        me.registerProp('hyd-sys-elevator-rh', "systems/actuators/elevator/hydraulic-system[1]");
+
+        me.registerProp('pcu-rudder-0', "systems/actuators/rudder/pcu[0]/status");
+        me.registerProp('pcu-rudder-1', "systems/actuators/rudder/pcu[1]/status");
+        me.registerProp('pcu-elevator-lh-0', "systems/actuators/elevator/pcu[0]/status");
+        me.registerProp('pcu-elevator-lh-1', "systems/actuators/elevator/pcu[1]/status");
+        me.registerProp('pcu-elevator-rh-0', "systems/actuators/elevator/pcu[2]/status");
+        me.registerProp('pcu-elevator-rh-1', "systems/actuators/elevator/pcu[3]/status");
+
         me.registerProp('elevator-law', "fbw/elevator/law");
         me.registerProp('rudder-law', "fbw/rudder/law");
         me.registerProp('spoilers-law', "fbw/spoilers/law");
+
         me.registerProp('aileron-left', "surface-positions/left-aileron-pos-norm");
         me.registerProp('aileron-right', "surface-positions/right-aileron-pos-norm");
         me.registerProp('rudder', "surface-positions/rudder-pos-norm");
@@ -941,11 +953,17 @@ var MFD = {
                 'fctl.aileron-rh-up.cover',
                 'fctl.aileron-rh-up.dashedbox',
                 'fctl.aileron-rh-up.stripes',
+                'fctl.actuator1.elev-lh.frame',
                 'fctl.actuator1.elev-lh.text',
+                'fctl.actuator1.elev-rh.frame',
                 'fctl.actuator1.elev-rh.text',
-                'fctl.actuator2.elev-lh.text',
-                'fctl.actuator2.elev-rh.text',
+                'fctl.actuator1.rudder.frame',
                 'fctl.actuator1.rudder.text',
+                'fctl.actuator2.elev-lh.frame',
+                'fctl.actuator2.elev-lh.text',
+                'fctl.actuator2.elev-rh.frame',
+                'fctl.actuator2.elev-rh.text',
+                'fctl.actuator2.rudder.frame',
                 'fctl.actuator2.rudder.text',
                 'fctl.aileron-lh-down',
                 'fctl.aileron-lh-down.cover',
@@ -963,6 +981,9 @@ var MFD = {
                 'fctl.aileron-rh-up.cover',
                 'fctl.aileron-rh-up.dashedbox',
                 'fctl.aileron-rh-up.stripes',
+                'fctl.hyd-sys.rudder.text',
+                'fctl.hyd-sys.elev-lh.text',
+                'fctl.hyd-sys.elev-rh.text',
                 'fctl.mode.elev-lh.frame',
                 'fctl.mode.elev-lh.text',
                 'fctl.mode.elev-rh.frame',
@@ -2575,6 +2596,57 @@ var MFD = {
                         self.elems['fctl.mode.rudder.frame'].show();
                     }
                 }, 1, 0);
+
+            me.addListener('systems', me.props['hyd-sys-rudder'], func (node) {
+                    var sys = node.getValue() + 1;
+                    self.elems['fctl.hyd-sys.rudder.text'].setText(sprintf("%1i", sys));
+                }, 1, 0);
+            me.addListener('systems', me.props['hyd-sys-elevator-lh'], func (node) {
+                    var sys = node.getValue() + 1;
+                    self.elems['fctl.hyd-sys.elev-lh.text'].setText(sprintf("%1i", sys));
+                }, 1, 0);
+            me.addListener('systems', me.props['hyd-sys-elevator-rh'], func (node) {
+                    var sys = node.getValue() + 1;
+                    self.elems['fctl.hyd-sys.elev-rh.text'].setText(sprintf("%1i", sys));
+                }, 1, 0);
+
+            var initActuator = func (propID, elemID) {
+                self.addListener('systems', self.props[propID], func (node) {
+                        var status = node.getValue();
+                        var text = "---";
+                        var fg = [0, 0, 0];
+                        var bg = [255, 192, 0];
+
+                        if (status == 0) {
+                            text = "STBY";
+                            fg = [255, 255, 255];
+                            bg = [0, 0, 0];
+                        }
+                        elsif (status == 1) {
+                            text = "ON";
+                            fg = [0, 255, 0];
+                            bg = [0, 0, 0];
+                        }
+                        else {
+                            text = "---";
+                            bg = [255, 192, 0];
+                            fg = [0, 0, 0];
+                        }
+                        self.elems[elemID ~ '.text']
+                            .setText(text)
+                            .setColor(fg[0], fg[1], fg[2]);
+                        self.elems[elemID ~ '.frame']
+                            .setColor(fg[0], fg[1], fg[2])
+                            .setColorFill(bg[0], bg[1], bg[2]);
+                    }, 1, 0);
+            };
+
+            initActuator('pcu-rudder-0', 'fctl.actuator1.rudder');
+            initActuator('pcu-rudder-1', 'fctl.actuator2.rudder');
+            initActuator('pcu-elevator-lh-0', 'fctl.actuator1.elev-lh');
+            initActuator('pcu-elevator-lh-1', 'fctl.actuator2.elev-lh');
+            initActuator('pcu-elevator-rh-0', 'fctl.actuator1.elev-rh');
+            initActuator('pcu-elevator-rh-1', 'fctl.actuator2.elev-rh');
         }
     },
 

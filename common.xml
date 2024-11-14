@@ -175,6 +175,10 @@
                 <path>Aircraft/E-jet-family/Systems/stabilizer.xml</path>
             </autopilot>
             <autopilot>
+                <name>HStab</name>
+                <path>Aircraft/E-jet-family/Systems/pcu.xml</path>
+            </autopilot>
+            <autopilot>
                 <name>Pushback</name>
                 <path>Aircraft/E-jet-family/Systems/pushback-steering.xml</path>
             </autopilot>
@@ -1761,6 +1765,88 @@
                 </sinks>
             </system>
         </hydraulic>
+        <actuators>
+            <odd-day type="bool">false</odd-day>
+
+            <elevator>
+                <pcu n="0">
+                    <name>Left Outboard Elevator PCU</name>
+                    <priority type="bool">true</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="1">
+                    <name>Left Inboard Elevator PCU</name>
+                    <priority type="bool">false</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="2">
+                    <name>Right Inboard Elevator PCU</name>
+                    <priority type="bool">true</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="3">
+                    <name>Right Outboard Elevator PCU</name>
+                    <priority type="bool">false</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <hydraulic-system n="0" type="int">0</hydraulic-system>
+                <hydraulic-system n="1" type="int">0</hydraulic-system>
+            </elevator>
+
+            <aileron>
+                <pcu n="0">
+                    <name>Left Outboard Aileron PCU</name>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="1">
+                    <name>Left Inboard Aileron PCU</name>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="2">
+                    <name>Right Inboard Aileron PCU</name>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="3">
+                    <name>Right Outboard Aileron PCU</name>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+            </aileron>
+
+            <rudder>
+                <pcu n="0">
+                    <name>Upper Rudder PCU</name>
+                    <priority type="bool">true</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <pcu n="1">
+                    <name>Lower Rudder PCU</name>
+                    <priority type="bool">false</priority>
+                    <active type="bool">false</active>
+                    <available type="bool">true</available>
+                    <status type="int">-1</status>
+                </pcu>
+                <hydraulic-system type="int">0</hydraulic-system>
+            </rudder>
+        </actuators>
+
         <pneumatic>
             <valves>
                 <xbleed>

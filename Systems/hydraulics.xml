@@ -161,13 +161,13 @@
                 <table>
                     <property>systems/hydraulic/system[0]/accumulator</property>
                     <entry>
-                        <ind>0</ind><dep>100</dep>
+                        <ind>0</ind><dep>0</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>2500</dep>
+                        <ind>0.5</ind><dep>3000</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>3100</dep>
+                        <ind>1.0</ind><dep>3000</dep>
                     </entry>
                 </table>
             </expression>
@@ -311,19 +311,45 @@
         <input>
             <expression>
                 <sum>
-                    <abs><property>systems/hydraulic/system[1]/sinks/elevator-left-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/elevator-right-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/aileron-left-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/aileron-right-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/thrust-reverser-right</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-left-outer-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-left-inner-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-right-outer-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/mfs-right-inner-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/brake-inboard</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/nosewheel-steering</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/landing-gear</property></abs>
-                    <abs><property>systems/hydraulic/system[1]/sinks/parking-brake</property></abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/elevator-left-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/elevator-right-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/aileron-left-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/aileron-right-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/thrust-reverser-right</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/mfs-left-outer-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/mfs-left-inner-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/mfs-right-outer-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/mfs-right-inner-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/brake-inboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/nosewheel-steering</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/landing-gear</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[1]/sinks/parking-brake</property>
+                    </abs>
                 </sum>
             </expression>
         </input>
@@ -339,13 +365,13 @@
                 <table>
                     <property>systems/hydraulic/system[1]/accumulator</property>
                     <entry>
-                        <ind>0</ind><dep>100</dep>
+                        <ind>0</ind><dep>0</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>2500</dep>
+                        <ind>0.5</ind><dep>3000</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>3100</dep>
+                        <ind>1.0</ind><dep>3000</dep>
                     </entry>
                 </table>
             </expression>
@@ -495,10 +521,18 @@
         <input>
             <expression>
                 <sum>
-                    <abs><property>systems/hydraulic/system[2]/sinks/elevator-right-outboard</property></abs>
-                    <abs><property>systems/hydraulic/system[2]/sinks/rudder-lower</property></abs>
-                    <abs><property>systems/hydraulic/system[2]/sinks/aileron-left-outboard</property></abs>
-                    <abs><property>systems/hydraulic/system[2]/sinks/aileron-right-outboard</property></abs>
+                    <abs>
+                        <property>systems/hydraulic/system[2]/sinks/elevator-right-outboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[2]/sinks/rudder-lower</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[2]/sinks/aileron-left-outboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[2]/sinks/aileron-right-outboard</property>
+                    </abs>
                 </sum>
             </expression>
         </input>
@@ -514,13 +548,13 @@
                 <table>
                     <property>systems/hydraulic/system[2]/accumulator</property>
                     <entry>
-                        <ind>0</ind><dep>100</dep>
+                        <ind>0</ind><dep>0</dep>
                     </entry>
                     <entry>
-                        <ind>0.1</ind><dep>2500</dep>
+                        <ind>0.5</ind><dep>3000</dep>
                     </entry>
                     <entry>
-                        <ind>1.0</ind><dep>3100</dep>
+                        <ind>1.0</ind><dep>3000</dep>
                     </entry>
                 </table>
             </expression>
