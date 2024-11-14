@@ -520,7 +520,7 @@
             </product>
         </function>
 
-        <function name="aero/moment/Roll_aileron">
+        <function name="aero/moment/Roll_aileron_left">
             <description>Roll moment due to aileron</description>
             <product>
                 <property>aero/qbar-psf</property>
@@ -538,7 +538,28 @@
                         2.00    0.33
                     </tableData>
                 </table>
-                <value>0.05</value>
+                <value>0.025</value>
+            </product>
+        </function>
+        <function name="aero/moment/Roll_aileron_right">
+            <description>Roll moment due to aileron</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>metrics/bw-ft</property>
+                <property>fcs/left-aileron-pos-rad</property>
+                <table>
+                    <independentVar lookup="row">velocities/mach</independentVar>
+                    <tableData>
+                        0.09    1.00
+                        0.70    1.00
+                        0.82    0.80
+                        0.85    0.50
+                        1.00    0.10
+                        2.00    0.33
+                    </tableData>
+                </table>
+                <value>-0.025</value>
             </product>
         </function>
 

@@ -2675,8 +2675,8 @@ var MFD = {
         elsif (submode == SUBMODE_FLIGHT_CONTROLS) {
             me.initFlightControl('fctl.aileron-lh-up', self.props['aileron-left'], 0, -75, -1);
             me.initFlightControl('fctl.aileron-lh-down', self.props['aileron-left'], 0, 75, 1);
-            me.initFlightControl('fctl.aileron-rh-up', self.props['aileron-right'], 0, -75, 1);
-            me.initFlightControl('fctl.aileron-rh-down', self.props['aileron-right'], 0, 75, -1);
+            me.initFlightControl('fctl.aileron-rh-up', self.props['aileron-right'], 0, -75, -1);
+            me.initFlightControl('fctl.aileron-rh-down', self.props['aileron-right'], 0, 75, 1);
             me.initFlightControl('fctl.rudder-left', self.props['rudder'], -45, 0, -1/0.55);
             me.initFlightControl('fctl.rudder-right', self.props['rudder'], 45, 0, 1/0.55);
             me.initFlightControl('fctl.elev-lh-up', self.props['elevator-left'], 0, -68, -1);

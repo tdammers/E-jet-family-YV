@@ -316,7 +316,7 @@
         <type>rotate</type>
         <object-name>aileron.r</object-name>
         <property>surface-positions/right-aileron-pos-norm</property>
-        <factor>35</factor>
+        <factor>-35</factor>
         <axis>
             <x1-m>2.75</x1-m>
             <y1-m>11.97</y1-m>

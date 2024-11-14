@@ -134,6 +134,7 @@
             <output>fcs/aileron-sum</output>
         </summer>
 
+
         <summer name="Roll Trim Sum">
             <input>fcs/aileron-sum</input>
             <input>fcs/roll-trim-cmd-norm</input>
@@ -143,8 +144,54 @@
             </clipto>
         </summer>
 
+        <fcs_function name="Aileron Unpowered">
+            <function>
+                <table>
+                    <independentVar lookup="row">aero/qbar-psf</independentVar>
+                    <tableData>
+                         0 1
+                         1 1
+                        15 0.5
+                        50 0.1
+                    </tableData>
+                </table>
+            </function>
+            <output>fcs/aileron-unpowered</output>
+        </fcs_function>
+
+        <switch>
+            <output>fcs/left-aileron-cmd-powered</output>
+            <default value="fcs/aileron-unpowered" />
+            <test logic="OR" value="fcs/roll-trim-sum">
+                /systems/actuators/aileron/pcu[0]/active &gt; 0
+                /systems/actuators/aileron/pcu[1]/active &gt; 0
+            </test>
+        </switch>
+
+        <actuator name="Left Aileron Master">
+            <input>fcs/left-aileron-cmd-powered</input>
+            <rate_limit>1</rate_limit>
+            <output>fcs/left-aileron-master</output>
+        </actuator>
+
+        <switch>
+            <output>fcs/right-aileron-cmd-powered</output>
+            <default value="fcs/aileron-unpowered" />
+            <test logic="OR" value="-fcs/roll-trim-sum">
+                /systems/actuators/aileron/pcu[2]/active &gt; 0
+                /systems/actuators/aileron/pcu[3]/active &gt; 0
+            </test>
+        </switch>
+
+        <actuator name="Right Aileron Master">
+            <input>fcs/right-aileron-cmd-powered</input>
+            <rate_limit>1</rate_limit>
+            <output>fcs/right-aileron-master</output>
+        </actuator>
+
+
         <aerosurface_scale name="Left Aileron Control">
-            <input>fcs/roll-trim-sum</input>
+            <input>fcs/left-aileron-master</input>
             <range>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
@@ -153,7 +200,7 @@
         </aerosurface_scale>
 
         <aerosurface_scale name="Right Aileron Control">
-            <input>fcs/roll-trim-sum</input>
+            <input>fcs/right-aileron-master</input>
             <range>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
