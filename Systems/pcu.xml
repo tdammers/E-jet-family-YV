@@ -107,19 +107,19 @@
     </logic>
 
     <logic>
-        <input>systems/actuators/aileron/pcu[0]/available</input>
+        <input><property>systems/actuators/aileron/pcu[0]/available</property></input>
         <output>systems/actuators/aileron/pcu[0]/active</output>
     </logic>
     <logic>
-        <input>systems/actuators/aileron/pcu[1]/available</input>
+        <input><property>systems/actuators/aileron/pcu[1]/available</property></input>
         <output>systems/actuators/aileron/pcu[1]/active</output>
     </logic>
     <logic>
-        <input>systems/actuators/aileron/pcu[2]/available</input>
+        <input><property>systems/actuators/aileron/pcu[2]/available</property></input>
         <output>systems/actuators/aileron/pcu[2]/active</output>
     </logic>
     <logic>
-        <input>systems/actuators/aileron/pcu[3]/available</input>
+        <input><property>systems/actuators/aileron/pcu[3]/available</property></input>
         <output>systems/actuators/aileron/pcu[3]/active</output>
     </logic>
 

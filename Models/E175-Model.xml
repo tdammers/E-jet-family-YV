@@ -226,7 +226,7 @@
         <name>Left elevator</name>
         <type>rotate</type>
         <object-name>elevator.l</object-name>
-        <property>surface-positions/elevator-pos-norm</property>
+        <property>surface-positions/elevator-lh-pos-norm</property>
         <interpolation>
             <entry>
                 <ind>-1.0</ind><dep>15.0</dep>
@@ -248,7 +248,7 @@
         <name>Right elevator</name>
         <type>rotate</type>
         <object-name>elevator.r</object-name>
-        <property>surface-positions/elevator-pos-norm</property>
+        <property>surface-positions/elevator-rh-pos-norm</property>
         <interpolation>
             <entry>
                 <ind>-1.0</ind><dep>-15.0</dep>

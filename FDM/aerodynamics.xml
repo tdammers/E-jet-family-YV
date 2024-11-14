@@ -171,13 +171,24 @@
             </product>
         </function>
 
-        <function name="aero/force/Lift_elevator">
+        <function name="aero/force/Lift_elevator_left">
             <description>Lift due to Elevator Deflection</description>
             <product>
                 <property>aero/qbar-psf</property>
                 <property>metrics/Sw-sqft</property>
-                <property>fcs/elevator-pos-rad</property>
+                <property>fcs/elevator-lh-pos-rad</property>
                 <property>aero-config/coefficients/lift-elevator</property>
+                <value>0.5</value>
+            </product>
+        </function>
+        <function name="aero/force/Lift_elevator_right">
+            <description>Lift due to Elevator Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>fcs/elevator-rh-pos-rad</property>
+                <property>aero-config/coefficients/lift-elevator</property>
+                <value>0.5</value>
             </product>
         </function>
         <function name="aero/force/Lift_hstab">
@@ -417,15 +428,28 @@
             </product>
         </function>
 
-        <function name="aero/force/Drag_elevator">
+        <function name="aero/force/Drag_elevator_left">
             <description>Drag due to Elevator Deflection</description>
             <product>
                 <property>aero/qbar-psf</property>
                 <property>metrics/Sw-sqft</property>
                 <abs>
-                    <property>fcs/elevator-pos-norm</property>
+                    <property>fcs/elevator-lh-pos-norm</property>
                 </abs>
                 <property>aero-config/coefficients/drag-elevator</property>
+                <value>0.5</value>
+            </product>
+        </function>
+        <function name="aero/force/Drag_elevator_right">
+            <description>Drag due to Elevator Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <abs>
+                    <property>fcs/elevator-rh-pos-norm</property>
+                </abs>
+                <property>aero-config/coefficients/drag-elevator</property>
+                <value>0.5</value>
             </product>
         </function>
         <function name="aero/force/Drag_hstab">
@@ -633,7 +657,29 @@
                 <property>metrics/Sw-sqft</property>
                 <property>metrics/bw-ft</property>
                 <property>fcs/rudder-pos-rad</property>
-                <value>0.01</value>
+                <property>aero-config/coefficients/bank-rudder</property>
+            </product>
+        </function>
+
+        <function name="aero/moment/Roll_elevator_left">
+            <description>Roll moment due to elevator</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>metrics/bw-ft</property>
+                <property>fcs/elevator-lh-pos-rad</property>
+                <property>aero-config/coefficients/bank-elevator</property>
+                <value>-1</value>
+            </product>
+        </function>
+        <function name="aero/moment/Roll_elevator_right">
+            <description>Roll moment due to elevator</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>metrics/bw-ft</property>
+                <property>fcs/elevator-rh-pos-rad</property>
+                <property>aero-config/coefficients/bank-elevator</property>
             </product>
         </function>
 
@@ -652,13 +698,13 @@
             </product>
         </function>
 
-        <function name="aero/moment/Pitch_elevator">
+        <function name="aero/moment/Pitch_elevator_left">
             <description>Pitch moment due to elevator</description>
             <product>
                 <property>aero/qbar-psf</property>
                 <property>metrics/Sw-sqft</property>
                 <property>metrics/cbarw-ft</property>
-                <property>fcs/elevator-pos-rad</property>
+                <property>fcs/elevator-lh-pos-rad</property>
                 <table>
                     <independentVar lookup="row">velocities/mach</independentVar>
                     <tableData>
@@ -670,7 +716,28 @@
                         2.00    0.33
                     </tableData>
                 </table>
-                <value>-1.8</value>
+                <value>-0.9</value>
+            </product>
+        </function>
+        <function name="aero/moment/Pitch_elevator_right">
+            <description>Pitch moment due to elevator</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <property>metrics/cbarw-ft</property>
+                <property>fcs/elevator-rh-pos-rad</property>
+                <table>
+                    <independentVar lookup="row">velocities/mach</independentVar>
+                    <tableData>
+                        0.09    1.00
+                        0.70    1.00
+                        0.82    0.80
+                        0.85    0.50
+                        1.00    0.10
+                        2.00    0.33
+                    </tableData>
+                </table>
+                <value>-0.9</value>
             </product>
         </function>
 
@@ -777,6 +844,30 @@
                 <property>metrics/bw-ft</property>
                 <property>fcs/rudder-pos-rad</property>
                 <value>-0.1</value>
+            </product>
+        </function>
+
+        <function name="aero/force/Yaw_elevator_left">
+            <description>Yaw due to Elevator Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <abs>
+                    <property>fcs/elevator-lh-pos-norm</property>
+                </abs>
+                <value>-1</value>
+                <property>aero-config/coefficients/yaw-elevator</property>
+            </product>
+        </function>
+        <function name="aero/force/Yaw_elevator_right">
+            <description>Yaw due to Elevator Deflection</description>
+            <product>
+                <property>aero/qbar-psf</property>
+                <property>metrics/Sw-sqft</property>
+                <abs>
+                    <property>fcs/elevator-rh-pos-norm</property>
+                </abs>
+                <property>aero-config/coefficients/yaw-elevator</property>
             </product>
         </function>
 

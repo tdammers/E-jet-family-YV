@@ -3404,23 +3404,26 @@
             </external_reactions>
             <aero-config>
                 <coefficients>
-                    <lift-elevator type="double">0.2</lift-elevator>
-                    <lift-hstab type="double">0.4</lift-hstab>
+                    <bank-elevator type="double">0.05</bank-elevator>
+                    <bank-mfs type="double">0.01</bank-mfs>
+                    <bank-rudder type="double">0.01</bank-rudder>
                     <drag-alpha type="double">2.0</drag-alpha>
                     <drag-beta type="double">1.0</drag-beta>
                     <drag-elevator type="double">0.02</drag-elevator>
-                    <drag-hstab type="double">0.01</drag-hstab>
                     <drag-flap type="double">0.04</drag-flap>
                     <drag-gear type="double">0.04</drag-gear>
+                    <drag-hstab type="double">0.01</drag-hstab>
                     <drag-induced type="double">0.03</drag-induced>
                     <drag-mach type="double">0.021</drag-mach>
+                    <drag-mfs type="double">0.01</drag-mfs>
                     <drag-parasitic type="double">0.01</drag-parasitic>
                     <drag-slat type="double">0.003</drag-slat>
-                    <drag-mfs type="double">0.01</drag-mfs>
-                    <yaw-mfs type="double">0.01</yaw-mfs>
-                    <bank-mfs type="double">0.01</bank-mfs>
+                    <lift-elevator type="double">0.2</lift-elevator>
+                    <lift-hstab type="double">0.4</lift-hstab>
                     <yaw-damper-beta type="double">-10</yaw-damper-beta>
                     <yaw-damper-rate type="double">5</yaw-damper-rate>
+                    <yaw-elevator type="double">0.005</yaw-elevator>
+                    <yaw-mfs type="double">0.01</yaw-mfs>
                 </coefficients>
             </aero-config>
         </jsbsim>

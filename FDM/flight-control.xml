@@ -2,35 +2,47 @@
 
 <flight_control name="FCS: E-Jet-Family">
     <channel name="Pitch">
+        <fcs_function name="Elevator Unpowered">
+            <function>
+                <table>
+                    <independentVar lookup="row">aero/qbar-psf</independentVar>
+                    <tableData>
+                         0 1
+                         1 1
+                        15 0.5
+                        50 0.1
+                    </tableData>
+                </table>
+            </function>
+            <output>fcs/elevator-unpowered</output>
+        </fcs_function>
 
         <switch>
-            <output>fcs/elevator-cmd-powered</output>
-            <default value="1" />
+            <output>fcs/elevator-lh-cmd-powered</output>
+            <default value="fcs/elevator-unpowered" />
             <test logic="OR" value="fcs/elevator-cmd-fbw">
                 /systems/actuators/elevator/pcu[0]/active &gt; 0
                 /systems/actuators/elevator/pcu[1]/active &gt; 0
-                /systems/actuators/elevator/pcu[2]/active &gt; 0
-                /systems/actuators/elevator/pcu[3]/active &gt; 0
             </test>
         </switch>
-        
+
         <actuator name="Elevator Master">
-            <input>fcs/elevator-cmd-powered</input>
+            <input>fcs/elevator-lh-cmd-powered</input>
             <rate_limit>1</rate_limit>
-            <output>fcs/elevator-master</output>
+            <output>fcs/elevator-lh-master</output>
         </actuator>
-        
+
         <aerosurface_scale name="Elevator Control">
-            <input>fcs/elevator-master</input>
+            <input>fcs/elevator-lh-master</input>
             <range>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
             </range>
-            <output>fcs/elevator-pos-rad</output>
+            <output>fcs/elevator-lh-pos-rad</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="Elevator Normalization">
-            <input>fcs/elevator-pos-rad</input>
+            <input>fcs/elevator-lh-pos-rad</input>
             <domain>
                 <min> -0.25 </min>
                 <max>  0.25 </max>
@@ -39,8 +51,46 @@
                 <min> -1 </min>
                 <max>  1 </max>
             </range>
-            <output>fcs/elevator-pos-norm</output>
+            <output>fcs/elevator-lh-pos-norm</output>
         </aerosurface_scale>
+
+        <switch>
+            <output>fcs/elevator-rh-cmd-powered</output>
+            <default value="fcs/elevator-unpowered" />
+            <test logic="OR" value="fcs/elevator-cmd-fbw">
+                /systems/actuators/elevator/pcu[2]/active &gt; 0
+                /systems/actuators/elevator/pcu[3]/active &gt; 0
+            </test>
+        </switch>
+
+        <actuator name="Elevator Master">
+            <input>fcs/elevator-rh-cmd-powered</input>
+            <rate_limit>1</rate_limit>
+            <output>fcs/elevator-rh-master</output>
+        </actuator>
+
+        <aerosurface_scale name="Elevator Control">
+            <input>fcs/elevator-rh-master</input>
+            <range>
+                <min> -0.25 </min>
+                <max>  0.25 </max>
+            </range>
+            <output>fcs/elevator-rh-pos-rad</output>
+        </aerosurface_scale>
+
+        <aerosurface_scale name="Elevator Normalization">
+            <input>fcs/elevator-rh-pos-rad</input>
+            <domain>
+                <min> -0.25 </min>
+                <max>  0.25 </max>
+            </domain>
+            <range>
+                <min> -1 </min>
+                <max>  1 </max>
+            </range>
+            <output>fcs/elevator-rh-pos-norm</output>
+        </aerosurface_scale>
+
 
         <aerosurface_scale name="HStab Control">
             <input>fcs/pitch-trim-cmd-norm</input>
@@ -50,7 +100,7 @@
             </range>
             <output>fcs/hstab-pos-rad</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="HStab Normalization">
             <input>fcs/hstab-pos-rad</input>
             <domain>
@@ -77,7 +127,7 @@
             <output>fcs/hstab-pos-deg</output>
         </aerosurface_scale>
     </channel>
-    
+
     <channel name="Roll">
         <summer name="fcs/aileron-sum">
             <input>/it-autoflight/internal/aileron</input>
@@ -101,7 +151,7 @@
             </range>
             <output>fcs/left-aileron-pos-rad</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="Right Aileron Control">
             <input>fcs/roll-trim-sum</input>
             <range>
@@ -110,7 +160,7 @@
             </range>
             <output>fcs/right-aileron-pos-rad</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="left aileron normalization">
             <input>fcs/left-aileron-pos-rad</input>
             <domain>
@@ -123,7 +173,7 @@
             </range>
             <output>fcs/left-aileron-pos-norm</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="right aileron normalization">
             <input>fcs/right-aileron-pos-rad</input>
             <domain>
@@ -136,9 +186,9 @@
             </range>
             <output>fcs/right-aileron-pos-norm</output>
         </aerosurface_scale>
-        
+
     </channel>
-    
+
     <channel name="Yaw">
         <summer name="Rudder Command Sum">
             <input>-/controls/flight/rudder</input>
@@ -149,7 +199,7 @@
                 <max>  0.55 </max>
             </clipto>
         </summer>
-        
+
         <scheduled_gain name="Yaw Damper Rate">
             <input>velocities/r-aero-rad_sec</input>
             <table>
@@ -161,7 +211,7 @@
             </table>
             <gain>fcs/yaw-damper-enable</gain>
         </scheduled_gain>
-        
+
         <scheduled_gain name="Yaw Damper Beta">
             <input>aero/beta-rad</input>
             <table>
@@ -173,7 +223,7 @@
             </table>
             <gain>aero-config/coefficients/yaw-damper-beta</gain>
         </scheduled_gain>
-        
+
         <scheduled_gain name="Yaw Damper">
             <input>velocities/r-aero-rad_sec</input>
             <table>
@@ -191,7 +241,7 @@
             <input>fcs/yaw-damper</input>
             <input>fcs/yaw-damper-beta</input>
         </summer>
-        
+
         <scheduled_gain name="Yaw Damper Final">
             <input>fcs/yaw-damper-sum</input>
             <table>
@@ -204,7 +254,7 @@
             </table>
             <gain>fcs/yaw-damper-enable</gain>
         </scheduled_gain>
-        
+
         <summer name="Rudder Sum">
             <input>fcs/rudder-command-sum</input>
             <input>fcs/yaw-damper-final</input>
@@ -222,13 +272,13 @@
                 /systems/actuators/rudder/pcu[1]/active &gt; 0
             </test>
         </switch>
-        
+
         <actuator>
             <input>fcs/rudder-sum</input>
             <rate_limit>fcs/rudder-rate-limit</rate_limit>
             <output>fcs/rudder-master</output>
         </actuator>
-        
+
         <aerosurface_scale name="Rudder Control">
             <input>fcs/rudder-master</input>
             <range>
@@ -237,7 +287,7 @@
             </range>
             <output>fcs/rudder-pos-rad</output>
         </aerosurface_scale>
-        
+
         <aerosurface_scale name="rudder normalization">
             <input>fcs/rudder-pos-rad</input>
             <domain>
@@ -250,11 +300,11 @@
             </range>
             <output>fcs/rudder-pos-norm</output>
         </aerosurface_scale>
-        
+
     </channel>
-    
+
     <channel name="Slats">
-        
+
         <!--Set slats according to http://www.smartcockpit.com/docs/Embraer_190-Flight_Controls.pdf page 4-->
         <fcs_function name="Slats Cmd">
             <function>
@@ -273,7 +323,7 @@
             </function>
             <output>fcs/slat-cmd-int-deg</output>
         </fcs_function>
-        
+
         <kinematic name="Slats Control">
             <input>fcs/slat-cmd-int-deg</input>
             <noscale/>
@@ -293,7 +343,7 @@
             </traverse>
             <output>fcs/slat-pos-deg</output>
         </kinematic>
-        
+
         <aerosurface_scale name="slat normalization">
             <input>fcs/slat-pos-deg</input>
             <domain>
@@ -306,15 +356,15 @@
             </range>
             <output>fcs/slat-pos-norm</output>
         </aerosurface_scale>
-        
+
     </channel>
-    
-    
-    
-    
+
+
+
+
     <channel name="Flaps">
-        
-        
+
+
         <!-- Set flaps according to http://www.smartcockpit.com/docs/Embraer_190-Flight_Controls.pdf page 4-->
         <fcs_function name="Flaps Cmd">
             <function>
@@ -333,7 +383,7 @@
             </function>
             <output>fcs/flap-cmd-int-deg</output>
         </fcs_function>
-        
+
         <kinematic name="Flaps Control">
             <input>fcs/flap-cmd-int-deg</input>
             <noscale/>
@@ -361,7 +411,7 @@
             </traverse>
             <output>fcs/flap-pos-deg</output>
         </kinematic>
-        
+
         <aerosurface_scale name="flap normalization">
             <input>fcs/flap-pos-deg</input>
             <domain>
@@ -374,9 +424,9 @@
             </range>
             <output>fcs/flap-pos-norm</output>
         </aerosurface_scale>
-        
+
     </channel>
-    
+
     <channel name="Landing Gear">
         <kinematic name="Gear Control">
             <input>gear/gear-cmd-norm</input>
@@ -392,7 +442,7 @@
             </traverse>
             <output>gear/gear-pos-norm</output>
         </kinematic>
-        
+
     </channel>
 
     <channel name="Steering">
@@ -402,7 +452,7 @@
                 /controls/gear/enable-tiller == 0
             </test>
         </switch>
-        
+
         <fcs_function name="Nose Wheel Steering Limit 0">
           <function name="fcs/steer-nose-limit-deg[0]">
             <ifthen>
@@ -449,7 +499,7 @@
                   <!-- Tiller enabled: rudder pedals command +/- 7°, tiller follows IRL schedule. -->
                   <ifthen>
                     <property>/options/controls/realistic-nose-wheel-steering</property>
-                    
+
                     <!-- Realistic NWS: tiller must be kept down for tiller
                          steering; rudder pedals only steer when tiller up. -->
                       <min>
@@ -518,7 +568,7 @@
             </ifthen>
           </function>
         </fcs_function>
-        
+
         <fcs_function name="Gear Nose Rate">
             <function name="fcs/steer-nose-rate">
                 <table>
@@ -539,7 +589,7 @@
             <output>fcs/steer-pos-deg[0]</output>
         </actuator>
     </channel>
-    
+
     <channel name="MFS Left Outboard">
         <kinematic name="MFS1 Control">
             <input>fcs/mfs-left-outboard-cmd-norm</input>
@@ -688,7 +738,7 @@
             <output>fcs/mfs6-pos-norm</output>
         </kinematic>
     </channel>
-    
+
     <channel name="FADEC">
         <pure_gain name="fcs/throttle-pos-norm[0]">
             <input>/fadec/throttle-cmd[0]</input>
@@ -706,17 +756,17 @@
 			<input>/controls/gear/brake-left</input>
 			<rate_limit>2</rate_limit>
 		</actuator>
-		
+
 		<actuator name="fcs/brake-right">
 			<input>/controls/gear/brake-right</input>
 			<rate_limit>2</rate_limit>
 		</actuator>
-		
+
 		<switch name="fcs/brake-avail">
 			<default value="1"/>
             <!-- TODO: hydraulics logic -->
 		</switch>
-		
+
 		<fcs_function name="fcs/left-brake-input">
 			<function>
 				<product>
@@ -737,13 +787,13 @@
 				<max>1</max>
 			</clipto>
 		</fcs_function>
-		
+
 		<actuator name="fcs/left-brake-actuator">
 			<input>fcs/left-brake-input</input>
 			<rate_limit>10</rate_limit>
             <output>fcs/left-brake-cmd-norm</output>
 		</actuator>
-		
+
 		<fcs_function name="fcs/right-brake-input">
 			<function>
 				<product>
@@ -764,12 +814,12 @@
 				<max>1</max>
 			</clipto>
 		</fcs_function>
-		
+
 		<actuator name="fcs/right-brake-actuator">
 			<input>fcs/right-brake-input</input>
 			<rate_limit>10</rate_limit>
             <output>fcs/right-brake-cmd-norm</output>
 		</actuator>
-		
+
 	</channel>
 </flight_control>

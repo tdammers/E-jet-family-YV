@@ -299,7 +299,8 @@ var MFD = {
         me.registerProp('aileron-left', "surface-positions/left-aileron-pos-norm");
         me.registerProp('aileron-right', "surface-positions/right-aileron-pos-norm");
         me.registerProp('rudder', "surface-positions/rudder-pos-norm");
-        me.registerProp('elevator', "surface-positions/elevator-pos-norm");
+        me.registerProp('elevator-left', "surface-positions/elevator-lh-pos-norm");
+        me.registerProp('elevator-right', "surface-positions/elevator-rh-pos-norm");
         me.registerProp('mfs1',  "fdm/jsbsim/fcs/mfs1-pos-norm");
         me.registerProp('mfs2',  "fdm/jsbsim/fcs/mfs2-pos-norm");
         me.registerProp('mfs3',  "fdm/jsbsim/fcs/mfs3-pos-norm");
@@ -2552,10 +2553,10 @@ var MFD = {
             me.initFlightControl('fctl.aileron-rh-down', self.props['aileron-right'], 0, 75, -1);
             me.initFlightControl('fctl.rudder-left', self.props['rudder'], -45, 0, -1/0.55);
             me.initFlightControl('fctl.rudder-right', self.props['rudder'], 45, 0, 1/0.55);
-            me.initFlightControl('fctl.elev-lh-up', self.props['elevator'], 0, -68, -1);
-            me.initFlightControl('fctl.elev-rh-up', self.props['elevator'], 0, -68, -1);
-            me.initFlightControl('fctl.elev-lh-down', self.props['elevator'], 0, 54, 1);
-            me.initFlightControl('fctl.elev-rh-down', self.props['elevator'], 0, 54, 1);
+            me.initFlightControl('fctl.elev-lh-up', self.props['elevator-left'], 0, -68, -1);
+            me.initFlightControl('fctl.elev-rh-up', self.props['elevator-right'], 0, -68, -1);
+            me.initFlightControl('fctl.elev-lh-down', self.props['elevator-left'], 0, 54, 1);
+            me.initFlightControl('fctl.elev-rh-down', self.props['elevator-right'], 0, 54, 1);
             me.initFlightControl('fctl.mfs1', self.props['mfs1'], 0, -34, 1);
             me.initFlightControl('fctl.mfs2', self.props['mfs2'], 0, -34, 1);
             me.initFlightControl('fctl.mfs3', self.props['mfs3'], 0, -34, 1);
@@ -2615,28 +2616,32 @@ var MFD = {
                         var status = node.getValue();
                         var text = "---";
                         var fg = [0, 0, 0];
-                        var bg = [255, 192, 0];
+                        var bg = [1, 0.75, 0];
+                        var fc = [1, 0.75, 0];
 
                         if (status == 0) {
                             text = "STBY";
-                            fg = [255, 255, 255];
+                            fg = [1, 1, 1];
                             bg = [0, 0, 0];
+                            fc = [1, 1, 1];
                         }
                         elsif (status == 1) {
                             text = "ON";
-                            fg = [0, 255, 0];
+                            fg = [0, 1, 0];
                             bg = [0, 0, 0];
+                            fc = [0, 1, 0];
                         }
                         else {
                             text = "---";
-                            bg = [255, 192, 0];
+                            bg = [1, 0.75, 0];
                             fg = [0, 0, 0];
+                            fc = [1, 0.75, 0];
                         }
                         self.elems[elemID ~ '.text']
                             .setText(text)
                             .setColor(fg[0], fg[1], fg[2]);
                         self.elems[elemID ~ '.frame']
-                            .setColor(fg[0], fg[1], fg[2])
+                            .setColor(fc[0], fc[1], fc[2])
                             .setColorFill(bg[0], bg[1], bg[2]);
                     }, 1, 0);
             };

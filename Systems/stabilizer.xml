@@ -8,4 +8,18 @@
         <input>fdm/jsbsim/fcs/hstab-pos-norm</input>
         <output>surface-positions/hstab-pos-norm</output>
     </filter>
+    <filter>
+        <name>elevator position lh</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>fdm/jsbsim/fcs/elevator-lh-pos-norm</input>
+        <output>surface-positions/elevator-lh-pos-norm</output>
+    </filter>
+    <filter>
+        <name>elevator position rh</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>fdm/jsbsim/fcs/elevator-rh-pos-norm</input>
+        <output>surface-positions/elevator-rh-pos-norm</output>
+    </filter>
 </PropertyList>
