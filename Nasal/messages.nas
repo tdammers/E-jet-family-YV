@@ -320,7 +320,7 @@ setlistener("sim/signals/fdm-initialized", func {
     listenOnProp("/systems/hydraulic/system[1]/pressurized", no, MSG_CAUTION, 'HYD 2 LO PRESS', 0, 0, [K3]);
     listenOnProp("/systems/hydraulic/system[2]/pressurized", no, MSG_CAUTION, 'HYD 3 LO PRESS', 0, 0, [K3]);
 
-    listenOnProp("/controls/hydraulic/ehp[2]", no, MSG_ADVISORY, 'HYD 3 PUMP A NOT ON', 0, 0, [K1, K3, K5]);
+    listenOnProp("/controls/hydraulic/ehp[2]", yes, MSG_ADVISORY, 'HYD 3 PUMP A NOT ON', 0, 0, [K1, K3, K5]);
     listenOnProp("/controls/hydraulic/ptu", yes, MSG_ADVISORY, 'HYD PTU NOT AUTO', 0, 0, [K3, K5]);
     listenOnProp("/controls/hydraulic/ehp[0]", yes, MSG_ADVISORY, 'HYD1 PUMP NOT AUTO', 0, 0, [K3, K5]);
     listenOnProp("/controls/hydraulic/ehp[1]", yes, MSG_ADVISORY, 'HYD2 PUMP NOT AUTO', 0, 0, [K3, K5]);

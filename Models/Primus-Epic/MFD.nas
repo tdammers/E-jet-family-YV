@@ -18,6 +18,7 @@ var SUBMODE_ELECTRICAL = 1;
 var SUBMODE_FUEL = 2;
 var SUBMODE_FLIGHT_CONTROLS = 3;
 var SUBMODE_ECS = 4;
+var SUBMODE_HYDRAULICS = 5;
 
 var PAGE_MAP = 0;
 var PAGE_PLAN = 1;
@@ -29,6 +30,7 @@ var submodeNames = [
     'Fuel',
     'FltCtl',
     'ECS',
+    'Hydr',
 ];
 
 var currentFile = os.path.new(caller(0)[2]);
@@ -292,6 +294,24 @@ var MFD = {
         me.registerProp('pcu-elevator-rh-0', "systems/actuators/elevator/pcu[2]/status");
         me.registerProp('pcu-elevator-rh-1', "systems/actuators/elevator/pcu[3]/status");
 
+        me.registerProp('hyd-sys1-press-psi', "systems/hydraulic/system[0]/pressure-psi");
+        me.registerProp('hyd-sys1-press', "systems/hydraulic/system[0]/pressurized");
+        me.registerProp('hyd-sys1-qty', "systems/hydraulic/system[0]/fill-ratio");
+        me.registerProp('hyd-sys1-edp', "systems/hydraulic/system[0]/edp/engaged");
+        me.registerProp('hyd-sys1-ehp', "systems/hydraulic/system[0]/ehp/engaged");
+
+        me.registerProp('hyd-sys2-press-psi', "systems/hydraulic/system[1]/pressure-psi");
+        me.registerProp('hyd-sys2-press', "systems/hydraulic/system[1]/pressurized");
+        me.registerProp('hyd-sys2-qty', "systems/hydraulic/system[1]/fill-ratio");
+        me.registerProp('hyd-sys2-edp', "systems/hydraulic/system[1]/edp/engaged");
+        me.registerProp('hyd-sys2-ehp', "systems/hydraulic/system[1]/ehp/engaged");
+
+        me.registerProp('hyd-sys3-press-psi', "systems/hydraulic/system[2]/pressure-psi");
+        me.registerProp('hyd-sys3-press', "systems/hydraulic/system[2]/pressurized");
+        me.registerProp('hyd-sys3-qty', "systems/hydraulic/system[2]/fill-ratio");
+        me.registerProp('hyd-sys3-ehp-a', "systems/hydraulic/system[2]/ehp[0]/engaged");
+        me.registerProp('hyd-sys3-ehp-b', "systems/hydraulic/system[2]/ehp[1]/engaged");
+
         me.registerProp('elevator-law', "fbw/elevator/law");
         me.registerProp('rudder-law', "fbw/rudder/law");
         me.registerProp('spoilers-law', "fbw/spoilers/law");
@@ -361,6 +381,8 @@ var MFD = {
         canvas.parsesvg(me.systemsPages.flightControls, "Aircraft/E-jet-family/Models/Primus-Epic/MFD-systems-flight-controls.svg", {'font-mapper': me.font_mapper});
         me.systemsPages.ecs = me.systemsContainer.createChild("group");
         canvas.parsesvg(me.systemsPages.ecs, "Aircraft/E-jet-family/Models/Primus-Epic/MFD-systems-ecs.svg", {'font-mapper': me.font_mapper});
+        me.systemsPages.hydraulic = me.systemsContainer.createChild("group");
+        canvas.parsesvg(me.systemsPages.hydraulic, "Aircraft/E-jet-family/Models/Primus-Epic/MFD-systems-hydraulic.svg", {'font-mapper': me.font_mapper});
 
         me.underlay = me.pageContainer.createChild("group");
         me.terrainViz = me.underlay.createChild("image");
@@ -1056,6 +1078,43 @@ var MFD = {
                 'fctl.mfs10.dashedbox',
                 'fctl.mfs10.stripes',
 
+                'hyd.edp1.pump',
+                'hyd.edp1.pump.line',
+                'hyd.edp1.valve',
+                'hyd.edp1.valve.line',
+                'hyd.edp2.pump',
+                'hyd.edp2.pump.line',
+                'hyd.edp2.valve',
+                'hyd.edp2.valve.line',
+                'hyd.ehp1.pump',
+                'hyd.ehp1.pump.line',
+                'hyd.ehp2.pump',
+                'hyd.ehp2.pump.line',
+                'hyd.ehp3a.pump',
+                'hyd.ehp3a.pump.line',
+                'hyd.ehp3b.pump',
+                'hyd.ehp3b.pump.line',
+                'hyd.press1.pointer',
+                'hyd.press1.text',
+                'hyd.press2.pointer',
+                'hyd.press2.text',
+                'hyd.press3.pointer',
+                'hyd.press3.text',
+                'hyd.ptu.pump',
+                'hyd.ptu.pump.line',
+                'hyd.qty1.pointer',
+                'hyd.qty1.text',
+                'hyd.qty2.pointer',
+                'hyd.qty2.text',
+                'hyd.qty3.pointer',
+                'hyd.qty3.text',
+                'hyd.sys1.line',
+                'hyd.sys2.line',
+                'hyd.sys3.line',
+                'hyd.temp1.text',
+                'hyd.temp2.text',
+                'hyd.temp3.text',
+
                 'ecs.apu.symbol',
                 'ecs.fan.cargobay',
                 'ecs.fan.recirc1',
@@ -1170,6 +1229,7 @@ var MFD = {
                 'submodeHydraulic',
                 'submodeFlightControls',
                 'submodeECS',
+                'submodeHydraulic',
             ];
         foreach (var k; submodeMenuKeys) {
             var box = me.elems[k ~ '.clickbox'].getTransformedBounds();
@@ -1207,6 +1267,7 @@ var MFD = {
         me.addWidget('submodeFuel', { active: func { self.elems['submodeMenu'].getVisible() }, onclick: func { self.selectSystemsSubmode(SUBMODE_FUEL); } });
         me.addWidget('submodeFlightControls', { active: func { self.elems['submodeMenu'].getVisible() }, onclick: func { self.selectSystemsSubmode(SUBMODE_FLIGHT_CONTROLS); } });
         me.addWidget('submodeECS', { active: func { self.elems['submodeMenu'].getVisible() }, onclick: func { self.selectSystemsSubmode(SUBMODE_ECS); } });
+        me.addWidget('submodeHydraulic', { active: func { self.elems['submodeMenu'].getVisible() }, onclick: func { self.selectSystemsSubmode(SUBMODE_HYDRAULICS); } });
         me.addWidget('weatherMenu.radioOff', { active: func { self.elems['weatherMenu'].getVisible() }, onclick: func { self.setWxMode(0); } });
         me.addWidget('weatherMenu.radioSTBY', { active: func { self.elems['weatherMenu'].getVisible() }, onclick: func { self.setWxMode(1); } });
         me.addWidget('weatherMenu.radioWX', { active: func { self.elems['weatherMenu'].getVisible() }, onclick: func { self.setWxMode(2); } });
@@ -1523,7 +1584,7 @@ var MFD = {
         var fmt = "%2.0f";
         if (range < 20)
             fmt = "%3.1f";
-        
+
         me.updateRadarScale(range);
         me.updateGreenArc();
         me.updateVnavFlightplan();
@@ -1835,7 +1896,7 @@ var MFD = {
     movePlanWpt: func (direction) {
         var fp = fms.getVisibleFlightplan();
         me.planIndex += direction;
-        
+
         if (me.planIndex < 0) {
             me.planIndex = 0;
         }
@@ -2016,6 +2077,7 @@ var MFD = {
         me.systemsPages.fuel.setVisible(submode == SUBMODE_FUEL);
         me.systemsPages.flightControls.setVisible(submode == SUBMODE_FLIGHT_CONTROLS);
         me.systemsPages.ecs.setVisible(submode == SUBMODE_ECS);
+        me.systemsPages.hydraulic.setVisible(submode == SUBMODE_HYDRAULICS);
         me.clearListeners('systems');
         if (submode == SUBMODE_STATUS) {
             me.addListener('systems', me.props['flight-id'], func (node) {
@@ -2078,6 +2140,70 @@ var MFD = {
                 })();
             }
 
+        }
+        elsif (submode == SUBMODE_HYDRAULICS) {
+            me.addListener('systems', '/systems/hydraulic/system[0]/pressurized', func (node) {
+                    fillColorByStatus(self.elems['hyd.sys1.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/pressurized', func (node) {
+                    fillColorByStatus(self.elems['hyd.sys2.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/pressurized', func (node) {
+                    fillColorByStatus(self.elems['hyd.sys3.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[0]/edp/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.edp1.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp1.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/controls/hydraulic/edp-shutoff[0]', func (node) {
+                    fillColorByStatus(self.elems['hyd.edp1.valve'], !node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp1.valve.line'], node.getValue());
+                    setValve(self.elems['hyd.edp1.valve'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/edp/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.edp2.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp2.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/controls/hydraulic/edp-shutoff[1]', func (node) {
+                    fillColorByStatus(self.elems['hyd.edp2.valve'], !node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp2.valve.line'], node.getValue());
+                    setValve(self.elems['hyd.edp2.valve'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[0]/ehp/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.ehp1.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.ehp1.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/ehp/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.ehp2.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.ehp2.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/ehp[0]/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.ehp3a.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.ehp3a.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/ehp[1]/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.ehp3b.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.ehp3b.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/ptu/engaged', func (node) {
+                    fillColorByStatus(self.elems['hyd.ptu.pump'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.ptu.pump.line'], node.getValue());
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[0]/pressure-psi', func (node) {
+                    var psi = node.getValue();
+                    self.elems['hyd.press1.text'].setText(sprintf("%4i", psi));
+                    self.elems['hyd.press1.pointer'].setTranslation(0, -psi * 100 / 3500);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/pressure-psi', func (node) {
+                    var psi = node.getValue();
+                    self.elems['hyd.press2.text'].setText(sprintf("%4i", psi));
+                    self.elems['hyd.press2.pointer'].setTranslation(0, -psi * 100 / 3500);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/pressure-psi', func (node) {
+                    var psi = node.getValue();
+                    self.elems['hyd.press3.text'].setText(sprintf("%4i", psi));
+                    self.elems['hyd.press3.pointer'].setTranslation(0, -psi * 100 / 3500);
+                }, 1, 0);
         }
         elsif (submode == SUBMODE_ELECTRICAL) {
             # External power
