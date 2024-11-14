@@ -26,6 +26,17 @@
         <u_max>1.0</u_max>
     </filter>
 
+    <logic>
+        <name>System 1 Pressurized</name>
+        <input>
+            <greater-than>
+                <property>systems/hydraulic/system[0]/pressure-psi</property>
+                <value>1500</value>
+            </greater-than>
+        </input>
+        <output>systems/hydraulic/system[0]/pressurized</output>
+    </logic>
+
     <flipflop>
         <type>RS</type>
         <name>Accumulator 1 Low</name>
@@ -200,6 +211,17 @@
         <u_min>0.0</u_min>
         <u_max>1.0</u_max>
     </filter>
+
+    <logic>
+        <name>System 2 Pressurized</name>
+        <input>
+            <greater-than>
+                <property>systems/hydraulic/system[1]/pressure-psi</property>
+                <value>1500</value>
+            </greater-than>
+        </input>
+        <output>systems/hydraulic/system[1]/pressurized</output>
+    </logic>
 
     <flipflop>
         <type>RS</type>
@@ -411,6 +433,17 @@
         <u_min>0.0</u_min>
         <u_max>1.0</u_max>
     </filter>
+
+    <logic>
+        <name>System 3 Pressurized</name>
+        <input>
+            <greater-than>
+                <property>systems/hydraulic/system[2]/pressure-psi</property>
+                <value>1500</value>
+            </greater-than>
+        </input>
+        <output>systems/hydraulic/system[2]/pressurized</output>
+    </logic>
 
     <flipflop>
         <type>RS</type>

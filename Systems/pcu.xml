@@ -23,20 +23,14 @@
     <!-- PCU availability -->
     <logic>
         <input>
-            <greater-than>
-                <property>systems/hydraulic/system[0]/pressure-psi</property>
-                <value>2000</value>
-            </greater-than>
+            <property>systems/hydraulic/system[0]/pressurized</property>
         </input>
         <output>systems/actuators/elevator/pcu[0]/available</output>
         <output>systems/actuators/rudder/pcu[0]/available</output>
     </logic>
     <logic>
         <input>
-            <greater-than>
-                <property>systems/hydraulic/system[1]/pressure-psi</property>
-                <value>2000</value>
-            </greater-than>
+            <property>systems/hydraulic/system[1]/pressurized</property>
         </input>
         <output>systems/actuators/elevator/pcu[1]/available</output>
         <output>systems/actuators/elevator/pcu[2]/available</output>
@@ -45,10 +39,7 @@
     </logic>
     <logic>
         <input>
-            <greater-than>
-                <property>systems/hydraulic/system[2]/pressure-psi</property>
-                <value>2000</value>
-            </greater-than>
+            <property>systems/hydraulic/system[2]/pressurized</property>
         </input>
         <output>systems/actuators/elevator/pcu[3]/available</output>
         <output>systems/actuators/aileron/pcu[0]/available</output>

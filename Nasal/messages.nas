@@ -316,6 +316,16 @@ setlistener("sim/signals/fdm-initialized", func {
     listenOnProp("/controls/pneumatic/xbleed", no, MSG_ADVISORY, 'XBLEED SW OFF', 0, 0, [K2b, K3, K5]);
     listenOnProp("/systems/pneumatic/valves/apu", yes, MSG_STATUS, 'BLEED APU VLV OPEN', 0, 0, [K2b, K3, K5]);
 
+    listenOnProp("/systems/hydraulic/system[0]/pressurized", no, MSG_CAUTION, 'HYD 1 LO PRESS', 0, 0, [K3]);
+    listenOnProp("/systems/hydraulic/system[1]/pressurized", no, MSG_CAUTION, 'HYD 2 LO PRESS', 0, 0, [K3]);
+    listenOnProp("/systems/hydraulic/system[2]/pressurized", no, MSG_CAUTION, 'HYD 3 LO PRESS', 0, 0, [K3]);
+
+    listenOnProp("/controls/hydraulic/ehp[2]", no, MSG_ADVISORY, 'HYD 3 PUMP A NOT ON', 0, 0, [K1, K3, K5]);
+    listenOnProp("/controls/hydraulic/ptu", yes, MSG_ADVISORY, 'HYD PTU NOT AUTO', 0, 0, [K3, K5]);
+    listenOnProp("/controls/hydraulic/ehp[0]", yes, MSG_ADVISORY, 'HYD1 PUMP NOT AUTO', 0, 0, [K3, K5]);
+    listenOnProp("/controls/hydraulic/ehp[1]", yes, MSG_ADVISORY, 'HYD2 PUMP NOT AUTO', 0, 0, [K3, K5]);
+    listenOnProp("/controls/hydraulic/ehp[3]", yes, MSG_ADVISORY, 'HYD3 PUMP B NOT AUTO', 0, 0, [K3, K5]);
+
     listenOnProp("/instrumentation/eicas/messages/debug", yes, MSG_WARNING, 'DEBUG WARN 1', 0);
     listenOnProp("/instrumentation/eicas/messages/debug", yes, MSG_WARNING, 'DEBUG WARN 2', 0);
     listenOnProp("/instrumentation/eicas/messages/debug", yes, MSG_WARNING, 'DEBUG WARN 3', 0);
