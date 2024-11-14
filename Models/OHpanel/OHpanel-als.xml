@@ -904,6 +904,103 @@
         </action>
     </animation>
 
+    <!-- Hydraulic switches -->
+    <animation>
+        <type>knob</type>
+        <object-name>hydraulic.ptu</object-name>
+        <property>controls/hydraulic/ptu</property>
+        <factor>90</factor>
+        <axis>
+            <object-name>hydraulic.ptu.axis</object-name>
+        </axis>
+        <action>
+            <binding>
+                <command>property-cycle</command>
+                <property>controls/hydraulic/ptu</property>
+                <value>-1</value>
+                <value>0</value>
+                <value>1</value>
+                <wrap>false</wrap>
+            </binding>
+        </action>
+    </animation>
+    <animation>
+        <type>knob</type>
+        <object-name>hydraulic.pump.left</object-name>
+        <property>controls/hydraulic/ehp[0]</property>
+        <factor>90</factor>
+        <axis>
+            <object-name>hydraulic.pump.left.axis</object-name>
+        </axis>
+        <action>
+            <binding>
+                <command>property-cycle</command>
+                <property>controls/hydraulic/ehp[0]</property>
+                <value>-1</value>
+                <value>0</value>
+                <value>1</value>
+                <wrap>false</wrap>
+            </binding>
+        </action>
+    </animation>
+    <animation>
+        <type>knob</type>
+        <object-name>hydraulic.pump.right</object-name>
+        <property>controls/hydraulic/ehp[1]</property>
+        <factor>90</factor>
+        <axis>
+            <object-name>hydraulic.pump.right.axis</object-name>
+        </axis>
+        <action>
+            <binding>
+                <command>property-cycle</command>
+                <property>controls/hydraulic/ehp[1]</property>
+                <value>-1</value>
+                <value>0</value>
+                <value>1</value>
+                <wrap>false</wrap>
+            </binding>
+        </action>
+    </animation>
+    <animation>
+        <type>knob</type>
+        <object-name>electric.pump.left</object-name>
+        <property>controls/hydraulic/ehp[2]</property>
+        <factor>90</factor>
+        <axis>
+            <object-name>electric.pump.left.axis</object-name>
+        </axis>
+        <action>
+            <binding>
+                <command>property-cycle</command>
+                <property>controls/hydraulic/ehp[2]</property>
+                <value>-1</value>
+                <value>0</value>
+                <wrap>false</wrap>
+            </binding>
+        </action>
+    </animation>
+    <animation>
+        <type>knob</type>
+        <object-name>electric.pump.right</object-name>
+        <property>controls/hydraulic/ehp[3]</property>
+        <factor>90</factor>
+        <axis>
+            <object-name>electric.pump.right.axis</object-name>
+        </axis>
+        <action>
+            <binding>
+                <command>property-cycle</command>
+                <property>controls/hydraulic/ehp[3]</property>
+                <value>-1</value>
+                <value>0</value>
+                <value>1</value>
+                <wrap>false</wrap>
+            </binding>
+        </action>
+    </animation>
+
+
     <!-- Cockpit lights -->
     <animation>
         <name>Dome lights pick</name>

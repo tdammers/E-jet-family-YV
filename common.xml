@@ -2098,20 +2098,20 @@
             <edp-shutoff n="1" type="bool">0</edp-shutoff>
 
             <!-- -1 = off, 0 = auto, 1 = on -->
-            <ptu type="int">0</ptu>
+            <ptu type="int">-1</ptu>
 
             <!-- EHP1 -->
             <!-- -1 = off, 0 = auto, 1 = on -->
-            <ehp n="0" type="int">0</ehp>
+            <ehp n="0" type="int">-1</ehp>
             <!-- EHP2 -->
             <!-- -1 = off, 0 = auto, 1 = on -->
-            <ehp n="1" type="int">0</ehp>
+            <ehp n="1" type="int">-1</ehp>
             <!-- EHP3A -->
             <!-- -1 = off, 0 or 1 = on -->
-            <ehp n="2" type="int">0</ehp>
+            <ehp n="2" type="int">-1</ehp>
             <!-- EHP3B -->
             <!-- -1 = off, 0 = auto, 1 = on -->
-            <ehp n="3" type="int">0</ehp>
+            <ehp n="3" type="int">-1</ehp>
         </hydraulic>
 
         <apu>

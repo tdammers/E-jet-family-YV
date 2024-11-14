@@ -176,6 +176,11 @@ This is the preferred method at airports that have ground power units
 available.
 
 - GPU AC POWER - ON
+- HYDRAULIC PTU - AUTO
+- HYDRAULIC SYS 1 - AUTO
+- HYDRAULIC SYS 2 - AUTO
+- HYDRAULIC SYS 3 ELEC PUMP A - ON
+- HYDRAULIC SYS 3 ELEC PUMP B - AUTO
 - IDG 1 - AUTO
 - IDG 2 - AUTO
 - AC BUS TIE - AUTO
@@ -207,6 +212,11 @@ Only the #1 engine is started at the gate, the #2 engine is started using
 cross-bleed from #1 just before takeoff.
 
 - GPU AC POWER - ON
+- HYDRAULIC PTU - AUTO
+- HYDRAULIC SYS 1 - AUTO
+- HYDRAULIC SYS 2 - AUTO
+- HYDRAULIC SYS 3 ELEC PUMP A - ON
+- HYDRAULIC SYS 3 ELEC PUMP B - AUTO
 - IDG 1 - AUTO
 - IDG 2 - AUTO
 - AC BUS TIE - AUTO
@@ -248,6 +258,11 @@ Without ground power, we can use the APU to provide electricity and bleed air.
 - BATTERY 2 - ON
 - DC BUS TIES - AUTO
 - APU GEN - AUTO
+- HYDRAULIC PTU - AUTO
+- HYDRAULIC SYS 1 - AUTO
+- HYDRAULIC SYS 2 - AUTO
+- HYDRAULIC SYS 3 ELEC PUMP A - ON
+- HYDRAULIC SYS 3 ELEC PUMP B - AUTO
 - APU - START
 - APU RPM - WAIT FOR 100%
 - APU BLEED - ON
@@ -283,6 +298,11 @@ adapted for a single-engine taxi.
 - BATTERY 2 - ON
 - DC BUS TIES - AUTO
 - APU GEN - AUTO
+- HYDRAULIC PTU - AUTO
+- HYDRAULIC SYS 1 - AUTO
+- HYDRAULIC SYS 2 - AUTO
+- HYDRAULIC SYS 3 ELEC PUMP A - ON
+- HYDRAULIC SYS 3 ELEC PUMP B - AUTO
 - APU - START
 - APU RPM - WAIT FOR 100%
 - APU BLEED - ON
