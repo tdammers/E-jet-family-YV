@@ -91,9 +91,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.80309999"
-     inkscape:cx="597.68398"
-     inkscape:cy="387.872"
+     inkscape:zoom="2.2715098"
+     inkscape:cx="343.82418"
+     inkscape:cy="305.30355"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -139,7 +139,7 @@
      style="display:none"
      sodipodi:insensitive="true"><image
        width="1018.5236"
-       height="848.76965"
+       height="383.69041"
        preserveAspectRatio="none"
        style="display:inline;stroke-width:0.74225;image-rendering:optimizeQuality"
        xlink:href="../../../../../../tmp/scrot.png"
@@ -813,10 +813,9 @@
        d="m 69.89442,298.89442 c -1.66257,1.66257 -3.10801,3.54097 -4.29374,5.5947 l 16.43886,11.55816 a 7.2367349,7.2367349 0 0 0 -0.003,3.90842 l -16.43609,11.55539 c 2.37144,4.10746 5.781,7.51702 9.88845,9.88845 l 11.55816,-16.43885 a 7.2367349,7.2367349 0 0 0 3.90842,0.003 l 11.55539,16.43608 c 4.10746,-2.37143 7.51702,-5.78099 9.88845,-9.88845 L 95.96047,319.95316 a 7.2367349,7.2367349 0 0 0 0.003,-3.90841 l 16.43609,-11.5554 c -2.37143,-4.10745 -5.78099,-7.51701 -9.88845,-9.88845 l -11.55817,16.43886 a 7.2367349,7.2367349 0 0 0 -3.90841,-0.003 l -11.5554,-16.43609 c -2.05373,1.18573 -3.93213,2.63117 -5.59471,4.29375 z"
        id="hyd.edp1.pump"
        inkscape:connector-curvature="0" /><path
-       style="fill:none;stroke:#00ff00;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="m 219,199 v 49"
-       id="hyd.ehp1.pump.line"
-       sodipodi:nodetypes="cc" /><circle
+       style="color:#000000;fill:#00ff00;-inkscape-stroke:none"
+       d="m 216,199 v 49 h 6 v -49 z"
+       id="hyd.ehp1.pump.line" /><circle
        style="fill:#808080;stroke:none;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
        id="circle1662"
        cx="204"

@@ -2156,18 +2156,16 @@ var MFD = {
                     fillColorByStatus(self.elems['hyd.edp1.pump.line'], node.getValue());
                 }, 1, 0);
             me.addListener('systems', '/controls/hydraulic/edp-shutoff[0]', func (node) {
-                    fillColorByStatus(self.elems['hyd.edp1.valve'], !node.getValue());
-                    fillColorByStatus(self.elems['hyd.edp1.valve.line'], node.getValue());
-                    setValve(self.elems['hyd.edp1.valve'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp1.valve.line'], !node.getValue());
+                    setValve(self.elems['hyd.edp1.valve'], node.getValue(), 1);
                 }, 1, 0);
             me.addListener('systems', '/systems/hydraulic/system[1]/edp/engaged', func (node) {
                     fillColorByStatus(self.elems['hyd.edp2.pump'], node.getValue());
                     fillColorByStatus(self.elems['hyd.edp2.pump.line'], node.getValue());
                 }, 1, 0);
             me.addListener('systems', '/controls/hydraulic/edp-shutoff[1]', func (node) {
-                    fillColorByStatus(self.elems['hyd.edp2.valve'], !node.getValue());
-                    fillColorByStatus(self.elems['hyd.edp2.valve.line'], node.getValue());
-                    setValve(self.elems['hyd.edp2.valve'], node.getValue());
+                    fillColorByStatus(self.elems['hyd.edp2.valve.line'], !node.getValue());
+                    setValve(self.elems['hyd.edp2.valve'], node.getValue(), 1);
                 }, 1, 0);
             me.addListener('systems', '/systems/hydraulic/system[0]/ehp/engaged', func (node) {
                     fillColorByStatus(self.elems['hyd.ehp1.pump'], node.getValue());
