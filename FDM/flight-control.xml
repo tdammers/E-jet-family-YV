@@ -28,7 +28,7 @@
 
         <actuator name="Elevator Master">
             <input>fcs/elevator-lh-cmd-powered</input>
-            <rate_limit>1</rate_limit>
+            <rate_limit>2</rate_limit>
             <output>fcs/elevator-lh-master</output>
         </actuator>
 
@@ -65,7 +65,7 @@
 
         <actuator name="Elevator Master">
             <input>fcs/elevator-rh-cmd-powered</input>
-            <rate_limit>1</rate_limit>
+            <rate_limit>2</rate_limit>
             <output>fcs/elevator-rh-master</output>
         </actuator>
 
@@ -170,7 +170,7 @@
 
         <actuator name="Left Aileron Master">
             <input>fcs/left-aileron-cmd-powered</input>
-            <rate_limit>1</rate_limit>
+            <rate_limit>2</rate_limit>
             <output>fcs/left-aileron-master</output>
         </actuator>
 
@@ -185,7 +185,7 @@
 
         <actuator name="Right Aileron Master">
             <input>fcs/right-aileron-cmd-powered</input>
-            <rate_limit>1</rate_limit>
+            <rate_limit>2</rate_limit>
             <output>fcs/right-aileron-master</output>
         </actuator>
 
@@ -314,7 +314,7 @@
         <switch>
             <output>fcs/rudder-rate-limit</output>
             <default value="0" />
-            <test logic="OR" value="1">
+            <test logic="OR" value="2">
                 /systems/actuators/rudder/pcu[0]/active &gt; 0
                 /systems/actuators/rudder/pcu[1]/active &gt; 0
             </test>
