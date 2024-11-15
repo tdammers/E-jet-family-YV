@@ -638,8 +638,15 @@
     </channel>
 
     <channel name="MFS Left Outboard">
+        <switch name="MFS1 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
+                /systems/hydraulic/system[1]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-left-outboard-powered</output>
+        </switch>
         <kinematic name="MFS1 Control">
-            <input>fcs/mfs-left-outboard-cmd-norm</input>
+            <input>fcs/mfs-left-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -652,8 +659,15 @@
             </traverse>
             <output>fcs/mfs1-pos-norm</output>
         </kinematic>
+        <switch name="MFS2 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-left-outboard-powered</output>
+        </switch>
         <kinematic name="MFS2 Control">
-            <input>fcs/mfs-left-outboard-cmd-norm</input>
+            <input>fcs/mfs-left-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -666,8 +680,15 @@
             </traverse>
             <output>fcs/mfs2-pos-norm</output>
         </kinematic>
+        <switch name="MFS3 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-left-outboard-powered</output>
+        </switch>
         <kinematic name="MFS3 Control">
-            <input>fcs/mfs-left-outboard-cmd-norm</input>
+            <input>fcs/mfs-left-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -682,8 +703,15 @@
         </kinematic>
     </channel>
     <channel name="MFS Left Inboard">
+        <switch name="MFS4 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-left-inboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-left-inboard-powered</output>
+        </switch>
         <kinematic name="MFS4 Control">
-            <input>fcs/mfs-left-inboard-cmd-norm</input>
+            <input>fcs/mfs-left-inboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -696,8 +724,15 @@
             </traverse>
             <output>fcs/mfs4-pos-norm</output>
         </kinematic>
+        <switch name="MFS5 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-left-inboard-cmd-norm">
+                /systems/hydraulic/system[1]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-left-inboard-powered</output>
+        </switch>
         <kinematic name="MFS5 Control">
-            <input>fcs/mfs-left-inboard-cmd-norm</input>
+            <input>fcs/mfs-left-inboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -712,8 +747,15 @@
         </kinematic>
     </channel>
     <channel name="MFS Right Outboard">
+        <switch name="MFS10 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-right-outboard-cmd-norm">
+                /systems/hydraulic/system[1]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-right-outboard-powered</output>
+        </switch>
         <kinematic name="MFS10 Control">
-            <input>fcs/mfs-right-outboard-cmd-norm</input>
+            <input>fcs/mfs-right-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -726,8 +768,15 @@
             </traverse>
             <output>fcs/mfs10-pos-norm</output>
         </kinematic>
+        <switch name="MFS9 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-right-outboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-right-outboard-powered</output>
+        </switch>
         <kinematic name="MFS9 Control">
-            <input>fcs/mfs-right-outboard-cmd-norm</input>
+            <input>fcs/mfs-right-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -740,8 +789,15 @@
             </traverse>
             <output>fcs/mfs9-pos-norm</output>
         </kinematic>
+        <switch name="MFS8 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-right-outboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-right-outboard-powered</output>
+        </switch>
         <kinematic name="MFS8 Control">
-            <input>fcs/mfs-right-outboard-cmd-norm</input>
+            <input>fcs/mfs-right-outboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -756,8 +812,15 @@
         </kinematic>
     </channel>
     <channel name="MFS Right Inboard">
+        <switch name="MFS7 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-right-inboard-cmd-norm">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-right-inboard-powered</output>
+        </switch>
         <kinematic name="MFS7 Control">
-            <input>fcs/mfs-right-inboard-cmd-norm</input>
+            <input>fcs/mfs-right-inboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -770,8 +833,15 @@
             </traverse>
             <output>fcs/mfs7-pos-norm</output>
         </kinematic>
+        <switch name="MFS6 Powered">
+            <default value="0" />
+            <test logic="OR" value="fcs/mfs-right-inboard-cmd-norm">
+                /systems/hydraulic/system[1]/pressurized &gt; 0
+            </test>
+            <output>fcs/mfs-right-inboard-powered</output>
+        </switch>
         <kinematic name="MFS6 Control">
-            <input>fcs/mfs-right-inboard-cmd-norm</input>
+            <input>fcs/mfs-right-inboard-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
