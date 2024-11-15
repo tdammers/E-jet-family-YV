@@ -2190,17 +2190,62 @@ var MFD = {
             me.addListener('systems', '/systems/hydraulic/system[0]/pressure-psi', func (node) {
                     var psi = node.getValue();
                     self.elems['hyd.press1.text'].setText(sprintf("%4i", psi));
-                    self.elems['hyd.press1.pointer'].setTranslation(0, -psi * 100 / 3500);
+                    self.elems['hyd.press1.pointer'].setTranslation(0, -math.min(psi, 3500) * 100 / 3500);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[0]/pressurized', func (node) {
+                    if (node.getBoolValue()) {
+                        self.elems['hyd.press1.text'].setColor(0, 1, 0);
+                        self.elems['hyd.press1.pointer'].setColorFill(0, 1, 0);
+                    }
+                    else {
+                        self.elems['hyd.press1.text'].setColor(1, 0.75, 0);
+                        self.elems['hyd.press1.pointer'].setColorFill(1, 0.75, 0);
+                    }
                 }, 1, 0);
             me.addListener('systems', '/systems/hydraulic/system[1]/pressure-psi', func (node) {
                     var psi = node.getValue();
                     self.elems['hyd.press2.text'].setText(sprintf("%4i", psi));
-                    self.elems['hyd.press2.pointer'].setTranslation(0, -psi * 100 / 3500);
+                    self.elems['hyd.press2.pointer'].setTranslation(0, -math.min(psi, 3500) * 100 / 3500);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/pressurized', func (node) {
+                    if (node.getBoolValue()) {
+                        self.elems['hyd.press2.text'].setColor(0, 1, 0);
+                        self.elems['hyd.press2.pointer'].setColorFill(0, 1, 0);
+                    }
+                    else {
+                        self.elems['hyd.press2.text'].setColor(1, 0.75, 0);
+                        self.elems['hyd.press2.pointer'].setColorFill(1, 0.75, 0);
+                    }
                 }, 1, 0);
             me.addListener('systems', '/systems/hydraulic/system[2]/pressure-psi', func (node) {
                     var psi = node.getValue();
                     self.elems['hyd.press3.text'].setText(sprintf("%4i", psi));
-                    self.elems['hyd.press3.pointer'].setTranslation(0, -psi * 100 / 3500);
+                    self.elems['hyd.press3.pointer'].setTranslation(0, -math.min(psi, 3500) * 100 / 3500);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/pressurized', func (node) {
+                    if (node.getBoolValue()) {
+                        self.elems['hyd.press3.text'].setColor(0, 1, 0);
+                        self.elems['hyd.press3.pointer'].setColorFill(0, 1, 0);
+                    }
+                    else {
+                        self.elems['hyd.press3.text'].setColor(1, 0.75, 0);
+                        self.elems['hyd.press3.pointer'].setColorFill(1, 0.75, 0);
+                    }
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[0]/fill-ratio', func (node) {
+                    var fill = node.getValue();
+                    self.elems['hyd.qty1.text'].setText(sprintf("%3i", fill * 100));
+                    self.elems['hyd.qty1.pointer'].setTranslation(0, -fill * 100);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[1]/fill-ratio', func (node) {
+                    var fill = node.getValue();
+                    self.elems['hyd.qty2.text'].setText(sprintf("%3i", fill * 100));
+                    self.elems['hyd.qty2.pointer'].setTranslation(0, -fill * 100);
+                }, 1, 0);
+            me.addListener('systems', '/systems/hydraulic/system[2]/fill-ratio', func (node) {
+                    var fill = node.getValue();
+                    self.elems['hyd.qty3.text'].setText(sprintf("%3i", fill * 100));
+                    self.elems['hyd.qty3.pointer'].setTranslation(0, -fill * 100);
                 }, 1, 0);
         }
         elsif (submode == SUBMODE_ELECTRICAL) {

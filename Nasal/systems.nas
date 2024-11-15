@@ -1,6 +1,14 @@
 # E-jet-family SYSTEMS
 #########################
 
+
+## ODD/EVEN DAY LOGIC
+#####################
+
+var oddDay = rand() < 0.5;
+setprop('/systems/actuators/odd-day', oddDay);
+
+
 ## LIVERY SELECT
 ################
 
@@ -62,9 +70,6 @@ var startup = func {
 	setprop("controls/electric/battery-switch", 1);
 	props.setAll("controls/electric/engine", "generator", 1);
 	props.setAll("controls/engines/engine", "cutoff-switch", 1);
-
-    var oddDay = rand() < 0.5;
-    setprop('/systems/actuators/odd-day', oddDay);
 
 	var listener1 = setlistener("engines/apu/running", func {
 		if (props.getNode("engines/apu/running").getBoolValue()) {
