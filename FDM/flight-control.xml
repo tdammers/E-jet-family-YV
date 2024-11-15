@@ -475,20 +475,19 @@
     </channel>
 
     <channel name="Landing Gear">
-        <kinematic name="Gear Control">
+        <switch>
+            <default value="0" />
+            <test logic="OR" value="0.066666667">
+                /systems/hydraulic/system[0]/pressurized &gt; 0
+                /systems/hydraulic/system[1]/pressurized &gt; 0
+            </test>
+            <output>gear/extend-retract-rate</output>
+        </switch>
+        <actuator name="Gear Control">
             <input>gear/gear-cmd-norm</input>
-            <traverse>
-                <setting>
-                    <position> 0 </position>
-                    <time>     0 </time>
-                </setting>
-                <setting>
-                    <position> 1 </position>
-                    <time>     15 </time>
-                </setting>
-            </traverse>
+            <rate_limit>gear/extend-retract-rate</rate_limit>
             <output>gear/gear-pos-norm</output>
-        </kinematic>
+        </actuator>
 
     </channel>
 
