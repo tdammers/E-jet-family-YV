@@ -867,9 +867,21 @@
 
     <!-- REVERSERS -->
     <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>/systems/hydraulic/system[0]/pressurized</property>
+            </condition>
+            <value>0.715</value>
+        </input>
+        <input><value>0</value></input>
+        <output>/engines/engine[0]/reverser-rate</output>
+    </filter>
+    <filter>
         <name>Reverser Left</name>
         <type>noise-spike</type>
-        <max-rate-of-change>0.715</max-rate-of-change>
+        <max-rate-of-change><property>/engines/engine[0]/reverser-rate</property></max-rate-of-change>
         <input>
             <condition>
                 <not>
@@ -894,9 +906,21 @@
         <output>/fdm/jsbsim/propulsion/engine[0]/reverser-angle-rad</output>
     </filter>
     <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>/systems/hydraulic/system[1]/pressurized</property>
+            </condition>
+            <value>0.715</value>
+        </input>
+        <input><value>0</value></input>
+        <output>/engines/engine[1]/reverser-rate</output>
+    </filter>
+    <filter>
         <name>Reverser Right</name>
         <type>noise-spike</type>
-        <max-rate-of-change>0.715</max-rate-of-change>
+        <max-rate-of-change><property>/engines/engine[1]/reverser-rate</property></max-rate-of-change>
         <input>
             <condition>
                 <not>
