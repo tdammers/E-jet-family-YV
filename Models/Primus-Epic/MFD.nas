@@ -294,12 +294,14 @@ var MFD = {
         me.registerProp('pcu-elevator-rh-0', "systems/actuators/elevator/pcu[2]/status");
         me.registerProp('pcu-elevator-rh-1', "systems/actuators/elevator/pcu[3]/status");
 
+        me.registerProp('hyd-sys1-emer', "systems/hydraulic/system[0]/emergency-accumulator");
         me.registerProp('hyd-sys1-press-psi', "systems/hydraulic/system[0]/pressure-psi");
         me.registerProp('hyd-sys1-press', "systems/hydraulic/system[0]/pressurized");
         me.registerProp('hyd-sys1-qty', "systems/hydraulic/system[0]/fill-ratio");
         me.registerProp('hyd-sys1-edp', "systems/hydraulic/system[0]/edp/engaged");
         me.registerProp('hyd-sys1-ehp', "systems/hydraulic/system[0]/ehp/engaged");
 
+        me.registerProp('hyd-sys2-emer', "systems/hydraulic/system[1]/emergency-accumulator");
         me.registerProp('hyd-sys2-press-psi', "systems/hydraulic/system[1]/pressure-psi");
         me.registerProp('hyd-sys2-press', "systems/hydraulic/system[1]/pressurized");
         me.registerProp('hyd-sys2-qty', "systems/hydraulic/system[1]/fill-ratio");
@@ -2139,6 +2141,31 @@ var MFD = {
                     }, 1, 0);
                 })();
             }
+
+            me.addListener('systems', self.props['hyd-sys1-emer'], func (node) {
+                var pressureNorm = node.getValue();
+                var pressure = pressureNorm * 3000;
+                self.elems['status.brake-pressure.left.digital'].setText(sprintf("%4.0f", pressure));
+                self.elems['status.brake-pressure.left.pointer'].setTranslation(0, pressureNorm * -136);
+                if (pressureNorm > 0.25) {
+                    self.elems['status.brake-pressure.left.pointer'].setColorFill(0, 1, 0);
+                }
+                else {
+                    self.elems['status.brake-pressure.left.pointer'].setColorFill(0, 0, 0);
+                }
+            });
+            me.addListener('systems', self.props['hyd-sys2-emer'], func (node) {
+                var pressureNorm = node.getValue();
+                var pressure = pressureNorm * 3000;
+                self.elems['status.brake-pressure.right.digital'].setText(sprintf("%4.0f", pressure));
+                self.elems['status.brake-pressure.right.pointer'].setTranslation(0, pressureNorm * -136);
+                if (pressureNorm > 0.25) {
+                    self.elems['status.brake-pressure.right.pointer'].setColorFill(0, 1, 0);
+                }
+                else {
+                    self.elems['status.brake-pressure.right.pointer'].setColorFill(0, 0, 0);
+                }
+            });
 
         }
         elsif (submode == SUBMODE_HYDRAULICS) {

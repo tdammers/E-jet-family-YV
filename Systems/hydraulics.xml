@@ -26,6 +26,33 @@
         <u_max>1.0</u_max>
     </filter>
 
+    <filter>
+        <name>Emergency Accumulator level 2</name>
+        <type>integrator</type>
+        <gain>0.001</gain>
+        <input>
+            <expression>
+                <difference>
+                    <sum>
+                        <product>
+                            <property>systems/hydraulic/system[1]/pressure-psi</property>
+                            <value>0.01666667</value>
+                        </product>
+                    </sum>
+                    <sum>
+                        <property>fdm/jsbsim/fcs/right-brake-input-emer</property>
+                        <property>fdm/jsbsim/fcs/left-brake-input-emer</property>
+                    </sum>
+                </difference>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[1]/emergency-accumulator</output>
+        <initialize-to>output</initialize-to>
+        <u_min>0.0</u_min>
+        <u_max>1.0</u_max>
+    </filter>
+
+
     <logic>
         <name>System 1 Pressurized</name>
         <input>
@@ -220,6 +247,33 @@
         <u_max>1.0</u_max>
     </filter>
 
+    <filter>
+        <name>Emergency Accumulator level 1</name>
+        <type>integrator</type>
+        <gain>0.001</gain>
+        <input>
+            <expression>
+                <difference>
+                    <sum>
+                        <product>
+                            <property>systems/hydraulic/system[0]/pressure-psi</property>
+                            <value>0.01666667</value>
+                        </product>
+                    </sum>
+                    <sum>
+                        <property>fdm/jsbsim/fcs/right-brake-input-emer</property>
+                        <property>fdm/jsbsim/fcs/left-brake-input-emer</property>
+                    </sum>
+                </difference>
+            </expression>
+        </input>
+        <output>systems/hydraulic/system[0]/emergency-accumulator</output>
+        <initialize-to>output</initialize-to>
+        <u_min>0.0</u_min>
+        <u_max>1.0</u_max>
+    </filter>
+
+
     <logic>
         <name>System 2 Pressurized</name>
         <input>
@@ -311,7 +365,7 @@
                     <value>0.12</value>
                 </greater-than>
                 <property>systems/hydraulic/system[0]/pressurized</property>
-                <not><property>systems/hydraulic/systems[1]/edp/power</property></not>
+                <not><property>systems/hydraulic/system[1]/edp/power</property></not>
                 <not>
                     <and>
                         <greater-than>

@@ -868,6 +868,30 @@
     </channel>
 
 	<channel name="Brakes">
+		<summer name="fcs/brake-power-psi">
+            <input>/systems/hydraulic/system[0]/pressure-psi</input>
+            <input>/systems/hydraulic/system[1]/pressure-psi</input>
+        </summer>
+
+		<pure_gain name="fcs/brake-power-norm">
+            <gain>0.0001666667</gain>
+            <input>fcs/brake-power-psi</input>
+        </pure_gain>
+
+		<summer name="fcs/emer-brake-power">
+            <input>/systems/hydraulic/system[0]/emergency-accumulator</input>
+            <input>/systems/hydraulic/system[1]/emergency-accumulator</input>
+        </summer>
+
+		<pure_gain name="fcs/emer-brake-power-norm">
+            <gain>4</gain>
+            <input>fcs/emer-brake-power</input>
+			<clipto>
+				<min>0</min>
+				<max>1</max>
+			</clipto>
+        </pure_gain>
+
 		<actuator name="fcs/brake-left">
 			<input>/controls/gear/brake-left</input>
 			<rate_limit>2</rate_limit>
@@ -878,15 +902,10 @@
 			<rate_limit>2</rate_limit>
 		</actuator>
 
-		<switch name="fcs/brake-avail">
-			<default value="1"/>
-            <!-- TODO: hydraulics logic -->
-		</switch>
-
-		<fcs_function name="fcs/left-brake-input">
+		<fcs_function name="fcs/left-brake-input-norm">
 			<function>
 				<product>
-					<property>fcs/brake-avail</property>
+					<property>fcs/brake-power-norm</property>
 					<max>
 						<property>/services/chocks</property>
 						<property>fcs/brake-left</property>
@@ -898,11 +917,24 @@
 					</max>
 				</product>
 			</function>
+		</fcs_function>
+		<fcs_function name="fcs/left-brake-input-emer">
+			<function>
+				<product>
+					<property>fcs/emer-brake-power-norm</property>
+                    <property>/controls/gear/brake-parking</property>
+				</product>
+			</function>
+		</fcs_function>
+        <summer name="fcs/left-brake-input">
+            <input>/services/chocks</input>
+            <input>fcs/left-brake-input-norm</input>
+            <input>fcs/left-brake-input-emer</input>
 			<clipto>
 				<min>0</min>
 				<max>1</max>
 			</clipto>
-		</fcs_function>
+        </summer>
 
 		<actuator name="fcs/left-brake-actuator">
 			<input>fcs/left-brake-input</input>
@@ -910,10 +942,10 @@
             <output>fcs/left-brake-cmd-norm</output>
 		</actuator>
 
-		<fcs_function name="fcs/right-brake-input">
+		<fcs_function name="fcs/right-brake-input-norm">
 			<function>
 				<product>
-					<property>fcs/brake-avail</property>
+					<property>fcs/brake-power-norm</property>
 					<max>
 						<property>/services/chocks</property>
 						<property>fcs/brake-right</property>
@@ -925,11 +957,24 @@
 					</max>
 				</product>
 			</function>
+		</fcs_function>
+		<fcs_function name="fcs/right-brake-input-emer">
+			<function>
+				<product>
+					<property>fcs/emer-brake-power-norm</property>
+                    <property>/controls/gear/brake-parking</property>
+				</product>
+			</function>
+		</fcs_function>
+        <summer name="fcs/right-brake-input">
+            <input>/services/chocks</input>
+            <input>fcs/right-brake-input-norm</input>
+            <input>fcs/right-brake-input-emer</input>
 			<clipto>
 				<min>0</min>
 				<max>1</max>
 			</clipto>
-		</fcs_function>
+        </summer>
 
 		<actuator name="fcs/right-brake-actuator">
 			<input>fcs/right-brake-input</input>
