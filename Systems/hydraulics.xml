@@ -43,7 +43,7 @@
         <S>
             <less-than>
                 <property>systems/hydraulic/system[0]/accumulator</property>
-                <value>0.95</value>
+                <value>0.90</value>
             </less-than>
         </S>
         <R>
@@ -143,7 +143,7 @@
     <filter>
         <name>Demand 1</name>
         <type>gain</type>
-        <gain>0.01</gain>
+        <gain>1</gain>
         <input>
             <expression>
                 <sum>
@@ -161,6 +161,14 @@
             </expression>
         </input>
         <output>systems/hydraulic/system[0]/demand</output>
+    </filter>
+
+    <filter>
+        <name>PTU draw</name>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>systems/hydraulic/system[1]/ptu/power</input>
+        <output>systems/hydraulic/system[0]/sinks/ptu</output>
     </filter>
 
     <filter>
@@ -229,7 +237,7 @@
         <S>
             <less-than>
                 <property>systems/hydraulic/system[1]/accumulator</property>
-                <value>0.95</value>
+                <value>0.90</value>
             </less-than>
         </S>
         <R>
@@ -281,6 +289,45 @@
         </input>
         <output>systems/hydraulic/system[1]/ehp/engaged</output>
     </logic>
+    <logic>
+        <name>PTU engage logic</name>
+        <input>
+            <and>
+                <or>
+                    <and>
+                        <equals>
+                            <property>controls/hydraulic/ptu</property>
+                            <value>0</value>
+                        </equals>
+                        <property>systems/hydraulic/system[1]/accumulator-low</property>
+                    </and>
+                    <equals>
+                        <property>controls/hydraulic/ptu</property>
+                        <value>1</value>
+                    </equals>
+                </or>
+                <greater-than>
+                    <property>systems/hydraulic/system[1]/fill-ratio</property>
+                    <value>0.12</value>
+                </greater-than>
+                <property>systems/hydraulic/system[0]/pressurized</property>
+                <not><property>systems/hydraulic/systems[1]/edp/power</property></not>
+                <not>
+                    <and>
+                        <greater-than>
+                            <property>controls/hydraulic/ehp[1]</property>
+                            <value>-1</value>
+                        </greater-than>
+                        <greater-than>
+                            <property>systems/electrical/outputs/ehp[1]</property>
+                            <value>20</value>
+                        </greater-than>
+                    </and>
+                </not>
+            </and>
+        </input>
+        <output>systems/hydraulic/system[1]/ptu/engaged</output>
+    </logic>
 
     <filter>
         <name>EDP 2</name>
@@ -303,6 +350,24 @@
         <min>0</min>
         <max>1</max>
         <output>systems/hydraulic/system[1]/edp/power</output>
+    </filter>
+
+    <filter>
+        <name>PTU</name>
+        <type>gain</type>
+        <gain>0.005</gain>
+        <input>
+            <condition>
+                <property>systems/hydraulic/system[1]/ptu/engaged</property>
+            </condition>
+            <property>systems/hydraulic/system[0]/pressure-psi</property>
+        </input>
+        <input>
+            <value>0</value>
+        </input>
+        <min>0</min>
+        <max>1</max>
+        <output>systems/hydraulic/system[1]/ptu/power</output>
     </filter>
 
     <filter>
@@ -329,7 +394,7 @@
     <filter>
         <name>Demand 2</name>
         <type>gain</type>
-        <gain>0.01</gain>
+        <gain>1</gain>
         <input>
             <expression>
                 <sum>
@@ -404,7 +469,7 @@
     <filter>
         <name>Nosewheel Steering</name>
         <type>derivative</type>
-        <filter-time>0.15</filter-time>
+        <filter-time>0.0015</filter-time>
         <input>/fdm/jsbsim/fcs/steer-pos-deg[0]</input>
         <output>systems/hydraulic/system[1]/sinks/nosewheel-steering</output>
     </filter>
@@ -451,7 +516,7 @@
         <S>
             <less-than>
                 <property>systems/hydraulic/system[2]/accumulator</property>
-                <value>0.95</value>
+                <value>0.90</value>
             </less-than>
         </S>
         <R>
@@ -550,7 +615,7 @@
     <filter>
         <name>Demand 3</name>
         <type>gain</type>
-        <gain>0.01</gain>
+        <gain>1</gain>
         <input>
             <expression>
                 <sum>
