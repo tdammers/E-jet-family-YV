@@ -6,7 +6,9 @@
     <filter>
         <type>derivative</type>
         <filter-time>10</filter-time>
-        <input><property>fdm/jsbsim/fcs/left-brake-input-emer</property></input>
+        <input>
+            <property>fdm/jsbsim/fcs/left-brake-input-emer</property>
+        </input>
         <output>systems/hydraulic/left-emergency-brake-load</output>
         <u_min>0.0</u_min>
         <u_max>10000.0</u_max>
@@ -14,8 +16,357 @@
     <filter>
         <type>derivative</type>
         <filter-time>10</filter-time>
-        <input><property>fdm/jsbsim/fcs/right-brake-input-emer</property></input>
+        <input>
+            <property>fdm/jsbsim/fcs/right-brake-input-emer</property>
+        </input>
         <output>systems/hydraulic/right-emergency-brake-load</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+
+    <!-- SINKS -->
+    <filter>
+        <name>Nosewheel Steering</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>/fdm/jsbsim/fcs/steer-pos-deg[0]</input>
+        <output>systems/hydraulic/system[1]/sinks/nosewheel-steering</output>
+    </filter>
+
+    <filter>
+        <name>Reverser Left</name>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>/engines/engine[0]/reverser-pos-norm</input>
+        <output>systems/hydraulic/system[0]/sinks/thrust-reverser-left</output>
+    </filter>
+    <filter>
+        <name>Reverser Right</name>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>/engines/engine[1]/reverser-pos-norm</input>
+        <output>systems/hydraulic/system[1]/sinks/thrust-reverser-right</output>
+    </filter>
+
+    <filter>
+        <name>Rudder Demand</name>
+        <type>derivative</type>
+        <filter-time>0.015</filter-time>
+        <input>fdm/jsbsim/fcs/rudder-master</input>
+        <output>systems/hydraulic/rudder-demand</output>
+    </filter>
+
+    <filter>
+        <name>Elevator Demand LH</name>
+        <type>derivative</type>
+        <filter-time>0.015</filter-time>
+        <input>fdm/jsbsim/fcs/elevator-lh-master</input>
+        <output>systems/hydraulic/elevator-lh-demand</output>
+    </filter>
+    <filter>
+        <name>Elevator Demand RH</name>
+        <type>derivative</type>
+        <filter-time>0.015</filter-time>
+        <input>fdm/jsbsim/fcs/elevator-rh-master</input>
+        <output>systems/hydraulic/elevator-rh-demand</output>
+    </filter>
+
+    <filter>
+        <name>Aileron Demand LH</name>
+        <type>derivative</type>
+        <filter-time>0.015</filter-time>
+        <input>fdm/jsbsim/fcs/left-aileron-master</input>
+        <output>systems/hydraulic/left-aileron-demand</output>
+    </filter>
+    <filter>
+        <name>Aileron Demand RH</name>
+        <type>derivative</type>
+        <filter-time>0.015</filter-time>
+        <input>fdm/jsbsim/fcs/right-aileron-master</input>
+        <output>systems/hydraulic/right-aileron-demand</output>
+    </filter>
+
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/rudder/pcu[0]/active</property>
+            </condition>
+            <property>systems/hydraulic/rudder-demand</property>
+        </input>
+        <output>systems/hydraulic/system[0]/sinks/rudder-upper</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/rudder/pcu[1]/active</property>
+            </condition>
+            <property>systems/hydraulic/rudder-demand</property>
+        </input>
+        <output>systems/hydraulic/system[2]/sinks/rudder-lower</output>
+    </filter>
+
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/elevator/pcu[0]/active</property>
+            </condition>
+            <property>systems/hydraulic/elevator-lh-demand</property>
+        </input>
+        <output>systems/hydraulic/system[0]/sinks/elevator-left-outboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/elevator/pcu[1]/active</property>
+            </condition>
+            <property>systems/hydraulic/elevator-lh-demand</property>
+        </input>
+        <output>systems/hydraulic/system[1]/sinks/elevator-left-inboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/elevator/pcu[2]/active</property>
+            </condition>
+            <property>systems/hydraulic/elevator-rh-demand</property>
+        </input>
+        <output>systems/hydraulic/system[1]/sinks/elevator-right-inboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <property>systems/actuators/elevator/pcu[3]/active</property>
+            </condition>
+            <property>systems/hydraulic/elevator-rh-demand</property>
+        </input>
+        <output>systems/hydraulic/system[2]/sinks/elevator-right-outboard</output>
+    </filter>
+
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <and>
+                    <property>systems/actuators/aileron/pcu[0]/active</property>
+                    <property>systems/actuators/aileron/pcu[1]/active</property>
+                </and>
+            </condition>
+            <expression>
+                <product>
+                    <property>systems/hydraulic/left-aileron-demand</property>
+                    <value>0.5</value>
+                </product>
+            </expression>
+        </input>
+        <input>
+            <condition>
+                <property>systems/actuators/aileron/pcu[0]/active</property>
+            </condition>
+            <property>systems/hydraulic/left-aileron-demand</property>
+        </input>
+        <input><value>0</value></input>
+        <output>systems/hydraulic/system[2]/sinks/aileron-left-outboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <and>
+                    <property>systems/actuators/aileron/pcu[0]/active</property>
+                    <property>systems/actuators/aileron/pcu[1]/active</property>
+                </and>
+            </condition>
+            <expression>
+                <product>
+                    <property>systems/hydraulic/left-aileron-demand</property>
+                    <value>0.5</value>
+                </product>
+            </expression>
+        </input>
+        <input>
+            <condition>
+                <property>systems/actuators/aileron/pcu[1]/active</property>
+            </condition>
+            <property>systems/hydraulic/left-aileron-demand</property>
+        </input>
+        <input><value>0</value></input>
+        <output>systems/hydraulic/system[1]/sinks/aileron-left-inboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <and>
+                    <property>systems/actuators/aileron/pcu[2]/active</property>
+                    <property>systems/actuators/aileron/pcu[3]/active</property>
+                </and>
+            </condition>
+            <expression>
+                <product>
+                    <property>systems/hydraulic/right-aileron-demand</property>
+                    <value>0.5</value>
+                </product>
+            </expression>
+        </input>
+        <input>
+            <condition>
+                <property>systems/actuators/aileron/pcu[3]/active</property>
+            </condition>
+            <property>systems/hydraulic/right-aileron-demand</property>
+        </input>
+        <input><value>0</value></input>
+        <output>systems/hydraulic/system[2]/sinks/aileron-right-outboard</output>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <input>
+            <condition>
+                <and>
+                    <property>systems/actuators/aileron/pcu[2]/active</property>
+                    <property>systems/actuators/aileron/pcu[3]/active</property>
+                </and>
+            </condition>
+            <expression>
+                <product>
+                    <property>systems/hydraulic/right-aileron-demand</property>
+                    <value>0.5</value>
+                </product>
+            </expression>
+        </input>
+        <input>
+            <condition>
+                <property>systems/actuators/aileron/pcu[2]/active</property>
+            </condition>
+            <property>systems/hydraulic/right-aileron-demand</property>
+        </input>
+        <input><value>0</value></input>
+        <output>systems/hydraulic/system[1]/sinks/aileron-right-inboard</output>
+    </filter>
+
+    <filter>
+        <name>MFS1</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs1-powered</input>
+        <output>systems/hydraulic/system[1]/sinks/mfs1</output>
+    </filter>
+    <filter>
+        <name>MFS2</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs2-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs2</output>
+    </filter>
+    <filter>
+        <name>MFS3</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs3-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs3</output>
+    </filter>
+    <filter>
+        <name>MFS4</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs4-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs4</output>
+    </filter>
+    <filter>
+        <name>MFS5</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs5-powered</input>
+        <output>systems/hydraulic/system[1]/sinks/mfs5</output>
+    </filter>
+    <filter>
+        <name>MFS6</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs6-powered</input>
+        <output>systems/hydraulic/system[1]/sinks/mfs6</output>
+    </filter>
+    <filter>
+        <name>MFS7</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs7-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs7</output>
+    </filter>
+    <filter>
+        <name>MFS8</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs8-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs8</output>
+    </filter>
+    <filter>
+        <name>MFS9</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs9-powered</input>
+        <output>systems/hydraulic/system[0]/sinks/mfs9</output>
+    </filter>
+    <filter>
+        <name>MFS10</name>
+        <type>derivative</type>
+        <filter-time>0.01</filter-time>
+        <input>fdm/jsbsim/fcs/mfs10-powered</input>
+        <output>systems/hydraulic/system[1]/sinks/mfs10</output>
+    </filter>
+
+    <filter>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>
+            <property>fdm/jsbsim/fcs/left-inboard-brake-input-norm</property>
+        </input>
+        <output>systems/hydraulic/system[1]/sinks/brake-left-inboard</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+    <filter>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>
+            <property>fdm/jsbsim/fcs/right-inboard-brake-input-norm</property>
+        </input>
+        <output>systems/hydraulic/system[1]/sinks/brake-right-inboard</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+    <filter>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>
+            <property>fdm/jsbsim/fcs/left-outboard-brake-input-norm</property>
+        </input>
+        <output>systems/hydraulic/system[0]/sinks/brake-left-outboard</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+    <filter>
+        <type>derivative</type>
+        <filter-time>1</filter-time>
+        <input>
+            <property>fdm/jsbsim/fcs/right-outboard-brake-input-norm</property>
+        </input>
+        <output>systems/hydraulic/system[0]/sinks/brake-right-outboard</output>
         <u_min>0.0</u_min>
         <u_max>10000.0</u_max>
     </filter>
@@ -34,7 +385,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[0]/demand</property>
-                        <value>0.2</value>
+                        <value>0.001</value>
                     </sum>
                 </difference>
             </expression>
@@ -192,16 +543,33 @@
         <input>
             <expression>
                 <sum>
-                    <property>systems/hydraulic/system[0]/sinks/elevator-left-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/rudder-upper</property>
-                    <property>systems/hydraulic/system[0]/sinks/thrust-reverser-left</property>
-                    <property>systems/hydraulic/system[0]/sinks/mfs-left-outer-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/mfs-left-inner-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/mfs-right-outer-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/mfs-right-inner-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/brake-outboard</property>
-                    <property>systems/hydraulic/system[0]/sinks/parking-brake</property>
-                    <property>systems/hydraulic/system[0]/sinks/ptu</property>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/elevator-left-outboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/rudder-upper</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/thrust-reverser-left</property>
+                    </abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs2</property></abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs3</property></abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs4</property></abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs7</property></abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs8</property></abs>
+                    <abs><property>systems/hydraulic/system[0]/sinks/mfs9</property></abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/brake-left-outboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/brake-right-outboard</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/parking-brake</property>
+                    </abs>
+                    <abs>
+                        <property>systems/hydraulic/system[0]/sinks/ptu</property>
+                    </abs>
                 </sum>
             </expression>
         </input>
@@ -254,7 +622,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[1]/demand</property>
-                        <value>0.2</value>
+                        <value>0.001</value>
                     </sum>
                 </difference>
             </expression>
@@ -383,7 +751,9 @@
                     <value>0.12</value>
                 </greater-than>
                 <property>systems/hydraulic/system[0]/pressurized</property>
-                <not><property>systems/hydraulic/system[1]/edp/power</property></not>
+                <not>
+                    <property>systems/hydraulic/system[1]/edp/power</property>
+                </not>
                 <not>
                     <and>
                         <greater-than>
@@ -485,20 +855,15 @@
                     <abs>
                         <property>systems/hydraulic/system[1]/sinks/thrust-reverser-right</property>
                     </abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs1</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs5</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs6</property></abs>
+                    <abs><property>systems/hydraulic/system[1]/sinks/mfs10</property></abs>
                     <abs>
-                        <property>systems/hydraulic/system[1]/sinks/mfs-left-outer-inboard</property>
+                        <property>systems/hydraulic/system[1]/sinks/brake-left-inboard</property>
                     </abs>
                     <abs>
-                        <property>systems/hydraulic/system[1]/sinks/mfs-left-inner-inboard</property>
-                    </abs>
-                    <abs>
-                        <property>systems/hydraulic/system[1]/sinks/mfs-right-outer-inboard</property>
-                    </abs>
-                    <abs>
-                        <property>systems/hydraulic/system[1]/sinks/mfs-right-inner-inboard</property>
-                    </abs>
-                    <abs>
-                        <property>systems/hydraulic/system[1]/sinks/brake-inboard</property>
+                        <property>systems/hydraulic/system[1]/sinks/brake-right-inboard</property>
                     </abs>
                     <abs>
                         <property>systems/hydraulic/system[1]/sinks/nosewheel-steering</property>
@@ -538,14 +903,6 @@
         <output>systems/hydraulic/system[1]/pressure-psi</output>
     </filter>
 
-    <filter>
-        <name>Nosewheel Steering</name>
-        <type>derivative</type>
-        <filter-time>0.0015</filter-time>
-        <input>/fdm/jsbsim/fcs/steer-pos-deg[0]</input>
-        <output>systems/hydraulic/system[1]/sinks/nosewheel-steering</output>
-    </filter>
-
     <!-- HYDRAULIC SYSTEM 3 -->
     <filter>
         <name>Accumulator level 3</name>
@@ -560,7 +917,7 @@
                     </sum>
                     <sum>
                         <property>systems/hydraulic/system[2]/demand</property>
-                        <value>0.2</value>
+                        <value>0.001</value>
                     </sum>
                 </difference>
             </expression>

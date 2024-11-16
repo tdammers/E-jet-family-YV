@@ -642,10 +642,10 @@
             <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
                 /systems/hydraulic/system[1]/pressurized &gt; 0
             </test>
-            <output>fcs/mfs-left-outboard-powered</output>
+            <output>fcs/mfs1-powered</output>
         </switch>
         <kinematic name="MFS1 Control">
-            <input>fcs/mfs-left-outboard-powered</input>
+            <input>fcs/mfs1-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -663,10 +663,10 @@
             <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
                 /systems/hydraulic/system[0]/pressurized &gt; 0
             </test>
-            <output>fcs/mfs-left-outboard-powered</output>
+            <output>fcs/mfs2-powered</output>
         </switch>
         <kinematic name="MFS2 Control">
-            <input>fcs/mfs-left-outboard-powered</input>
+            <input>fcs/mfs2-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -684,10 +684,10 @@
             <test logic="OR" value="fcs/mfs-left-outboard-cmd-norm">
                 /systems/hydraulic/system[0]/pressurized &gt; 0
             </test>
-            <output>fcs/mfs-left-outboard-powered</output>
+            <output>fcs/mfs3-powered</output>
         </switch>
         <kinematic name="MFS3 Control">
-            <input>fcs/mfs-left-outboard-powered</input>
+            <input>fcs/mfs3-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
@@ -707,10 +707,10 @@
             <test logic="OR" value="fcs/mfs-left-inboard-cmd-norm">
                 /systems/hydraulic/system[0]/pressurized &gt; 0
             </test>
-            <output>fcs/mfs-left-inboard-powered</output>
+            <output>fcs/mfs4-powered</output>
         </switch>
         <kinematic name="MFS4 Control">
-            <input>fcs/mfs-left-inboard-powered</input>
+            <input>fcs/mfs4-powered</input>
             <traverse>
                 <setting>
                     <position> 0 </position>
