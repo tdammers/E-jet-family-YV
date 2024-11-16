@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PropertyList>
+
+    <!-- EMERGENCY BRAKE LOAD -->
+    <filter>
+        <type>derivative</type>
+        <filter-time>10</filter-time>
+        <input><property>fdm/jsbsim/fcs/left-brake-input-emer</property></input>
+        <output>systems/hydraulic/left-emergency-brake-load</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+    <filter>
+        <type>derivative</type>
+        <filter-time>10</filter-time>
+        <input><property>fdm/jsbsim/fcs/right-brake-input-emer</property></input>
+        <output>systems/hydraulic/right-emergency-brake-load</output>
+        <u_min>0.0</u_min>
+        <u_max>10000.0</u_max>
+    </filter>
+
     <!-- HYDRAULIC SYSTEM 1 -->
     <filter>
         <name>Accumulator level 1</name>
@@ -27,31 +46,30 @@
     </filter>
 
     <filter>
-        <name>Emergency Accumulator level 2</name>
+        <name>Emergency Accumulator level 1</name>
         <type>integrator</type>
-        <gain>0.001</gain>
+        <gain>0.01</gain>
         <input>
             <expression>
                 <difference>
                     <sum>
                         <product>
-                            <property>systems/hydraulic/system[1]/pressure-psi</property>
-                            <value>0.01666667</value>
+                            <property>systems/hydraulic/system[0]/pressure-psi</property>
+                            <value>0.001666667</value>
                         </product>
                     </sum>
                     <sum>
-                        <property>fdm/jsbsim/fcs/right-brake-input-emer</property>
-                        <property>fdm/jsbsim/fcs/left-brake-input-emer</property>
+                        <property>systems/hydraulic/left-emergency-brake-load</property>
+                        <property>systems/hydraulic/right-emergency-brake-load</property>
                     </sum>
                 </difference>
             </expression>
         </input>
-        <output>systems/hydraulic/system[1]/emergency-accumulator</output>
+        <output>systems/hydraulic/system[0]/emergency-accumulator</output>
         <initialize-to>output</initialize-to>
         <u_min>0.0</u_min>
         <u_max>1.0</u_max>
     </filter>
-
 
     <logic>
         <name>System 1 Pressurized</name>
@@ -248,26 +266,26 @@
     </filter>
 
     <filter>
-        <name>Emergency Accumulator level 1</name>
+        <name>Emergency Accumulator level 2</name>
         <type>integrator</type>
-        <gain>0.001</gain>
+        <gain>0.01</gain>
         <input>
             <expression>
                 <difference>
                     <sum>
                         <product>
-                            <property>systems/hydraulic/system[0]/pressure-psi</property>
-                            <value>0.01666667</value>
+                            <property>systems/hydraulic/system[1]/pressure-psi</property>
+                            <value>0.001666667</value>
                         </product>
                     </sum>
                     <sum>
-                        <property>fdm/jsbsim/fcs/right-brake-input-emer</property>
-                        <property>fdm/jsbsim/fcs/left-brake-input-emer</property>
+                        <property>systems/hydraulic/left-emergency-brake-load</property>
+                        <property>systems/hydraulic/right-emergency-brake-load</property>
                     </sum>
                 </difference>
             </expression>
         </input>
-        <output>systems/hydraulic/system[0]/emergency-accumulator</output>
+        <output>systems/hydraulic/system[1]/emergency-accumulator</output>
         <initialize-to>output</initialize-to>
         <u_min>0.0</u_min>
         <u_max>1.0</u_max>

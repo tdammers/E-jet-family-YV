@@ -1698,7 +1698,7 @@
                 <pressure-psi type="double">0.0</pressure-psi>
                 <fill-ratio type="double">0.9</fill-ratio>
                 <accumulator type="double">0.0</accumulator>
-                <emergency-accumulator type="double">0.0</emergency-accumulator>
+                <emergency-accumulator type="double">1.0</emergency-accumulator>
                 <sinks>
                     <elevator-left-outboard type="double">0.0</elevator-left-outboard>
                     <rudder-upper type="double">0.0</rudder-upper>
@@ -1728,7 +1728,7 @@
                 <pressure-psi type="double">0.0</pressure-psi>
                 <fill-ratio type="double">0.9</fill-ratio>
                 <accumulator type="double">0.0</accumulator>
-                <emergency-accumulator type="double">0.0</emergency-accumulator>
+                <emergency-accumulator type="double">1.0</emergency-accumulator>
                 <sinks>
                     <elevator-left-inboard type="double">0.0</elevator-left-inboard>
                     <elevator-right-inboard type="double">0.0</elevator-right-inboard>
