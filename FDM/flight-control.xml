@@ -868,14 +868,22 @@
     </channel>
 
 	<channel name="Brakes">
-		<summer name="fcs/brake-power-psi">
+		<summer name="fcs/brake-power-outboard-psi">
             <input>/systems/hydraulic/system[0]/pressure-psi</input>
+        </summer>
+
+		<pure_gain name="fcs/brake-power-outboard-norm">
+            <gain>0.0001666667</gain>
+            <input>fcs/brake-power-outboard-psi</input>
+        </pure_gain>
+
+		<summer name="fcs/brake-power-inboard-psi">
             <input>/systems/hydraulic/system[1]/pressure-psi</input>
         </summer>
 
-		<pure_gain name="fcs/brake-power-norm">
+		<pure_gain name="fcs/brake-power-inboard-norm">
             <gain>0.0001666667</gain>
-            <input>fcs/brake-power-psi</input>
+            <input>fcs/brake-power-inboard-psi</input>
         </pure_gain>
 
 		<summer name="fcs/emer-brake-power">
@@ -902,12 +910,26 @@
 			<rate_limit>2</rate_limit>
 		</actuator>
 
-		<fcs_function name="fcs/left-brake-input-norm">
+		<fcs_function name="fcs/left-inboard-brake-input-norm">
 			<function>
 				<product>
-					<property>fcs/brake-power-norm</property>
+					<property>fcs/brake-power-inboard-norm</property>
 					<max>
-						<property>/services/chocks</property>
+						<property>fcs/brake-left</property>
+						<product>
+							<property>/autopilot/autobrake/output-brake</property>
+							<property>/autopilot/autobrake/engaged</property>
+						</product>
+						<property>/controls/gear/brake-parking</property>
+					</max>
+				</product>
+			</function>
+		</fcs_function>
+		<fcs_function name="fcs/left-outboard-brake-input-norm">
+			<function>
+				<product>
+					<property>fcs/brake-power-outboard-norm</property>
+					<max>
 						<property>fcs/brake-left</property>
 						<product>
 							<property>/autopilot/autobrake/output-brake</property>
@@ -926,28 +948,59 @@
 				</product>
 			</function>
 		</fcs_function>
-        <summer name="fcs/left-brake-input">
-            <input>/services/chocks</input>
-            <input>fcs/left-brake-input-norm</input>
+
+        <summer name="fcs/left-inboard-brake-input">
+            <input>fcs/left-inboard-brake-input-norm</input>
             <input>fcs/left-brake-input-emer</input>
+        </summer>
+
+		<actuator>
+			<input>fcs/left-inboard-brake-input</input>
+			<rate_limit>10</rate_limit>
+            <output>fcs/left-inboard-brake</output>
+		</actuator>
+
+        <summer name="fcs/left-outboard-brake-input">
+            <input>fcs/left-outboard-brake-input-norm</input>
+            <input>fcs/left-brake-input-emer</input>
+        </summer>
+
+		<actuator>
+			<input>fcs/left-outboard-brake-input</input>
+			<rate_limit>10</rate_limit>
+            <output>fcs/left-outboard-brake</output>
+		</actuator>
+
+        <summer name="fcs/left-brake-cmd-norm">
+            <input>fcs/left-inboard-brake</input>
+            <input>fcs/left-outboard-brake</input>
+            <input>/services/chocks</input>
 			<clipto>
 				<min>0</min>
 				<max>1</max>
 			</clipto>
         </summer>
 
-		<actuator name="fcs/left-brake-actuator">
-			<input>fcs/left-brake-input</input>
-			<rate_limit>10</rate_limit>
-            <output>fcs/left-brake-cmd-norm</output>
-		</actuator>
-
-		<fcs_function name="fcs/right-brake-input-norm">
+		<fcs_function name="fcs/right-inboard-brake-input-norm">
 			<function>
 				<product>
-					<property>fcs/brake-power-norm</property>
+					<property>fcs/brake-power-inboard-norm</property>
 					<max>
-						<property>/services/chocks</property>
+						<property>fcs/brake-right</property>
+						<product>
+							<property>/autopilot/autobrake/output-brake</property>
+							<property>/autopilot/autobrake/engaged</property>
+						</product>
+						<property>/controls/gear/brake-parking</property>
+					</max>
+				</product>
+			</function>
+		</fcs_function>
+		<fcs_function name="fcs/right-outboard-brake-input-norm">
+			<function>
+				<product>
+					<property>fcs/brake-power-outboard-norm</property>
+					<max>
 						<property>fcs/brake-right</property>
 						<product>
 							<property>/autopilot/autobrake/output-brake</property>
@@ -966,21 +1019,38 @@
 				</product>
 			</function>
 		</fcs_function>
-        <summer name="fcs/right-brake-input">
-            <input>/services/chocks</input>
-            <input>fcs/right-brake-input-norm</input>
+
+        <summer name="fcs/right-inboard-brake-input">
+            <input>fcs/right-inboard-brake-input-norm</input>
             <input>fcs/right-brake-input-emer</input>
+        </summer>
+
+		<actuator>
+			<input>fcs/right-inboard-brake-input</input>
+			<rate_limit>10</rate_limit>
+            <output>fcs/right-inboard-brake</output>
+		</actuator>
+
+        <summer name="fcs/right-outboard-brake-input">
+            <input>fcs/right-outboard-brake-input-norm</input>
+            <input>fcs/right-brake-input-emer</input>
+        </summer>
+
+		<actuator>
+			<input>fcs/right-outboard-brake-input</input>
+			<rate_limit>10</rate_limit>
+            <output>fcs/right-outboard-brake</output>
+		</actuator>
+
+        <summer name="fcs/right-brake-cmd-norm">
+            <input>fcs/right-inboard-brake</input>
+            <input>fcs/right-outboard-brake</input>
+            <input>/services/chocks</input>
 			<clipto>
 				<min>0</min>
 				<max>1</max>
 			</clipto>
         </summer>
-
-		<actuator name="fcs/right-brake-actuator">
-			<input>fcs/right-brake-input</input>
-			<rate_limit>10</rate_limit>
-            <output>fcs/right-brake-cmd-norm</output>
-		</actuator>
 
 	</channel>
 </flight_control>

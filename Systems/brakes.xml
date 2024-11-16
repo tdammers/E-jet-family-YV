@@ -63,7 +63,7 @@
         <input>
             <expression>
                 <product>
-                    <property>/fdm/jsbsim/fcs/left-brake-cmd-norm</property>
+                    <property>/fdm/jsbsim/fcs/left-outboard-brake</property>
                     <!-- spring coefficient, lbs/ft -->
                     <value>120000</value>
                     <property>/fdm/jsbsim/gear/unit[1]/compression-ft</property>
@@ -193,7 +193,7 @@
         <input>
             <expression>
                 <product>
-                    <property>/fdm/jsbsim/fcs/left-brake-cmd-norm</property>
+                    <property>/fdm/jsbsim/fcs/left-inboard-brake</property>
                     <!-- spring coefficient, lbs/ft -->
                     <value>120000</value>
                     <property>/fdm/jsbsim/gear/unit[1]/compression-ft</property>
@@ -324,7 +324,7 @@
         <input>
             <expression>
                 <product>
-                    <property>/fdm/jsbsim/fcs/right-brake-cmd-norm</property>
+                    <property>/fdm/jsbsim/fcs/right-inboard-brake</property>
                     <!-- spring coefficient, lbs/ft -->
                     <value>120000</value>
                     <property>/fdm/jsbsim/gear/unit[1]/compression-ft</property>
@@ -454,7 +454,7 @@
         <input>
             <expression>
                 <product>
-                    <property>/fdm/jsbsim/fcs/right-brake-cmd-norm</property>
+                    <property>/fdm/jsbsim/fcs/right-outboard-brake</property>
                     <!-- spring coefficient, lbs/ft -->
                     <value>120000</value>
                     <property>/fdm/jsbsim/gear/unit[1]/compression-ft</property>
