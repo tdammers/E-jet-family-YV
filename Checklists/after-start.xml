@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<PropertyList>
+    <title>AFTER START</title>
+    <item>
+        <name>GROUND EQUIPMENT</name>
+        <value>REMOVED</value>
+    </item>
+    <item>
+        <name>SLAT/FLAP</name>
+        <value>SET</value>
+    </item>
+    <item>
+        <name>FLIGHT CONTROLS</name>
+        <value>CHECKED</value>
+    </item>
+</PropertyList>

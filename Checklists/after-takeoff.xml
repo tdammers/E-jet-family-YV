@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<PropertyList>
+    <title>AFTER TAKEOFF</title>
+    <item>
+        <name>LANDING GEAR</name>
+        <value>UP</value>
+    </item>
+    <item>
+        <name>SLAT/FLAP</name>
+        <value>0</value>
+    </item>
+</PropertyList>

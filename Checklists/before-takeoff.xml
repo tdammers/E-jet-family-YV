@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<PropertyList>
+    <title>BEFORE TAKEOFF</title>
+    <item>
+        <name>BRAKES TEMPERATURE</name>
+        <value>CHECKED</value>
+    </item>
+    <item>
+        <name>EICAS</name>
+        <value>CHECKED</value>
+    </item>
+    <item>
+        <name>TRANSPONDER</name>
+        <value>TA/RA</value>
+    </item>
+    <item>
+        <name>TAKEOFF CONFIGURATION</name>
+        <value>CHECKED</value>
+    </item>
+</PropertyList>

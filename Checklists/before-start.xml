@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<PropertyList>
+    <title>BEFORE START</title>
+    <item>
+        <name>PASSENGER SIGNS</name>
+        <value>SET</value>
+    </item>
+    <item>
+        <name>PRESSURIZATION PANEL</name>
+        <value>SET</value>
+    </item>
+    <item>
+        <name>OXYGEN MASKS</name>
+        <value>CHECKED</value>
+    </item>
+    <item>
+        <name>FLIGHT INSTRUMENTS</name>
+        <value>X-CHECKED</value>
+    </item>
+    <item>
+        <name>THRUST LEVERS</name>
+        <value>IDLE</value>
+    </item>
+    <item>
+        <name>FUEL QUANTITY</name>
+        <value>CHECKED</value>
+    </item>
+    <item>
+        <name>MCDU</name>
+        <value>SET</value>
+    </item>
+    <item>
+        <name>TRIM</name>
+        <value>SET/ZERO/ZERO</value>
+    </item>
+    <item>
+        <name>DOORS and WINDOWS</name>
+        <value>CLOSED</value>
+    </item>
+    <item>
+        <name>RED BEACON</name>
+        <value>ON</value>
+    </item>
+    <item>
+        <name>EMERGENCY/PARK BRAKE</name>
+        <value>AS REQUIRED</value>
+    </item>
+</PropertyList>

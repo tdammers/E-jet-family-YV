@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<PropertyList>
+    <title>BEFORE LANDING</title>
+    <item>
+        <name>LANDING GEAR</name>
+        <value>DOWN</value>
+    </item>
+    <item>
+        <name>SLAT/FLAP</name>
+        <value>SET</value>
+    </item>
+</PropertyList>

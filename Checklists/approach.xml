@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<PropertyList>
+    <title>APPROACH</title>
+    <item>
+        <name>PASSENGER SIGNS</name>
+        <value>SET</value>
+    </item>
+    <item>
+        <name>ALTIMETERS</name>
+        <value>SET/X-CHECKED</value>
+    </item>
+</PropertyList>

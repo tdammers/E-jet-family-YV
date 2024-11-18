@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<PropertyList>
+    <group>
+        <name>Normal Checklists</name>
+        <checklist include="Checklists/before-start.xml"/>
+        <checklist include="Checklists/after-start.xml"/>
+        <checklist include="Checklists/before-takeoff.xml"/>
+        <checklist include="Checklists/after-takeoff.xml"/>
+        <checklist include="Checklists/approach.xml"/>
+        <checklist include="Checklists/before-landing.xml"/>
+    </group>
+</PropertyList>

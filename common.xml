@@ -281,6 +281,8 @@
             </electrical>
         </systems>
 
+        <checklists include="Checklists/checklists.xml" />
+
         <chase-distance-m>-50</chase-distance-m>
 
         <sound>
