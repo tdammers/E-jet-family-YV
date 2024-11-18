@@ -4,6 +4,7 @@ mkdir -p ./release/E-jet-family
 cp -R \
     common.xml \
     COPYING.md \
+    Checklists \
     Data \
     Documentation \
     DualControl \
