@@ -34,6 +34,31 @@ setlistener('options/instrumentation/pfd-coupling', func (node) {
     }
 }, 1, 0);
 
+## SHARED CCD INPUT
+###################
+
+var activeCCDNode = props.globals.getNode('/controls/shared-ccd/target');
+var registerCCDProp = func (propname) {
+    var target0 = props.globals.getNode('/controls/ccd[0]/' ~ propname);
+    var target1 = props.globals.getNode('/controls/ccd[1]/' ~ propname);
+    setlistener('/controls/shared-ccd/' ~ propname, func (node) {
+        var value = node.getValue();
+        if (activeCCDNode.getValue() == 0) {
+            target0.setValue(value);
+        }
+        else {
+            target1.setValue(value);
+        }
+    }, 0, 1);
+};
+
+registerCCDProp('rel-x');
+registerCCDProp('rel-y');
+registerCCDProp('rel-inner');
+registerCCDProp('rel-outer');
+registerCCDProp('screen-select');
+registerCCDProp('click');
+
 ## LIGHTS
 #########
 

@@ -2344,6 +2344,15 @@
             <screen-select type="int">0</screen-select>
             <click type="bool">0</click>
         </ccd>
+        <shared-ccd n="0">
+            <rel-x type="double">0</rel-x>
+            <rel-y type="double">0</rel-y>
+            <rel-inner type="double">0</rel-inner>
+            <rel-outer type="double">0</rel-outer>
+            <screen-select type="int">0</screen-select>
+            <click type="bool">0</click>
+            <target type="int">0</target>
+        </shared-ccd>
     </controls>
 
     <services>
