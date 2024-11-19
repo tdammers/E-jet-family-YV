@@ -15,6 +15,25 @@ setprop('/systems/actuators/odd-day', oddDay);
 var aero = substr(getprop("sim/aero"), 4);
 aircraft.livery.init("Aircraft/E-jet-family/Models/Liveries/" ~ aero);
 
+## PFD SLAVING
+##############
+
+setlistener('options/instrumentation/pfd-coupling', func (node) {
+    var val = substr(node.getValue(), 0, 1);
+    if (val == '1') {
+        setprop('/instrumentation/pfd[0]/slaved', 1);
+        setprop('/instrumentation/pfd[1]/slaved', 0);
+    }
+    elsif (val == '2') {
+        setprop('/instrumentation/pfd[0]/slaved', 0);
+        setprop('/instrumentation/pfd[1]/slaved', 1);
+    }
+    else {
+        setprop('/instrumentation/pfd[0]/slaved', 0);
+        setprop('/instrumentation/pfd[1]/slaved', 0);
+    }
+}, 1, 0);
+
 ## LIGHTS
 #########
 

@@ -153,27 +153,18 @@
     </group>
     <group>
         <layout>hbox</layout>
-        <checkbox>
-            <label>1 follows 2 (FO is Pilot Flying)</label>
-            <property>/instrumentation/pfd[0]/minimums-slaved</property>
-            <binding>
-                <command>property-toggle</command>
-                <property>/instrumentation/pfd[0]/minimums-slaved</property>
-            </binding>
-            <halign>left</halign>
-            <live type="bool">true</live>
-        </checkbox>
 
-        <checkbox>
-            <label>2 follows 1 (Captain is Pilot Flying)</label>
-            <property>/instrumentation/pfd[1]/minimums-slaved</property>
-            <halign>left</halign>
+        <combo>
+            <pref-width>300</pref-width>
+            <property>options/instrumentation/pfd-coupling</property>
+            <value>independent</value>
+            <value>2 follows 1 (Captain is Pilot Flying)</value>
+            <value>1 follows 2 (FO is Pilot Flying)</value>
             <binding>
-                <command>property-toggle</command>
-                <property>/instrumentation/pfd[1]/minimums-slaved</property>
+                <command>dialog-apply</command>
             </binding>
             <live type="bool">true</live>
-        </checkbox>
+        </combo>
     </group>
 
     <hrule/>

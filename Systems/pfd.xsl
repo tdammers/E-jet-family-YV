@@ -311,9 +311,9 @@ re-run build.sh.
                     </condition>
                 </enable>
                 <input>
-                    <property>instrumentation/pfd[<xsl:value-of select="$otherIndex"/>]/setting-hpa</property>
+                    <property>instrumentation/altimeter[<xsl:value-of select="$otherIndex"/>]/setting-hpa</property>
                 </input>
-                <output>instrumentation/pfd[<xsl:value-of select="$index"/>]/setting-hpa</output>
+                <output>instrumentation/altimeter[<xsl:value-of select="$index"/>]/setting-hpa</output>
             </filter>
             <filter>
                 <name>Slave altimeter setting inhg</name>
@@ -325,9 +325,9 @@ re-run build.sh.
                     </condition>
                 </enable>
                 <input>
-                    <property>instrumentation/pfd[<xsl:value-of select="$otherIndex"/>]/setting-inhg</property>
+                    <property>instrumentation/altimeter[<xsl:value-of select="$otherIndex"/>]/setting-inhg</property>
                 </input>
-                <output>instrumentation/pfd[<xsl:value-of select="$index"/>]/setting-inhg</output>
+                <output>instrumentation/altimeter[<xsl:value-of select="$index"/>]/setting-inhg</output>
             </filter>
 
             <!-- MINIMUMS -->

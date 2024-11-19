@@ -293,9 +293,9 @@ re-run build.sh.
       </condition>
     </enable>
     <input>
-      <property>instrumentation/pfd[0]/setting-hpa</property>
+      <property>instrumentation/altimeter[0]/setting-hpa</property>
     </input>
-    <output>instrumentation/pfd[1]/setting-hpa</output>
+    <output>instrumentation/altimeter[1]/setting-hpa</output>
   </filter>
   <filter>
     <name>Slave altimeter setting inhg</name>
@@ -307,9 +307,9 @@ re-run build.sh.
       </condition>
     </enable>
     <input>
-      <property>instrumentation/pfd[0]/setting-inhg</property>
+      <property>instrumentation/altimeter[0]/setting-inhg</property>
     </input>
-    <output>instrumentation/pfd[1]/setting-inhg</output>
+    <output>instrumentation/altimeter[1]/setting-inhg</output>
   </filter>
   <filter>
     <name>Fake baro minimums</name>

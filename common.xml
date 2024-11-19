@@ -80,6 +80,7 @@
             <path>/options/controls/ccd-emulation</path>
             <path>/options/instrumentation/iru-alignment-mode</path>
             <path>/options/instrumentation/iru-auto-align</path>
+            <path>/options/instrumentation/pfd-coupling</path>
             <path>/instrumentation/efb/available</path>
             <path>/instrumentation/efb/show-debug-apps</path>
             <path>/instrumentation/efb/brightness</path>
@@ -223,7 +224,7 @@
             <property-rule n="102">
                 <path>Aircraft/E-jet-family/Systems/eicas.xml</path>
             </property-rule>
-            <property-rule n="102">
+            <property-rule n="103">
                 <path>Aircraft/E-jet-family/Systems/efis.xml</path>
             </property-rule>
             <autopilot>
@@ -759,6 +760,7 @@
         <instrumentation>
             <iru-alignment-mode type="string">normal</iru-alignment-mode>
             <iru-auto-align type="bool">false</iru-auto-align>
+            <pfd-coupling type="string">independent</pfd-coupling>
         </instrumentation>
     </options>
 
@@ -2523,7 +2525,7 @@
             </messages>
             <declutter>
                 <active type="bool">false</active>
-                <cond type="bool">false</cond>
+                <inhibit-cond type="bool">false</inhibit-cond>
                 <eicas-full type="bool">false</eicas-full>
                 <inhibit type="bool">false</inhibit>
             </declutter>
