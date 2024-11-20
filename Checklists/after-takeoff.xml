@@ -3,11 +3,25 @@
 <PropertyList>
     <title>AFTER TAKEOFF</title>
     <item>
-        <name>LANDING GEAR</name>
+        <name>Landing Gear</name>
         <value>UP</value>
+        <condition>
+            <equals>
+                <property>controls/gear/gear-down</property>
+                <value>0</value>
+            </equals>
+        </condition>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>SLAT/FLAP</name>
+        <name>Slat/Flap</name>
         <value>0</value>
+        <condition>
+            <equals>
+                <property>controls/flight/flaps</property>
+                <value>0</value>
+            </equals>
+        </condition>
+        <completed type="bool">false</completed>
     </item>
 </PropertyList>

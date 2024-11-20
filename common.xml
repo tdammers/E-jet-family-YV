@@ -2089,6 +2089,7 @@
             <recirc type="bool">false</recirc>
             <mode type="int">0</mode>
             <alt type="int">0</alt>
+            <lfe type="int">0</lfe>
 
             <takeoff-ref-ecs type="bool">true</takeoff-ref-ecs>
         </pressurization>
@@ -2519,6 +2520,7 @@
                     <master type="bool">false</master>
                     <checking type="bool">false</checking>
                     <ok type="bool">false</ok>
+                    <checked type="bool">false</checked>
                 </no-takeoff>
                 <doors>
                     <l1><open type="bool">false</open></l1>

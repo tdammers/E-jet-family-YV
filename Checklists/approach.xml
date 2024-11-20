@@ -3,11 +3,16 @@
 <PropertyList>
     <title>APPROACH</title>
     <item>
-        <name>PASSENGER SIGNS</name>
+        <name>Passenger Signs</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <property>controls/switches/seatbelt-sign</property>
+        </condition>
     </item>
     <item>
-        <name>ALTIMETERS</name>
+        <name>Altimeters</name>
         <value>SET/X-CHECKED</value>
+        <completed type="bool">false</completed>
     </item>
 </PropertyList>

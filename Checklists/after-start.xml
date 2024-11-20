@@ -2,15 +2,46 @@
 <PropertyList>
     <title>AFTER START</title>
     <item>
-        <name>GROUND EQUIPMENT</name>
+        <name>Ground Equipment</name>
         <value>REMOVED</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <and>
+                <equals>
+                    <property>services/chocks</property>
+                    <value>0.0</value>
+                </equals>
+                <equals>
+                    <property>controls/switches/cones</property>
+                    <value>0.0</value>
+                </equals>
+                <not>
+                    <property>controls/switches/fuel-truck/connected</property>
+                </not>
+                <not>
+                    <property>controls/electric/external-power/connected</property>
+                </not>
+            </and>
+        </condition>
     </item>
     <item>
-        <name>SLAT/FLAP</name>
+        <name>Slat/Flap</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <equals>
+                <property>controls/flight/flaps</property>
+                <property>fms/takeoff-conditions/flaps</property>
+            </equals>
+        </condition>
     </item>
     <item>
-        <name>FLIGHT CONTROLS</name>
+        <name>Flight Controls</name>
         <value>CHECKED</value>
+        <completed type="bool">false</completed>
+        <link>
+            <type>synoptic</type>
+            <page>3</page>
+        </link>
     </item>
 </PropertyList>

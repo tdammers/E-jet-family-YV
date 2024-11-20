@@ -3,11 +3,19 @@
 <PropertyList>
     <title>BEFORE LANDING</title>
     <item>
-        <name>LANDING GEAR</name>
+        <name>Landing Gear</name>
         <value>DOWN</value>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>SLAT/FLAP</name>
+        <name>Slat/Flap</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <equals>
+                <property>controls/flight/flaps</property>
+                <property>fms/landing-condition/landing-flaps</property>
+            </equals>
+        </condition>
     </item>
 </PropertyList>

@@ -3,19 +3,41 @@
 <PropertyList>
     <title>BEFORE TAKEOFF</title>
     <item>
-        <name>BRAKES TEMPERATURE</name>
+        <name>Brakes Temperature</name>
         <value>CHECKED</value>
+        <condition>
+            <not>
+                <property>gear/brake-overheat</property>
+            </not>
+        </condition>
+        <link>
+            <type>synoptic</type>
+            <page>0</page>
+        </link>
+        <completed type="bool">false</completed>
     </item>
     <item>
         <name>EICAS</name>
         <value>CHECKED</value>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>TRANSPONDER</name>
+        <name>Transponder</name>
         <value>TA/RA</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <equals>
+                <property>instrumentation/transponder/inputs/knob-mode</property>
+                <value>5</value>
+            </equals>
+        </condition>
     </item>
     <item>
-        <name>TAKEOFF CONFIGURATION</name>
+        <name>Takeoff Configuration</name>
         <value>CHECKED</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <property>instrumentation/eicas/messages/no-takeoff/checked</property>
+        </condition>
     </item>
 </PropertyList>

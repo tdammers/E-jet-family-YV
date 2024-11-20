@@ -2,47 +2,151 @@
 <PropertyList>
     <title>BEFORE START</title>
     <item>
-        <name>PASSENGER SIGNS</name>
+        <name>Passenger Signs</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <property>controls/switches/seatbelt-sign</property>
+        </condition>
     </item>
     <item>
-        <name>PRESSURIZATION PANEL</name>
+        <name>Pressurization Panel</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <and>
+                <equals>
+                    <property>controls/pressurization/mode</property>
+                    <value>0</value>
+                </equals>
+                <equals>
+                    <property>controls/pressurization/alt</property>
+                    <value>0</value>
+                </equals>
+                <equals>
+                    <property>controls/pressurization/lfe</property>
+                    <value>0</value>
+                </equals>
+            </and>
+        </condition>
     </item>
     <item>
-        <name>OXYGEN MASKS</name>
+        <name>Oxygen Masks</name>
         <value>CHECKED</value>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>FLIGHT INSTRUMENTS</name>
+        <name>Flight Instruments</name>
         <value>X-CHECKED</value>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>THRUST LEVERS</name>
+        <name>Thrust Levers</name>
         <value>IDLE</value>
+        <condition>
+            <and>
+                <less-than>
+                    <property>controls/engines/engine[0]/throttle</property>
+                    <value>0.005</value>
+                </less-than>
+                <less-than>
+                    <property>controls/engines/engine[1]/throttle</property>
+                    <value>0.005</value>
+                </less-than>
+            </and>
+        </condition>
+        <completed type="bool">false</completed>
     </item>
     <item>
-        <name>FUEL QUANTITY</name>
+        <name>Fuel Quantity</name>
         <value>CHECKED</value>
+        <completed type="bool">false</completed>
     </item>
     <item>
         <name>MCDU</name>
         <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <property>fms/performance-initialized</property>
+        </condition>
     </item>
     <item>
-        <name>TRIM</name>
-        <value>SET/ZERO/ZERO</value>
+        <name>Elevator Trim</name>
+        <value>SET</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <and>
+                <less-than>
+                    <property>controls/flight/elevator-trim</property>
+                    <value>0.2</value>
+                </less-than>
+                <greater-than>
+                    <property>controls/flight/elevator-trim</property>
+                    <value>-0.3</value>
+                </greater-than>
+            </and>
+        </condition>
     </item>
     <item>
-        <name>DOORS and WINDOWS</name>
+        <name>Aileron Trim</name>
+        <value>ZERO</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <and>
+                <less-than>
+                    <property>controls/flight/aileron-trim</property>
+                    <value>0.025</value>
+                </less-than>
+                <greater-than>
+                    <property>controls/flight/aileron-trim</property>
+                    <value>-0.025</value>
+                </greater-than>
+            </and>
+        </condition>
+    </item>
+    <item>
+        <name>Rudder Trim</name>
+        <value>ZERO</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <and>
+                <less-than>
+                    <property>controls/flight/rudder-trim</property>
+                    <value>0.025</value>
+                </less-than>
+                <greater-than>
+                    <property>controls/flight/rudder-trim</property>
+                    <value>-0.025</value>
+                </greater-than>
+            </and>
+        </condition>
+    </item>
+    <item>
+        <name>Doors and Windows</name>
         <value>CLOSED</value>
+        <completed type="bool">false</completed>
+        <link>
+            <type>synoptic</type>
+            <page>0</page>
+        </link>
     </item>
     <item>
-        <name>RED BEACON</name>
+        <name>Red Beacon</name>
         <value>ON</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <property>controls/lighting/beacon</property>
+        </condition>
     </item>
     <item>
-        <name>EMERGENCY/PARK BRAKE</name>
+        <name>Emergency/Park Brake</name>
         <value>AS REQUIRED</value>
+        <completed type="bool">false</completed>
+        <condition>
+            <or>
+                <property>controls/gear/brake-parking</property>
+                <property>services/chocks</property>
+            </or>
+        </condition>
     </item>
 </PropertyList>
