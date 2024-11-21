@@ -140,6 +140,14 @@ mouse working normally is possible; <a href="https://wiki.flightgear.org/Input_d
 page</a> on the
 FlightGear wiki explains how.</p>
 
+<p>It is also possible to use a single input device to drive both CCD's, with a
+toggle to select the 'current' one. To use this, map your device inputs to
+<code>/controls/shared-ccd</code>; the same properties exist here as in the individual
+CCD's, plus a <code>target</code> property that can be set to either 0 or 1 to control the
+left and right CCD respectively. Inputs to the shared CCD will be forwarded to
+the active target according to this property, so you can use this to map a
+button on your input device to switch between CCD's.</p>
+
 <p>The following functionality is available through the CCD-driven GUI:</p>
 
 <h3>PFD</h3>
