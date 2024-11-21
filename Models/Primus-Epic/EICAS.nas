@@ -31,7 +31,7 @@ var msgKeys = [
 var EICAS = {
     new: func () {
         # TODO: make EICAS available from both sides.
-        var m = canvas_base.BaseScreen.new(0, 2);
+        var m = canvas_base.BaseScreen.new(-1, 2);
         m.parents = [EICAS] ~ m.parents;
         m.timer = nil;
         m.messageMap = [];
