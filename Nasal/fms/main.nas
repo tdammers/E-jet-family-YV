@@ -94,6 +94,39 @@ var getModifyableFlightplan = func () {
 var kickRouteManager = func {
     setprop("/autopilot/route-manager/active",
         getprop("/autopilot/route-manager/active"));
+    displayLegs = nil;
+    updateDisplayLegs();
+};
+
+var displayLegs = nil;
+
+var updateDisplayLegs = func () {
+    var fp = getVisibleFlightplan();
+    if (displayLegs == nil) {
+        var result = [];
+        var prev = nil;
+        var i = 0;
+        for (var wpi = 0; wpi < fp.getPlanSize(); wpi += 1) {
+            var wp = fp.getWP(wpi);
+            if (prev != nil and
+                prev.wp_name == wp.wp_name and  
+                abs(prev.wp_lat - wp.wp_lat) < 0.000001 and
+                abs(prev.wp_lon - wp.wp_lon) < 0.000001) {
+                pop(result);
+            }
+            append(result,
+                { "wp": wp
+                , "idx": wpi
+                });
+            prev = wp;
+            i += 1;
+        }
+        displayLegs = result;
+    }
+    while (size(displayLegs) > 1 and displayLegs[1].idx < fp.current) {
+        displayLegs = subvec(displayLegs, 1);
+    }
+    return displayLegs;
 };
 
 # Get whichever flightplan is currently "visible" in the RTE, FPL, etc., views.

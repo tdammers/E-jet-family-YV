@@ -258,6 +258,62 @@ var celsiusToFahrenheit = func (c) {
     return 32.0 + c * 1.8;
 };
 
+var parseArinc424Latlon = func(str) {
+    var parsed = [];
+    var success = 0;
+    var quadrant = nil;
+    var lat = 0;
+    var lon = 0;
+
+    if (string.match(str, "[0-9][0-9][NSWE][0-9][0-9]")) {
+        success = string.scanf(str, "%2d%1s%2d", parsed);
+        if (success > 0) {
+            lat = parsed[0];
+            lon = parsed[2] + 100;
+            quadrant = parsed[1];
+        }
+    }
+    elsif (string.match(str, "[0-9][0-9][0-9][0-9][NSWE]")) {
+        success = string.scanf(str, "%2d%2d%1s", parsed);
+        if (success > 0) {
+            lat = parsed[0];
+            lon = parsed[1];
+            quadrant = parsed[2];
+        }
+    }
+    elsif (string.match(str, "H[0-9][0-9][0-9][0-9]")) {
+        success = string.scanf(str, "H%2d%2d", parsed);
+        if (success > 0) {
+            lat = parsed[0] + 0.5;
+            lon = parsed[1];
+            quadrant = "N";
+        }
+    }
+
+    if (quadrant == nil) return nil;
+
+    if (quadrant == 'N') {
+        lat = -lat;
+        lon = -lon;
+    }
+    elsif (quadrant == 'S') {
+    }
+    elsif (quadrant == 'W') {
+        lon = -lon;
+    }
+    elsif (quadrant == 'E') {
+        lat = -lat;
+    }
+    else {
+            return nil;
+    }
+    return {"lat": lat, "lon": lon};
+};
+
+# foreach (var str; ["50N60", "5060N", "H5060", "5060E", "50E60", "5060S", "50S60", "5060W", "50W60"]) {
+#     debug.dump(str, parseArinc424Latlon(str));
+# }
+
 var parseMCDULatlon = func(strDegMins, strFrac = '0') {
     strDegMins = strDegMins ~ '';
     var mins = num(substr(strDegMins, size(strDegMins), 2) ~ '.' ~ strFrac);

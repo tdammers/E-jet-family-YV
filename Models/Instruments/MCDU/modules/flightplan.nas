@@ -40,13 +40,17 @@ var FlightPlanModule = {
         if (me.fpStatus != 'ACT') {
             me.fp = fms.discardFlightplan();
             me.fpStatus = 'ACT';
+            me.displayLegs = nil;
         }
     },
 
+    getDisplayLegs: func () {
+        return fms.updateDisplayLegs();
+    },
+
     getNumPages: func () {
-        var numEntries = me.fp.getPlanSize();
-        var firstEntry = me.fp.current - 1;
-        return math.max(1, math.ceil((numEntries - firstEntry) / 5));
+        var displayLegs = me.getDisplayLegs();
+        return math.max(1, math.ceil(size(displayLegs) / 5));
     },
 
     activate: func () {
@@ -100,9 +104,9 @@ var FlightPlanModule = {
     },
 
     loadPageItems: func (p) {
-        var numWaypoints = me.fp.getPlanSize();
-        var firstEntry = math.max(0, me.fp.current - 1);
-        var firstWP = p * 5 + firstEntry;
+        var displayLegs = me.getDisplayLegs();
+        var numWaypoints = size(displayLegs);
+        var firstWP = p * 5;
         var transitionAlt = getprop("/controls/flight/transition-alt");
         me.views = [];
         me.controllers = {};
@@ -112,8 +116,13 @@ var FlightPlanModule = {
             append(me.views, StaticView.new(1, y, "ORIGIN/ETD", mcdu_white));
         }
         for (var i = 0; i < 5; i += 1) {
-            var wpi = firstWP + i;
-            var wp = me.fp.getWP(wpi);
+            var dwpi = firstWP + i;
+            if (dwpi >= size(displayLegs)) {
+                break;
+            }
+            var leg = displayLegs[dwpi];
+            var wpi = leg.idx;
+            var wp = leg.wp;
             var lsk = "L" ~ (i + 1);
             var rsk = "R" ~ (i + 1);
             if (wp == nil) {
@@ -132,7 +141,7 @@ var FlightPlanModule = {
                 }
                 else {
                     var color = mcdu_yellow;
-                    if (wpi != firstEntry) {
+                    if (dwpi != 0) {
                         color = mcdu_green;
                         append(me.views, StaticView.new(1, y, sprintf("%3d°", wp.leg_bearing), mcdu_green));
                         var distFormat = (wp.leg_distance < 100) ? "%5.1fNM" : "%5.0fNM";
@@ -201,7 +210,7 @@ var FlightPlanModule = {
                         })(wpi);
                     }
                 }
-                else if (wpi == firstEntry) {
+                else if (dwpi == 0) {
                     var this = me;
                     me.controllers[lsk] = (func (wp, wpi) {
                         return FuncController.new(func(owner, val) {
