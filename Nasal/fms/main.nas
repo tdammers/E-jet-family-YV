@@ -5,6 +5,7 @@ var fast_update = func () {
 var slow_update = func () {
     vnav.update();
     update_radios();
+    updateCruiseSpeeds();
 };
 
 var modifiedFlightplan = nil;

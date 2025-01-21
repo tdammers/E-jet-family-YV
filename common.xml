@@ -1247,6 +1247,16 @@
             <vmo-effective type="double">320</vmo-effective>
         </speed-limits>
 
+        <cruise-speeds>
+            <!-- effective as per cruise mode -->
+            <cruise-kts type="double">240</cruise-kts>
+            <cruise-mach type="double">0.76</cruise-mach>
+
+            <!-- speeds per cruise mode -->
+            <vlrc type="double">240</vlrc>
+            <mlrc type="double">0.76</mlrc>
+        </cruise-speeds>
+
         <!--
             These are effective v-speeds, as displayed on the PFD, and used
             by the FMS-managed speed mode.
@@ -2251,8 +2261,18 @@
                 <climb-limit-alt type="double">10000</climb-limit-alt>
                 <climb-kts type="double">280</climb-kts>
                 <climb-mach type="double">0.73</climb-mach>
+
+                <!-- pilot-selected values for cruise-mode = 0 -->
                 <cruise-kts type="double">300</cruise-kts>
                 <cruise-mach type="double">0.76</cruise-mach>
+
+                <!--
+                    0 = pilot selected
+                    1 = LRC
+                    2 = MAX SPD
+                    3 = MAX END
+                    4 = MXR SPD
+                -->
                 <cruise-mode type="int">0</cruise-mode>
                 <descent-mach type="double">0.76</descent-mach>
                 <descent-kts type="double">290</descent-kts>
@@ -3349,7 +3369,9 @@
             <file>Aircraft/E-jet-family/Nasal/fd-annun.nas</file>
         </annun>
         <fms>
+            <file>Aircraft/E-jet-family/Nasal/fms/lookup.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/vspeeds.nas</file>
+            <file>Aircraft/E-jet-family/Nasal/fms/cruise.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/speed.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/vnav.nas</file>
             <file>Aircraft/E-jet-family/Nasal/fms/lnav.nas</file>

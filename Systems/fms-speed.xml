@@ -423,6 +423,64 @@
         <output>/fms/internal/cond/approach</output>
     </logic>
 
+    <!-- set effective cruise speed -->
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <output>/fms/cruise-speeds/cruise-kts</output>
+        <input>
+            <condition>
+                <equals>
+                    <!-- LRC -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/vlrc</property>
+        </input>
+        <input>
+            <condition>
+                <equals>
+                    <!-- MAX SPD -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>2</value>
+                </equals>
+            </condition>
+            <property>/fms/speed-limits/vmo</property>
+        </input>
+        <input>
+            <property>/controls/flight/speed-schedule/cruise-kts</property>
+        </input>
+    </filter>
+    <filter>
+        <type>gain</type>
+        <gain>1</gain>
+        <output>/fms/cruise-speeds/cruise-mach</output>
+        <input>
+            <condition>
+                <equals>
+                    <!-- LRC -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>1</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/mlrc</property>
+        </input>
+        <input>
+            <condition>
+                <equals>
+                    <!-- MAX SPD -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>2</value>
+                </equals>
+            </condition>
+            <property>/fms/speed-limits/mmo</property>
+        </input>
+        <input>
+            <property>/controls/flight/speed-schedule/cruise-mach</property>
+        </input>
+    </filter>
+
     <!-- set scheduled speeds -->
     <filter>
         <type>gain</type>
@@ -516,7 +574,7 @@
             </condition>
             <expression>
                 <min>
-                    <property>/controls/flight/speed-schedule/cruise-kts</property>
+                    <property>/fms/cruise-speeds/cruise-kts</property>
                     <property>/fms/internal/speed-limit-climb</property>
                     <property>/fms/internal/speed-limit-descent</property>
                 </min>
@@ -596,7 +654,7 @@
                     <value>4</value>
                 </equals>
             </condition>
-            <property>/controls/flight/speed-schedule/cruise-mach</property>
+            <property>/fms/cruise-speeds/cruise-mach</property>
         </input>
         <input>
             <condition>

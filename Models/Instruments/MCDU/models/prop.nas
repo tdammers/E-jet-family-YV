@@ -1,9 +1,10 @@
 # Model backed by a property
 var PropModel = {
-    new: func (prop, key = nil, defval = '') {
+    new: func (prop, key = nil, defval = '', format = nil) {
         var m = BaseModel.new();
         m.parents = prepended(PropModel, m.parents);
         m.key = key;
+        m.format = format;
         m.prop = (typeof(prop) == 'scalar') ?
                     props.globals.getNode(prop) :
                     prop;
@@ -22,7 +23,15 @@ var PropModel = {
 
     get: func () {
         if (me.prop != nil) {
-            return me.prop.getValue();
+            var val = me.prop.getValue();
+            if (val == nil)
+                return nil;
+            if (typeof(me.format) == 'func')
+                return me.format(val);
+            elsif (typeof(me.format) == 'scalar')
+                return sprintf(me.format, val);
+            else
+                return val;
         }
         else {
             return nil;

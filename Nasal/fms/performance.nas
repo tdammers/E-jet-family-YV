@@ -24,6 +24,8 @@ var makeInfo = func {
         cruiseAlt: myprops.cruiseAlt.getValue(),
         currentAlt: myprops.alt.getValue(),
         landingAlt: myprops.landingAlt.getValue(),
+
+        # TODO: base these on selected cruise mode
         cruiseIAS: myprops.cruiseIAS.getValue(),
         cruiseMach: myprops.cruiseMach.getValue(),
     };
@@ -162,6 +164,7 @@ var initialize = func {
         cruiseAlt: props.globals.getNode('/autopilot/route-manager/cruise/altitude-ft'),
         cruiseIAS: props.globals.getNode('/controls/flight/speed-schedule/cruise-kts'),
         cruiseMach: props.globals.getNode('/controls/flight/speed-schedule/cruise-mach'),
+        cruiseMode: props.globals.getNode('/controls/flight/speed-schedule/cruise-mode'),
         alt: props.globals.getNode('/instrumentation/altimeter/indicated-altitude-ft'),
         landingAlt: props.globals.getNode('/fms/approach-conditions/runway-elevation'),
     };

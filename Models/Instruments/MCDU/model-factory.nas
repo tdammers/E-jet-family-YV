@@ -3,10 +3,9 @@ var modelFactory = func (key) {
     if (contains(keyProps, key)) {
         return KeyPropModel.new(key);
     }
-    else {
-        return BaseModel.new();
-    }
+    return BaseModel.new();
 };
+
 
 var routeDepartureLens = {
     get: func (route) { return route.departureAirport; },

@@ -1,3 +1,115 @@
+var cruiseModeLabels = ["MANUAL", "LRC", "MAX SPD", "MAX END", "MXR SPD"];
+
+var cruiseModeLabel = func (mode) {
+    if (mode >= size(cruiseModeLabels))
+        return sprintf("MODE%d", mode);
+    elsif (mode <= 0)
+        return "MANUAL";
+    else
+        return cruiseModeLabels[mode];
+};
+
+var cruiseModeModel =
+        FuncModel.new("CRZ-MODE",
+            func () {
+                var cruiseMode = getprop("/controls/flight/speed-schedule/cruise-mode");
+                if (cruiseMode == 0) {
+                    var cruiseSpeed = getprop("/controls/flight/speed-schedule/cruise-kts");
+                    var cruiseMach = getprop("/controls/flight/speed-schedule/cruise-mach");
+                    return sprintf('%3d/%1.2fM', cruiseSpeed, cruiseMach);
+                }
+                else {
+                    return cruiseModeLabel(cruiseMode);
+                }
+            },
+            func (cruiseModeStr) {
+                return nil;
+            },
+            func () {
+                var cruiseMode = getprop("/controls/flight/speed-schedule/cruise-mode");
+                setprop("/controls/flight/speed-schedule/cruise-mode", math.fmod(cruiseMode + 1, 5));
+                return nil;
+            });
+
+var cruiseSpeedController =
+        FuncController.new(
+            func (owner, val) {
+                if (val == nil or val == '') {
+                    owner.mcdu.setScratchpad(
+                        sprintf("%3.0f/%0.2f",
+                            getprop("/controls/flight/speed-schedule/cruise-kts"),
+                            getprop("/controls/flight/speed-schedule/cruise-mach")));
+                }
+                else {
+                    var parts = split("/", val);
+                    if (typeof(parts) == 'vector') {
+                        if (size(parts) > 0 and parts[0])
+                            setprop("/controls/flight/speed-schedule/cruise-kts", parts[0]);
+                        if (size(parts) > 1 and isnum(parts[1])) {
+                            if (parts[1] > 1 and parts[1] < 100)
+                                setprop("/controls/flight/speed-schedule/cruise-mach", parts[1] / 100);
+                            elsif (parts[1] > 0.4 and parts[1] < 1.0)
+                                setprop("/controls/flight/speed-schedule/cruise-mach", parts[1]);
+                        }
+                    }
+                    setprop("/controls/flight/speed-schedule/cruise-mode", 0);
+                    owner.fullRedraw();
+                }
+            });
+
+var CruiseModeModule = {
+    new: func (mcdu, parentModule) {
+        var m = BaseModule.new(mcdu, parentModule);
+        m.parents = prepended(CruiseModeModule, m.parents);
+        return m;
+    },
+    getNumPages: func () { return 1; },
+    getTitle: func () {
+        return "CRUISE MODE";
+    },
+    getShortTitle: func () {
+        return "CRUISE MODE";
+    },
+
+    loadPageItems: func (n) {
+        me.views = [
+            StaticView.new(1, 1, "MANUAL", mcdu_green),
+            FormatView.new(1, 2, mcdu_large | mcdu_green, "VCRZ", 3, "%3.0f"),
+            StaticView.new(4, 2, "/", mcdu_large | mcdu_green),
+            FormatView.new(5, 2, mcdu_large | mcdu_green, "MCRZ", 3, "%0.2fM"),
+            ToggleView.new(11, 2, mcdu_green | mcdu_large, "CRZ-MODE", "(ACT)", 0),
+
+            StaticView.new(0, 4, left_triangle, mcdu_white | mcdu_large),
+            StaticView.new(1, 4, "LRC", mcdu_green | mcdu_large),
+            ToggleView.new(5, 4, mcdu_green | mcdu_large, "CRZ-MODE", "(ACT)", 1),
+
+            StaticView.new(0, 6, left_triangle, mcdu_white | mcdu_large),
+            StaticView.new(1, 6, "MAX SPD", mcdu_green | mcdu_large),
+            ToggleView.new(9, 6, mcdu_green | mcdu_large, "CRZ-MODE", "(ACT)", 2),
+
+            StaticView.new(0, 8, left_triangle, mcdu_white | mcdu_large),
+            StaticView.new(1, 8, "MAX END", mcdu_green | mcdu_large),
+            ToggleView.new(9, 8, mcdu_green | mcdu_large, "CRZ-MODE", "(ACT)", 3),
+
+            StaticView.new(0, 10, left_triangle, mcdu_white | mcdu_large),
+            StaticView.new(1, 10, "MXR SPD", mcdu_green | mcdu_large),
+            ToggleView.new(9, 10, mcdu_green | mcdu_large, "CRZ-MODE", "(ACT)", 4),
+
+            StaticView.new(17, 2, "RETURN" ~ right_triangle, mcdu_white | mcdu_large),
+        ];
+
+        me.controllers = {
+            'L1': cruiseSpeedController,
+            'L2': SelectController.new("CRZ-MODE", 1),
+            'L3': SelectController.new("CRZ-MODE", 2),
+            'L4': SelectController.new("CRZ-MODE", 3),
+            'L5': SelectController.new("CRZ-MODE", 4),
+            'R1': SubmodeController.new("ret"),
+        };
+    },
+
+};
+
 var PerfInitModule = {
     new: func (mcdu, parentModule) {
         var m = BaseModule.new(mcdu, parentModule);
@@ -28,8 +140,8 @@ var PerfInitModule = {
                 FormatView.new(0, 6, mcdu_large | mcdu_green, "VCLB", 3, "%3.0f/"),
                 FormatView.new(4, 6, mcdu_large | mcdu_green, "MCLB", 3, "%3.2fM"),
                 StaticView.new(1, 7, "CRUISE", mcdu_white),
-                CycleView.new(0, 8, mcdu_large | mcdu_green, "CRZ-MODE",
-                    [0, 1, 2, 3], ["LRC", "MAX SPD", "MAX END", "MXR SPD"], 1),
+                FormatView.new(0, 8, mcdu_large | mcdu_green, cruiseModeModel, 15, "%-15s"),
+                StaticView.new(21, 8, "OR" ~ right_triangle, mcdu_large | mcdu_white),
                 StaticView.new(1, 9, "DESCENT", mcdu_white),
                 FormatView.new(0, 10, mcdu_large | mcdu_green, "VDES", 3, "%3.0f/"),
                 FormatView.new(4, 10, mcdu_large | mcdu_green, "MDES", 3, "%3.2fM/"),
@@ -41,7 +153,8 @@ var PerfInitModule = {
             me.controllers = {
                 "R2": CycleController.new("PERF-MODE", [1, 2, 0]),
                 "L3": MultiModelController.new(["VCLB", "MCLB"]),
-                "R4": CycleController.new("CRZ-MODE", [0, 1, 2, 3]),
+                "L4": cruiseSpeedController,
+                "R4": SubmodeController.new(func (owner, parent) { return CruiseModeModule.new(owner, parent); }),
                 "L5": MultiModelController.new(["VDES", "MDES", "DES-FPA"]),
                 # "L6": SubmodeController.new("DEP-APP-SPD"),
             };
