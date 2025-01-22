@@ -541,9 +541,8 @@ configured correctly:
 
 - An active flight plan (via Route Manager, or the RTE and FPL pages in the
   MCDU)
-- Performance settings for all flight phases (via the E-Jet family >
-  Performance Config menu, or via the PERF INIT and PERFORMANCE > TAKEOFF and
-  PERFORMANCE > LANDING pages in the MCDU)
+- Performance settings for all flight phases (via the PERF INIT and PERFORMANCE
+  > TAKEOFF and PERFORMANCE > LANDING pages in the MCDU)
 
 Managed speed will use the following logic:
 
@@ -557,7 +556,7 @@ Managed speed will use the following logic:
   does not arrest the climb entirely. At FL290, switch to climb Mach (default:
   Mach .73).
 - Once levelled off after reaching cruise altitude, speed up to configured
-  cruise speed (default: 300 kts below FL290, Mach .77 above FL290).
+  cruise speed.
 - When descending, select descent speed (default: 290 kts / Mach .77), but
   respect low-altitude limit (default: 250 kts below 10,000 ft / FL100), using
   the same interpolation as for the climb.
@@ -568,6 +567,30 @@ Managed speed will use the following logic:
 - Speed restrictions in the flight plan overrule the above when they are lower
   (e.g., a speed restriction of 220 KIAS on the departure will prevent the
   aircraft from speeding up to 250 KIAS for the climb).
+
+#### Cruise Speed Modes
+
+Cruise speed can be set to one of 5 modes:
+
+- **Manual** (indicated as airspeed/mach number in the MCDU): use the exact
+  airspeed (below FL290) or mach number (FL290 and up) as entered by the pilot.
+- **Long Range Cruise** (`LRC`): this picks an airspeed/mach number that will
+  achieve within 99% of the maximum obtainable range for the aircraft in its
+  current configuration.
+- **Max Speed** (`MAX SPD`): this picks the fastest speed the aircraft can
+  safely fly (320 knots / Mach 0.82). Used when fuel burn is not a concern, and
+  you just need to get to your destination as fast as possible.
+- **Max Endurance** (`MAX END`): this optimizes speed for maximum endurance
+  (flight time). Typically selects approx. 210 knots and Mach 0.60. Useful in
+  emergencies, when you need to buy yourself as much time as possible.
+- **Max Range Speed** (`MXR SPD`): picks an airspeed/mach number that will
+  achieve the absolute longest range possible, at the expense of being about 4%
+  slower than Long Range Cruise. Useful when range is the most critical
+  concern.
+
+Note that the FMS does not calculate cruise speeds based on a cost index (CI) -
+this must be done during flight planning, and the calculated cruise speeds
+entered manually.
 
 ### Autoland
 

@@ -584,12 +584,13 @@ configured correctly:</p>
 <ul>
 <li>An active flight plan (via Route Manager, or the RTE and FPL pages in the
 MCDU)</li>
-<li>Performance settings for all flight phases (via the E-Jet family >
-Performance Config menu, or via the PERF INIT and PERFORMANCE > TAKEOFF and
-PERFORMANCE > LANDING pages in the MCDU)</li>
+<li>Performance settings for all flight phases (via the PERF INIT and PERFORMANCE
+<blockquote>
+  <p>TAKEOFF and PERFORMANCE > LANDING pages in the MCDU)</li>
 </ul>
 
 <p>Managed speed will use the following logic:</p>
+</blockquote></p>
 
 <ul>
 <li>During takeoff, target V2 until reaching V2, then target V2 + 10 until
@@ -602,7 +603,7 @@ speed between limit and limit + 2000 ft to produce a gradual speed-up that
 does not arrest the climb entirely. At FL290, switch to climb Mach (default:
 Mach .73).</li>
 <li>Once levelled off after reaching cruise altitude, speed up to configured
-cruise speed (default: 300 kts below FL290, Mach .77 above FL290).</li>
+cruise speed.</li>
 <li>When descending, select descent speed (default: 290 kts / Mach .77), but
 respect low-altitude limit (default: 250 kts below 10,000 ft / FL100), using
 the same interpolation as for the climb.</li>
@@ -614,6 +615,32 @@ setting, down to final approach speed (Vref + 5 or Vref + 10).</li>
 (e.g., a speed restriction of 220 KIAS on the departure will prevent the
 aircraft from speeding up to 250 KIAS for the climb).</li>
 </ul>
+
+<h4>Cruise Speed Modes</h4>
+
+<p>Cruise speed can be set to one of 5 modes:</p>
+
+<ul>
+<li><strong>Manual</strong> (indicated as airspeed/mach number in the MCDU): use the exact
+airspeed (below FL290) or mach number (FL290 and up) as entered by the pilot.</li>
+<li><strong>Long Range Cruise</strong> (<code>LRC</code>): this picks an airspeed/mach number that will
+achieve within 99% of the maximum obtainable range for the aircraft in its
+current configuration.</li>
+<li><strong>Max Speed</strong> (<code>MAX SPD</code>): this picks the fastest speed the aircraft can
+safely fly (320 knots / Mach 0.82). Used when fuel burn is not a concern, and
+you just need to get to your destination as fast as possible.</li>
+<li><strong>Max Endurance</strong> (<code>MAX END</code>): this optimizes speed for maximum endurance
+(flight time). Typically selects approx. 210 knots and Mach 0.60. Useful in
+emergencies, when you need to buy yourself as much time as possible.</li>
+<li><strong>Max Range Speed</strong> (<code>MXR SPD</code>): picks an airspeed/mach number that will
+achieve the absolute longest range possible, at the expense of being about 4%
+slower than Long Range Cruise. Useful when range is the most critical
+concern.</li>
+</ul>
+
+<p>Note that the FMS does not calculate cruise speeds based on a cost index (CI) -
+this must be done during flight planning, and the calculated cruise speeds
+entered manually.</p>
 
 <h3>Autoland</h3>
 
