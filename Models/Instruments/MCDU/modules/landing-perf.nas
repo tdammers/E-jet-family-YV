@@ -43,13 +43,28 @@ var LandingPerfModule = {
             fms.update_approach_vspeeds();
             me.views = [
                 StaticView.new(1, 1, "VREF", mcdu_white),
-                FormatView.new(0, 2, mcdu_large | mcdu_yellow, "APP-EFF-VREF", 3),
+                AlternativeView.new(0, 2, mcdu_yellow, 3,
+                    [ { model: "APP-SEL-VREF", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_yellow | mcdu_large }
+                    , { model: "APP-EFF-VREF", flags: mcdu_yellow }
+                    ]),
+
                 StaticView.new(1, 3, "VAP", mcdu_white),
-                FormatView.new(0, 4, mcdu_large | mcdu_cyan, "APP-EFF-VAPPR", 3),
+                AlternativeView.new(0, 4, mcdu_cyan, 3,
+                    [ { model: "APP-SEL-VAPPR", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_cyan | mcdu_large }
+                    , { model: "APP-EFF-VAPPR", flags: mcdu_cyan }
+                    ]),
+
                 StaticView.new(1, 5, "VAC", mcdu_white),
-                FormatView.new(0, 6, mcdu_large | mcdu_magenta, "APP-EFF-VAC", 3),
+                AlternativeView.new(0, 6, mcdu_magenta, 3,
+                    [ { model: "APP-SEL-VAC", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_magenta | mcdu_large }
+                    , { model: "APP-EFF-VAC", flags: mcdu_magenta }
+                    ]),
+
                 StaticView.new(1, 7, "VFS", mcdu_white),
-                FormatView.new(0, 8, mcdu_large | mcdu_green, "APP-EFF-VFS", 3),
+                AlternativeView.new(0, 8, mcdu_green, 3,
+                    [ { model: "APP-SEL-VFS", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_green | mcdu_large }
+                    , { model: "APP-EFF-VFS", flags: mcdu_green }
+                    ]),
             ];
             me.controllers = {
                 "L1": ValueController.new("APP-SEL-VREF"),

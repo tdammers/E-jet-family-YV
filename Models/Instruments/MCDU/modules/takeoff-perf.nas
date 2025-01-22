@@ -67,13 +67,29 @@ var TakeoffPerfModule = {
             fms.update_departure_vspeeds();
             me.views = [
                 StaticView.new(1, 1, "V1", mcdu_white),
-                FormatView.new(0, 2, mcdu_large | mcdu_magenta, "DEP-EFF-V1", 3),
+                AlternativeView.new(0, 2, mcdu_magenta, 3,
+                    [ { model: "DEP-SEL-V1", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_magenta | mcdu_large }
+                    , { model: "DEP-EFF-V1", flags: mcdu_magenta }
+                    ]),
+
                 StaticView.new(1, 3, "VR", mcdu_white),
-                FormatView.new(0, 4, mcdu_large | mcdu_cyan, "DEP-EFF-VR", 3),
+                AlternativeView.new(0, 4, mcdu_cyan, 3,
+                    [ { model: "DEP-SEL-VR", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_cyan | mcdu_large }
+                    , { model: "DEP-EFF-VR", flags: mcdu_cyan }
+                    ]),
+
                 StaticView.new(1, 5, "V2", mcdu_white),
-                FormatView.new(0, 6, mcdu_large | mcdu_yellow, "DEP-EFF-V2", 3),
+                AlternativeView.new(0, 6, mcdu_yellow, 3,
+                    [ { model: "DEP-SEL-V2", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_yellow | mcdu_large }
+                    , { model: "DEP-EFF-V2", flags: mcdu_yellow }
+                    ]),
+
                 StaticView.new(1, 7, "VFS", mcdu_white),
-                FormatView.new(0, 8, mcdu_large | mcdu_green, "DEP-EFF-VFS", 3),
+                AlternativeView.new(0, 8, mcdu_green, 3,
+                    [ { model: "DEP-SEL-VFS", cond: func (val) { return val != nil and val > 0; }, flags: mcdu_green | mcdu_large }
+                    , { model: "DEP-EFF-VFS", flags: mcdu_green }
+                    ]),
+
                 StaticView.new(0, 10,left_triangle ~ "LANDING", mcdu_large | mcdu_white),
                 StaticView.new(14, 9, "T/O PITCH", mcdu_white),
                 FormatView.new(18, 10, mcdu_large | mcdu_green, "DEP-EFF-PITCH", 5, "%4.1f°"),
@@ -89,4 +105,3 @@ var TakeoffPerfModule = {
         }
     },
 };
-

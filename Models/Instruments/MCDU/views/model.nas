@@ -2,6 +2,7 @@ var ModelView = {
     new: func (x, y, flags, model) {
         var m = BaseView.new(x, y, flags);
         m.parents = prepended(ModelView, m.parents);
+
         if (typeof(model) == "scalar") {
             m.model = modelFactory(model);
         }

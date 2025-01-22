@@ -144,11 +144,12 @@ var loadTable3DH = func (tablekey) {
     if (contains(cachedTables, tablekey))
         return cachedTables[tablekey];
     var path = resolvepath("Aircraft/E-jet-family/Data/" ~ tablekey ~ ".table");
-    if (path == nil or path == '') { return nil; }
+    if (path == nil or path == '') {
+        printf("Not found: %s", tablekey);
+        return nil;
+    }
     var file = io.open(path, "r");
     var result = {};
-    return result;
-    io.close(file);
     var key = 0;
     var columnHeaders = nil;
     while (1) {
@@ -230,6 +231,9 @@ var lookupTable = func (table, path) {
         }
         else {
             var k = nearestKey(current, f);
+            if (typeof(k) != 'scalar') {
+                debug.dump(current, k);
+            }
             current = current[k];
         }
         path = subvec(path, 1);

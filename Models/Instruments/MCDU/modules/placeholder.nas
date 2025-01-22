@@ -11,7 +11,7 @@ var PlaceholderModule = {
 
     loadPageItems: func (p) {
         me.views = [
-            StaticView.new(1, 6, "MODULE NOT IMPLEMENTED", mcdu_red | mcdu_large),
+            StaticView.new(1, 6, "--------- INOP -------", mcdu_yellow | mcdu_large),
         ];
         me.controllers = {};
         if (me.ptitle != nil) {
