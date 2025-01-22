@@ -423,6 +423,7 @@ var MCDU = {
         # Perf
         "PERF-TAKEOFF": func (mcdu, parent) { return TakeoffPerfModule.new(mcdu, parent); },
         "PERF-LANDING": func (mcdu, parent) { return LandingPerfModule.new(mcdu, parent); },
+        "PERF-CRUISE": func (mcdu, parent) { return CruiseModeModule.new(mcdu, parent); },
         "PERFINIT": func (mcdu, parent) { return PerfInitModule.new(mcdu, parent); },
         "PERFDATA": func (mcdu, parent) { return PerfDataModule.new(mcdu, parent); },
 
