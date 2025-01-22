@@ -49,7 +49,6 @@ var AlternativeView = {
     },
 
     drawBranch: func (mcdu, branch, val) {
-        debug.dump(branch, val);
         var flags = me.flags;
         var draw = contains(branch, 'draw') ? branch.draw : nil;
         if (contains(branch, 'flags')) {
@@ -59,7 +58,7 @@ var AlternativeView = {
             draw(mcdu, me.x, me.y, flags, val);
         }
         elsif (typeof(draw) == 'scalar') {
-            mcdu.print(me.x, me.y, sprintf(format, val), flags);
+            mcdu.print(me.x, me.y, sprintf(draw, val), flags);
         }
         elsif (draw == nil) {
             mcdu.print(me.x, me.y, sprintf('%' ~ me.w ~ 's', val), flags);

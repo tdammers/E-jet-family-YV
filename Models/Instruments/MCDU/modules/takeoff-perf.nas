@@ -92,7 +92,17 @@ var TakeoffPerfModule = {
 
                 StaticView.new(0, 10,left_triangle ~ "LANDING", mcdu_large | mcdu_white),
                 StaticView.new(14, 9, "T/O PITCH", mcdu_white),
-                FormatView.new(18, 10, mcdu_large | mcdu_green, "DEP-EFF-PITCH", 5, "%4.1f°"),
+                AlternativeView.new(18, 10, mcdu_green, 5,
+                    [ { model: "DEP-SEL-PITCH",
+                        cond: func (val) { return val != nil and val > 0; },
+                        flags: mcdu_green | mcdu_large,
+                        draw: "%4.1f°"
+                      }
+                    , { model: "DEP-EFF-PITCH",
+                        flags: mcdu_green,
+                        draw: "%4.1f°"
+                      }
+                    ]),
             ];
             me.controllers = {
                 "L1": ValueController.new("DEP-SEL-V1"),

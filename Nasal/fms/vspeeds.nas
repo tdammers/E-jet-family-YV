@@ -50,7 +50,7 @@ var calcV = func (which) {
     var tablekey = '';
     var table = nil;
 
-    tablekey = sprintf("%s/min%s_TO-%i", model, which, toMode);
+    tablekey = sprintf("%s/min%s_TO-%i", model, (which == 'V2') ? 'V1' : which, toMode);
     table = loadTable3DH(tablekey);
     var minV = lookupTable(table, [ altitude, oat, tow ]) or 0;
 
