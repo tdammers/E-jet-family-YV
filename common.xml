@@ -1255,6 +1255,10 @@
             <!-- speeds per cruise mode -->
             <vlrc type="double">240</vlrc>
             <mlrc type="double">0.76</mlrc>
+            <vmxe type="double">210</vmxe>
+            <mmxe type="double">0.6</mmxe>
+            <vmxr type="double">230</vmxr>
+            <mmxr type="double">0.73</mmxr>
         </cruise-speeds>
 
         <!--

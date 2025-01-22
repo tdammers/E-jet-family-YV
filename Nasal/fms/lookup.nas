@@ -28,6 +28,26 @@ var stripComment = func (str) {
     }
 };
 
+var wordsplit = func (str) {
+    var splits = [];
+    var pos = 0;
+    while (size(str) > 0) {
+        pos = find(' ', str);
+        if (pos == 0) {
+            str = substr(str, 1);
+        }
+        elsif (pos == -1) {
+            append(splits, str);
+            str = '';
+        }
+        else {
+            append(splits, substr(str, 0, pos));
+            str = substr(str, pos);
+        }
+    }
+    return splits;
+};
+
 var num_compare = func (a, b) {
     return a - b;
 };
@@ -46,7 +66,7 @@ var loadTable1D = func (tablekey) {
         if (ln == "") {
             continue;
         }
-        var row = split(" ", ln);
+        var row = wordsplit(ln);
         if (size(row) >= 2) {
             result[num(row[0])] = num(row[1]);
         }
@@ -70,7 +90,7 @@ var loadTable2D = func (tablekey) {
         if (ln == "") {
             continue;
         }
-        var row = split(" ", ln);
+        var row = wordsplit(ln);
         if (size(row) >= 2) {
             var rowIndex = num(row[0]);
             result[rowIndex] = [];
@@ -101,16 +121,17 @@ var loadTable2DH = func (tablekey) {
         }
         if (columnHeaders == nil) {
             columnHeaders = [];
-            foreach (var k; split(" ", ln)) {
+            foreach (var k; wordsplit(ln)) {
                 append(columnHeaders, num(k));
             }
         }
         else {
-            var row = split(" ", ln);
+            var row = wordsplit(ln);
             var rowKey = num(row[0]);
             result[rowKey] = {};
             forindex (var i; columnHeaders) {
-                result[rowKey][columnHeaders[i]] = num(row[i+1]);
+                if (i + 1 < size(row))
+                    result[rowKey][columnHeaders[i]] = num(row[i+1]);
             }
         }
     }
@@ -145,16 +166,17 @@ var loadTable3DH = func (tablekey) {
         }
         else if (columnHeaders == nil) {
             columnHeaders = [];
-            foreach (var k; split(" ", ln)) {
+            foreach (var k; wordsplit(ln)) {
                 append(columnHeaders, num(k));
             }
         }
         else {
-            var row = split(" ", ln);
+            var row = wordsplit(ln);
             var rowKey = num(row[0]);
             result[key][rowKey] = {};
             forindex (var i; columnHeaders) {
-                result[key][rowKey][columnHeaders[i]] = num(row[i+1]);
+                if (i + 1 < size(row))
+                    result[key][rowKey][columnHeaders[i]] = num(row[i+1]);
             }
         }
     }

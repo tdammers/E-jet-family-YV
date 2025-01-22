@@ -449,6 +449,26 @@
             <property>/fms/speed-limits/vmo</property>
         </input>
         <input>
+            <condition>
+                <equals>
+                    <!-- MAX END -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>3</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/vmxe</property>
+        </input>
+        <input>
+            <condition>
+                <equals>
+                    <!-- MAX END -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>4</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/vmxr</property>
+        </input>
+        <input>
             <property>/controls/flight/speed-schedule/cruise-kts</property>
         </input>
     </filter>
@@ -475,6 +495,26 @@
                 </equals>
             </condition>
             <property>/fms/speed-limits/mmo</property>
+        </input>
+        <input>
+            <condition>
+                <equals>
+                    <!-- MAX END -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>3</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/mmxe</property>
+        </input>
+        <input>
+            <condition>
+                <equals>
+                    <!-- MAX END -->
+                    <property>controls/flight/speed-schedule/cruise-mode</property>
+                    <value>4</value>
+                </equals>
+            </condition>
+            <property>/fms/cruise-speeds/mmxr</property>
         </input>
         <input>
             <property>/controls/flight/speed-schedule/cruise-mach</property>
