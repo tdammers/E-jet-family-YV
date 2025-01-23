@@ -1,33 +1,53 @@
 <?xml version="1.0"?>
+<!-- vim: set ts=4 sw=4 noexpandtab -->
 <PropertyList>
     <name>performance</name>
-	<layout>vbox</layout>
-	<pref-width>800</pref-width>
+    <layout>vbox</layout>
+    <pref-width>800</pref-width>
+
+    <nasal>
+        <open><![CDATA[
+            var cruiseMode = getprop('/controls/flight/speed-schedule/cruise-mode');
+            if (cruiseMode == 0)
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MANUAL');
+            elsif (cruiseMode == 1)
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'LRC');
+            elsif (cruiseMode == 2)
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MAX SPD');
+            elsif (cruiseMode == 3)
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MAX END');
+            elsif (cruiseMode == 4)
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MXR SPD');
+            else
+                setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MANUAL');
+        ]]>
+        </open>
+    </nasal>
 
     <group>
         <layout>hbox</layout>
-		<empty>
-			<stretch>1</stretch>
-		</empty>
+        <empty>
+            <stretch>1</stretch>
+        </empty>
 
         <text>
             <label>Performance</label>
         </text>
 
-		<empty>
-			<stretch>1</stretch>
-		</empty>
+        <empty>
+            <stretch>1</stretch>
+        </empty>
 
-		<button>
-			<pref-width>16</pref-width>
-			<pref-height>16</pref-height>
-			<legend></legend>
-			<keynum>27</keynum>
-			<border>2</border>
-			<binding>
-				<command>dialog-close</command>
-			</binding>
-		</button>
+        <button>
+            <pref-width>16</pref-width>
+            <pref-height>16</pref-height>
+            <legend></legend>
+            <keynum>27</keynum>
+            <border>2</border>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
     </group>
 
     <hrule/>
@@ -36,7 +56,7 @@
         <layout>vbox</layout>
 
         <text>
-            <label>Speed Schedule</label>
+            <label>Speed Schedule (0 = automatic)</label>
         </text>
         <group>
             <layout>hbox</layout>
@@ -54,7 +74,7 @@
                     <layout>hbox</layout>
                     <text>
                         <label>V1</label>
-                        <pref-width>15</pref-width>
+                        <pref-width>10</pref-width>
                     </text>
                     <input>
                         <property>/controls/flight/vspeeds/departure/v1</property>
@@ -63,12 +83,15 @@
                             <command>dialog-apply</command>
                         </binding>
                     </input>
+                    <text>
+                        <property>/fms/vspeeds-effective/departure/v1</property>
+                    </text>
                 </group>
                 <group>
                     <layout>hbox</layout>
                     <text>
                         <label>Vr</label>
-                        <pref-width>15</pref-width>
+                        <pref-width>10</pref-width>
                     </text>
                     <input>
                         <property>/controls/flight/vspeeds/departure/vr</property>
@@ -77,12 +100,15 @@
                             <command>dialog-apply</command>
                         </binding>
                     </input>
+                    <text>
+                        <property>/fms/vspeeds-effective/departure/vr</property>
+                    </text>
                 </group>
                 <group>
                     <layout>hbox</layout>
                     <text>
                         <label>V2</label>
-                        <pref-width>15</pref-width>
+                        <pref-width>10</pref-width>
                     </text>
                     <input>
                         <property>/controls/flight/vspeeds/departure/v2</property>
@@ -91,12 +117,15 @@
                             <command>dialog-apply</command>
                         </binding>
                     </input>
+                    <text>
+                        <property>/fms/vspeeds-effective/departure/v2</property>
+                    </text>
                 </group>
                 <group>
                     <layout>hbox</layout>
                     <text>
                         <label>Vfs</label>
-                        <pref-width>15</pref-width>
+                        <pref-width>10</pref-width>
                     </text>
                     <input>
                         <property>/controls/flight/vspeeds/departure/vfs</property>
@@ -105,6 +134,9 @@
                             <command>dialog-apply</command>
                         </binding>
                     </input>
+                    <text>
+                        <property>/fms/vspeeds-effective/departure/vfs</property>
+                    </text>
                 </group>
             </group>
             <vrule/>
@@ -132,7 +164,7 @@
                 <group>
                     <layout>hbox</layout>
                     <text>
-                        <label>Vclb&lt;10k</label>
+                        <label>Vclb (low)</label>
                         <pref-width>15</pref-width>
                     </text>
                     <input>
@@ -146,7 +178,21 @@
                 <group>
                     <layout>hbox</layout>
                     <text>
-                        <label>Vclb</label>
+                        <label>Spd limit alt</label>
+                        <pref-width>15</pref-width>
+                    </text>
+                    <input>
+                        <property>/controls/flight/speed-schedule/climb-limit-alt</property>
+                        <label>ft</label>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                    </input>
+                </group>
+                <group>
+                    <layout>hbox</layout>
+                    <text>
+                        <label>Vclb (high)</label>
                         <pref-width>15</pref-width>
                     </text>
                     <input>
@@ -172,20 +218,66 @@
                     </input>
                 </group>
             </group>
-        </group>
-
-        <group>
-            <layout>hbox</layout>
-            <halign>center</halign>
-            <valign>top</valign>
-
+            <vrule/>
             <group>
                 <layout>vbox</layout>
                 <valign>top</valign>
                 <pref-width>250</pref-width>
                 <text>
-                    <label>Cruise/Descent</label>
+                    <label>Cruise</label>
                 </text>
+                <group>
+                    <layout>hbox</layout>
+                    <text>
+                        <label>Altitude</label>
+                        <pref-width>15</pref-width>
+                    </text>
+                    <input>
+                        <property>/autopilot/route-manager/cruise/altitude-ft</property>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                        <label>ft</label>
+                    </input>
+                </group>
+                <group>
+                    <layout>hbox</layout>
+                    <text>
+                        <label>Cruise mode</label>
+                        <pref-width>15</pref-width>
+                    </text>
+                    <combo>
+                        <pref-width>100</pref-width>
+                        <property>/controls/flight/speed-schedule/cruise-mode-label</property>
+                        <value>MANUAL</value>
+                        <value>LRC</value>
+                        <value>MAX SPD</value>
+                        <value>MAX END</value>
+                        <value>MXR SPD</value>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                        <binding>
+                            <command>nasal</command>
+                            <script>
+                                <![CDATA[
+                                var lbl = getprop('/controls/flight/speed-schedule/cruise-mode-label');
+                                if (lbl == 'LRC')
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 1);
+                                elsif (lbl == 'MAX SPD')
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 2);
+                                elsif (lbl == 'MAX END')
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 3);
+                                elsif (lbl == 'MXR SPD')
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 4);
+                                elsif (lbl == 'MANUAL')
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 0);
+                                ]]>
+                            </script>
+                        </binding>
+                        <live>1</live>
+                    </combo>
+                </group>
                 <group>
                     <layout>hbox</layout>
                     <text>
@@ -208,12 +300,81 @@
                     </text>
                     <input>
                         <property>/controls/flight/speed-schedule/cruise-mach</property>
-                        <label>KIAS</label>
+                        <label>Mach</label>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                        <live>1</live>
+                    </input>
+                </group>
+                <hrule/>
+                <group>
+                    <layout>hbox</layout>
+                    <text>
+                        <label>CI</label>
+                        <pref-width>15</pref-width>
+                    </text>
+                    <input>
+                        <property>/controls/flight/speed-schedule/cruise/ci</property>
                         <binding>
                             <command>dialog-apply</command>
                         </binding>
                     </input>
                 </group>
+                <group>
+                    <layout>hbox</layout>
+                    <text>
+                        <label>Wind</label>
+                        <pref-width>15</pref-width>
+                    </text>
+                    <input>
+                        <property>/controls/flight/speed-schedule/cruise/wind-correction</property>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                        <label>KTAS</label>
+                    </input>
+                </group>
+                <group>
+                    <layout>hbox</layout>
+                    <button>
+                        <legend>Calculate Mach</legend>
+                        <binding>
+                            <command>dialog-apply</command>
+                        </binding>
+                        <binding>
+                            <command>nasal</command>
+                            <script>
+                                <![CDATA[
+                                    var mach = fms.getCruiseEconMach(
+                                            getprop('/controls/flight/speed-schedule/cruise/ci'),
+                                            getprop('/autopilot/route-manager/cruise/altitude-ft'),
+                                            nil,
+                                            getprop('/controls/flight/speed-schedule/cruise/wind-correction'));
+                                    setprop('/controls/flight/speed-schedule/cruise-mach', mach);
+                                    setprop('/controls/flight/speed-schedule/cruise-mode', 0);
+                                    setprop('/controls/flight/speed-schedule/cruise-mode-label', 'MANUAL');
+                                ]]>
+                            </script>
+                        </binding>
+                    </button>
+                </group>
+
+            </group>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <halign>center</halign>
+            <valign>top</valign>
+
+            <group>
+                <layout>vbox</layout>
+                <valign>top</valign>
+                <pref-width>250</pref-width>
+                <text>
+                    <label>Descent</label>
+                </text>
                 <group>
                     <layout>hbox</layout>
                     <text>

@@ -2278,6 +2278,7 @@
                     4 = MXR SPD
                 -->
                 <cruise-mode type="int">0</cruise-mode>
+                <cruise-mode-label type="string">MANUAL</cruise-mode-label>
                 <descent-mach type="double">0.76</descent-mach>
                 <descent-kts type="double">290</descent-kts>
                 <descent-below-10k type="double">250</descent-below-10k>

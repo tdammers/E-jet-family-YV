@@ -9,6 +9,29 @@ var getCruiseModeValue = func (key, weight, cruiseAlt) {
     return lookupTable(table, [ weight, cruiseAlt ]);
 };
 
+var getWindCorrection = func (ci, wind) {
+    var model = getModel();
+    var tablekey = sprintf("%s/CI_wind", model);
+    var table = loadTable2DH(tablekey);
+    return lookupTable(table, [wind or 0, ci or 0]);
+};
+
+var getCruiseEconMach = func (ci, altitude = nil, weight = nil, wind = 0) {
+    var model = getModel();
+    if (altitude == nil) {
+        altitude = getprop('/autopilot/route-manager/cruise/altitude-ft') or 27000;
+    }
+    if (weight == nil) {
+        weight = (getprop('/fdm/jsbsim/inertia/weight-lbs') or 60000) * LB2KG;
+    }
+    if (wind != nil) {
+        ci += getWindCorrection(ci or 0, wind or 0) or 0;
+    }
+    var tablekey = sprintf("%s/CI", model);
+    var table = loadTable3DH(tablekey);
+    return lookupTable(table, [ altitude, weight, ci ]);
+};
+
 var updateCruiseSpeeds = func () {
     var cruiseAlt = getprop('/autopilot/route-manager/cruise/altitude-ft') or 0;
     var currentAlt = getprop('/instrumentation/altimeter/indicated-altitude-ft') or 0;
@@ -25,8 +48,8 @@ var updateCruiseSpeeds = func () {
     # MXR SPD
     # No data available for MXR SPD; we'll assume that LRC is based on MXR plus
     # 4%, so we derive MXR as being 4% slower than LRC.
-    mach = mach * 0.96;
-    ias = ias * 0.96;
+    mach = math.round(mach * 96) / 100;
+    ias = math.round(ias * 0.96);
     setprop('fms/cruise-speeds/mmxr', mach);
     setprop('fms/cruise-speeds/vmxr', ias);
 

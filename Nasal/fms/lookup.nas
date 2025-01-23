@@ -130,8 +130,9 @@ var loadTable2DH = func (tablekey) {
             var rowKey = num(row[0]);
             result[rowKey] = {};
             forindex (var i; columnHeaders) {
-                if (i + 1 < size(row))
+                if (i + 1 < size(row)) {
                     result[rowKey][columnHeaders[i]] = num(row[i+1]);
+                }
             }
         }
     }
@@ -197,8 +198,10 @@ var nearestKey = func (table, val) {
         }
     }
     else {
-        var keys = sort(keys(table), num_compare);
-        foreach (var key; keys) {
+        if (!contains(table, '_keys')) {
+            table._keys = sort(keys(table), num_compare);
+        }
+        foreach (var key; table._keys) {
             if (key >= val) {
                 return key;
             }
